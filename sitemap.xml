@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.zhonmiaozhimen.cn/manifest.json</loc>
+    
+    <lastmod>2025-01-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zhonmiaozhimen.cn/posts/127241be.html</loc>
     
     <lastmod>2025-01-10</lastmod>
@@ -133,6 +142,13 @@
   </url>
   
   <url>
+    <loc>https://www.zhonmiaozhimen.cn/tags/%E9%81%93/</loc>
+    <lastmod>2025-01-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zhonmiaozhimen.cn/tags/%E6%85%A7%E6%82%9F/</loc>
     <lastmod>2025-01-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -141,13 +157,6 @@
   
   <url>
     <loc>https://www.zhonmiaozhimen.cn/tags/%E9%9E%A0%E8%BA%AC/</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zhonmiaozhimen.cn/tags/%E9%81%93/</loc>
     <lastmod>2025-01-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -177,6 +186,13 @@
   </url>
   
   <url>
+    <loc>https://www.zhonmiaozhimen.cn/categories/%E6%96%87%E5%8C%96/</loc>
+    <lastmod>2025-01-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zhonmiaozhimen.cn/categories/%E6%85%A7%E6%80%A7%E6%95%99%E8%82%B2/</loc>
     <lastmod>2025-01-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -185,13 +201,6 @@
   
   <url>
     <loc>https://www.zhonmiaozhimen.cn/categories/%E4%BF%AE%E5%AD%A6%E6%97%A5%E6%96%B0/</loc>
-    <lastmod>2025-01-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zhonmiaozhimen.cn/categories/%E6%96%87%E5%8C%96/</loc>
     <lastmod>2025-01-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
