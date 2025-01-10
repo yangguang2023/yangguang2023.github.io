@@ -129,3 +129,10 @@ a.categoryBar-list-link span:not(.categoryBar-list-count):not(.categoryBar-list-
   opacity: 1;
   visibility: visible;
 }
+
+/* 针对移动端的字体大小设置 */
+@media (max-width: 768px) { /* 768px是常见的移动端屏幕宽度 */
+  #article-container {
+      font-size: 16px; /* 设置字体大小为16px */
+  }
+}
