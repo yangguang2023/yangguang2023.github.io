@@ -87,3 +87,45 @@ a.categoryBar-list-link span:not(.categoryBar-list-count):not(.categoryBar-list-
       font-size: 24px !important;
   }
 }
+
+/* 自定义侧边栏 */
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 400px; /* 固定容器高度 */
+  overflow: hidden; /* 防止内容溢出 */
+}
+
+.asideimage {
+  width: 100%;
+  height: 100%; /* 让图片填充整个容器 */
+  object-fit: cover; /* 保持图片比例并填充 */
+  transition: opacity 0.3s ease; /* 平滑过渡效果 */
+}
+
+.description {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: black;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  overflow: hidden; /* 超出文字隐藏 */
+  text-overflow: ellipsis; /* 显示省略号 */
+}
+
+.image-container:hover .asideimage {
+  opacity: 0;
+}
+
+.image-container:hover .description {
+  opacity: 1;
+  visibility: visible;
+}
