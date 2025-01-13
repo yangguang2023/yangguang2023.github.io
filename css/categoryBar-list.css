@@ -93,13 +93,11 @@ a.categoryBar-list-link span:not(.categoryBar-list-count):not(.categoryBar-list-
 .image-container {
   position: relative;
   width: 100%;
-  height: 400px; /* 固定容器高度 */
   overflow: hidden; /* 防止内容溢出 */
 }
 
 .asideimage {
   width: 100%;
-  height: 100%; /* 让图片填充整个容器 */
   object-fit: cover; /* 保持图片比例并填充 */
   transition: opacity 0.3s ease; /* 平滑过渡效果 */
 }
