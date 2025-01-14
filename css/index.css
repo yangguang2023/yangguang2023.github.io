@@ -3427,7 +3427,6 @@ figure.highlight pre .javascript .function {
 #page-header #post-info {
   position: absolute;
   width: 100%;
-  text-align: center;
   bottom: 30px;
 }
 #page-header #post-info > * {
