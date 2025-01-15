@@ -44,3 +44,9 @@
       font-size: 18px; /* 设置字体大小为16px */
   }
 }
+/* 针对移动端隐藏特定元素 */
+@media (max-width: 768px) { /* 768px是常见的移动端屏幕宽度 */
+  #categoryBar {
+      display: none !important; /* 隐藏该元素 */
+  }
+}
