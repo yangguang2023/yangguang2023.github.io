@@ -3,12 +3,22 @@
   position: relative;
   width: 100%;
   overflow: hidden; /* 防止内容溢出 */
+  border-radius: 12px; /* 添加圆角 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+  margin-bottom: 15px; /* 底部间距 */
+  transition: transform 0.3s ease; /* 添加悬停时的变换效果 */
+}
+
+.image-container:hover {
+  transform: translateY(-2px); /* 悬停时轻微上浮 */
 }
 
 .asideimage {
   width: 100%;
+  height: auto;
   object-fit: cover; /* 保持图片比例并填充 */
-  transition: opacity 0.3s ease; /* 平滑过渡效果 */
+  transition: all 0.5s ease; /* 更平滑的过渡效果 */
+  display: block; /* 消除图片底部间隙 */
 }
 
 .description {
@@ -16,34 +26,48 @@
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: black;
+  height: 100%; /* 确保覆盖整个容器 */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 240, 0.9)); /* 渐变背景 */
+  color: #333; /* 更深的文字颜色 */
   font-size: 16px;
+  line-height: 1.6; /* 增加行高 */
+  padding: 15px; /* 添加内边距 */
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: justify; /* 文本两端对齐 */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease;
-  overflow: hidden; /* 超出文字隐藏 */
-  text-overflow: ellipsis; /* 显示省略号 */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 使用更高级的过渡效果 */
+  transform: scale(0.9); /* 初始缩小 */
+  border-radius: 12px; /* 保持与容器相同的圆角 */
+  box-sizing: border-box; /* 确保padding不会增加元素尺寸 */
 }
 
 .image-container:hover .asideimage {
-  opacity: 0;
+  transform: scale(1.05); /* 图片轻微放大 */
+  filter: blur(3px); /* 添加模糊效果 */
+  opacity: 0.3; /* 不完全隐藏图片，而是降低透明度 */
 }
 
 .image-container:hover .description {
   opacity: 1;
   visibility: visible;
+  transform: scale(1); /* 恢复正常大小 */
 }
 
 /* 针对移动端的字体大小设置 */
 @media (max-width: 768px) { /* 768px是常见的移动端屏幕宽度 */
   #article-container {
-      font-size: 18px; /* 设置字体大小为16px */
+      font-size: 18px;
+  }
+  
+  .description {
+    font-size: 14px; /* 移动端字体稍小 */
+    padding: 10px;
   }
 }
+
 /* 针对移动端隐藏特定元素 */
 @media (max-width: 768px) { /* 768px是常见的移动端屏幕宽度 */
   #categoryBar {
