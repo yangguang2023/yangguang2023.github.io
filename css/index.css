@@ -4827,14 +4827,14 @@ figure.highlight pre .javascript .function {
   -o-transform: translate3d(100%, 0, 0);
   -ms-transform: translate3d(100%, 0, 0);
   transform: translate3d(100%, 0, 0);
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 9;
 }
 .container figure.gallery-group .gallery-group-name {
   position: relative;
   margin: 0;
   padding: 8px 0;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1em;
   line-height: 1.5;
   -webkit-line-clamp: 2;
 }
