@@ -4768,9 +4768,6 @@ figure.highlight pre .javascript .function {
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
   backface-visibility: hidden;
-  opacity: 0.8;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-  filter: alpha(opacity=80);
   -webkit-transition: all 0.3s, filter 375ms ease-in 0.2s;
   -moz-transition: all 0.3s, filter 375ms ease-in 0.2s;
   -o-transition: all 0.3s, filter 375ms ease-in 0.2s;
