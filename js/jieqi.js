@@ -14,18 +14,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 定义12等分区域的链接和描述
     const segmentLinks = [
-        { url: "https://baike.baidu.com/item/子时/5698239" },
-        { url: "https://baike.baidu.com/item/丑时/5698245" },
-        { url: "https://baike.baidu.com/item/寅时/5698268" },
-        { url: "https://baike.baidu.com/item/卯时/5698273" },
-        { url: "https://baike.baidu.com/item/辰时/5698276" },
-        { url: "https://baike.baidu.com/item/巳时/5698256" },
-        { url: "https://baike.baidu.com/item/午时/5698255" },
-        { url: "https://baike.baidu.com/item/未时/5698252" },
-        { url: "https://baike.baidu.com/item/申时/5698249" },
-        { url: "https://baike.baidu.com/item/酉时/5698266" },
-        { url: "https://baike.baidu.com/item/戌时/5698262" },
-        { url: "https://baike.baidu.com/item/亥时/5698258" }
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" },
+        { url: "/categories/二十四节气/" }
     ];
 
     // 节气数据，包含所有2025年的24个节气
