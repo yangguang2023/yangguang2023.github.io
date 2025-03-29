@@ -11,13 +11,50 @@
     <script>
         // 添加页面标识类，帮助CSS选择器识别
         document.documentElement.classList.add('custom-index-page');
+        
+        // 检测设备安全区域并添加CSS变量
+        function checkSafeArea() {
+            // 获取环境安全区域值
+            const safeAreaBottom = window.getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-bottom)') || '0px';
+            document.documentElement.style.setProperty('--safe-area-inset-bottom', safeAreaBottom);
+        }
+        
+        // 页面加载后检测底部导航栏
+        function checkBottomNav() {
+            // 如果页面高度大于视口高度，说明可能有底部导航栏
+            const hasBottomNav = document.body.offsetHeight > window.innerHeight;
+            
+            // 检查是否是iPhone X或更新机型（有底部安全区域）
+            const isIPhoneX = /iPhone/.test(navigator.userAgent) && 
+                (window.screen.height >= 812 || window.screen.width >= 812);
+                
+            // 如果检测到底部导航栏或是iPhone X，添加类名
+            if (hasBottomNav || isIPhoneX) {
+                document.body.classList.add('has-bottom-nav');
+            } else {
+                document.body.classList.remove('has-bottom-nav');
+            }
+            
+            // 重新调整分页窗口位置
+            setTimeout(function() {
+                const infoPanel = document.querySelector('.solar-term-info-panel');
+                if (infoPanel) {
+                    const content = document.querySelector('.info-content');
+                    const buttons = document.querySelector('.tab-buttons');
+                    if (typeof updatePanelLayout === 'function') {
+                        updatePanelLayout(infoPanel, content, buttons);
+                    }
+                }
+            }, 300);
+        }
+        
         window.onload = function() {
             document.body.classList.add('page-index');
-            // 检测是否有底部导航栏
-            const hasBottomNav = window.innerHeight < document.documentElement.scrollHeight;
-            if (hasBottomNav) {
-                document.body.classList.add('has-bottom-nav');
-            }
+            checkSafeArea();
+            checkBottomNav();
+            
+            // 在窗口大小改变时重新检测
+            window.addEventListener('resize', checkBottomNav);
         };
     </script>
 </head>

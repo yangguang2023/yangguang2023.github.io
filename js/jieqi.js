@@ -366,14 +366,45 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
+        // 更新分页窗口位置
+        const infoPanel = document.querySelector('.solar-term-info-panel');
+        if (infoPanel) {
+            updatePanelLayout(infoPanel, document.querySelector('.info-content'), document.querySelector('.tab-buttons'));
+        }
+        
         console.log('视口尺寸变化，罗盘已更新');
     }
 
-    // 窗口大小变化事件
-    window.addEventListener('resize', debounce(handleViewportChange, 100));
+    // 防抖函数，避免频繁触发重绘
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func.apply(context, args);
+            }, wait);
+        };
+    }
 
-    // 设备方向变化事件
-    window.addEventListener('orientationchange', debounce(handleViewportChange, 300));
+    // 创建防抖处理函数的实例
+    const debouncedViewportChange = debounce(handleViewportChange, 150);
+    const debouncedOrientationChange = debounce(handleViewportChange, 350);
+
+    // 窗口大小变化事件，使用150ms的防抖
+    window.removeEventListener('resize', debouncedViewportChange);
+    window.addEventListener('resize', debouncedViewportChange);
+
+    // 设备方向变化事件，方向变化后等待更长时间重绘
+    window.removeEventListener('orientationchange', debouncedOrientationChange);
+    window.addEventListener('orientationchange', debouncedOrientationChange);
+    
+    // 添加特殊处理，针对iOS设备方向变化后的延迟重绘
+    window.addEventListener('orientationchange', function() {
+        // iOS设备在方向变化后可能需要额外时间来正确报告viewport尺寸
+        setTimeout(handleViewportChange, 500);
+    });
 
     // 初始化罗盘
     initCompass();
@@ -749,33 +780,28 @@ document.addEventListener('DOMContentLoaded', function() {
         const container = document.querySelector('.container');
         const containerRect = container.getBoundingClientRect();
         
-        // 根据设备类型设置不同的尺寸
-        if (isMobile) {
-            // 获取视口宽度和高度
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-            
-            // 计算合适的罗盘尺寸（取视口宽度和高度的较小值的94%）
-            const compassSize = Math.min(viewportWidth, viewportHeight) * 0.92;
-            
-            // 设置罗盘容器尺寸
-            compass.style.width = `${compassSize}px`;
-            compass.style.height = `${compassSize}px`;
-            
-            // 确保罗盘在视口中居中
-            compass.style.margin = 'auto';
-        } else {
-            // 桌面端使用固定像素值
-            const containerSize = Math.min(containerRect.width, containerRect.height);
-            const compassSize = containerSize * 0.94; // 使用与移动端相同的比例
-            
-            compass.style.width = `${compassSize}px`;
-            compass.style.height = `${compassSize}px`;
-            compass.style.margin = 'auto';
-        }
+        // 使用统一的尺寸计算方法，确保一致性
+        // 计算合适的罗盘尺寸（取视口宽度和高度的较小值的90%）
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const viewportMin = Math.min(viewportWidth, viewportHeight);
+        
+        // 无论是桌面还是移动端，都使用相同的计算逻辑
+        const compassSize = viewportMin * 0.9; // 统一使用90%的视口较小尺寸
+        
+        // 设置罗盘容器尺寸
+        compass.style.width = `${compassSize}px`;
+        compass.style.height = `${compassSize}px`;
+        
+        // 确保罗盘在视口中居中
+        compass.style.margin = 'auto';
         
         compass.style.overflow = 'visible';
         compass.style.borderRadius = '50%';
+        
+        // 设置最大尺寸，防止在大屏幕上过大
+        compass.style.maxWidth = '800px';
+        compass.style.maxHeight = '800px';
         
         // 始终添加边框
         compass.classList.add('border-enabled');
@@ -1153,9 +1179,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // 更新面板布局的函数
     function updatePanelLayout(panel, content, buttons) {
         const isMobile = window.innerWidth <= 768;
+        const hasBottomNav = document.body.classList.contains('has-bottom-nav');
+        const isHighScreen = window.innerHeight >= 800;
         
         if (isMobile) {
-            panel.style.bottom = '20px';
+            // 设置底部距离，考虑不同情况
+            if (hasBottomNav && isHighScreen) {
+                panel.style.bottom = '160px'; // 高屏幕带导航栏
+            } else if (hasBottomNav) {
+                panel.style.bottom = '120px'; // 普通屏幕带导航栏
+            } else if (isHighScreen) {
+                panel.style.bottom = '160px'; // 高屏幕无导航栏
+            } else {
+                panel.style.bottom = '120px'; // 普通屏幕无导航栏
+            }
+            
+            // 应用安全区域距离（针对iPhone X等全面屏设备）
+            if (hasBottomNav) {
+                // 使用CSS变量获取底部安全区域
+                const safeAreaBottom = getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom') || '0px';
+                // 如果安全区域值存在且不为0，则增加额外距离
+                if (safeAreaBottom && safeAreaBottom !== '0px') {
+                    const numValue = parseInt(safeAreaBottom);
+                    if (!isNaN(numValue) && numValue > 0) {
+                        panel.style.bottom = `calc(${panel.style.bottom} + ${safeAreaBottom})`;
+                    }
+                }
+            }
+            
             panel.style.left = '50%';
             panel.style.right = 'auto';
             panel.style.transform = 'translateX(-50%)';

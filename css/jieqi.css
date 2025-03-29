@@ -370,8 +370,6 @@ input:checked + .slider:before {
 
 .compass {
     position: relative;
-    width: 90vmin;
-    height: 90vmin;
     max-width: 800px;
     max-height: 800px;
     display: flex;
@@ -571,8 +569,6 @@ input:checked + .slider:before {
     }
 
     .compass {
-        width: 90vmin;
-        height: 90vmin;
         max-width: none;
         max-height: none;
     }
@@ -754,6 +750,24 @@ input:checked + .slider:before {
     }
     .compass.auto-rotating .text-item {
         transition: none !important;
+    }
+}
+
+/* 较小屏幕的适配 - 移除缩放设置，保持尺寸一致 */
+@media screen and (max-width: 360px) {
+    /* 移除缩放代码 */
+    .compass {
+        /* 不再缩放 */
+        transform: none; 
+        margin-top: 0;
+    }
+}
+
+/* 折叠屏和大屏手机的适配 - 移除缩放设置，保持尺寸一致 */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .compass {
+        /* 不再缩放 */
+        transform: none; 
     }
 }
 
@@ -941,14 +955,6 @@ input:checked + .slider:before {
     }
 }
 
-/* 较小屏幕的适配 */
-@media screen and (max-width: 360px) {
-    .compass {
-        transform: scale(0.75);
-        margin-top: -80px;
-    }
-}
-
 /* 处理底部导航栏 */
 body.has-bottom-nav .container {
     padding-bottom: max(100px, env(safe-area-inset-bottom) + 80px);
@@ -974,28 +980,21 @@ body.has-bottom-nav .scroll-indicator {
     }
 }
 
-/* 适配折叠屏和大屏手机 */
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-    .compass {
-        transform: scale(0.9);
-    }
-}
-
 /* 移动端分页窗口位置调整 */
 @media screen and (max-width: 768px) {
     .solar-term-info-panel {
-        bottom: 80px !important; /* 上移更多，避免被底部导航栏遮挡 */
+        bottom: 100px !important; /* 上移更多，避免被底部导航栏遮挡 */
     }
 }
 
 /* 适配不同机型的分页窗口位置 */
 @media screen and (max-width: 768px) and (min-height: 800px) {
     .solar-term-info-panel {
-        bottom: 100px !important; /* 在更高的屏幕上进一步上移 */
+        bottom: 160px !important; /* 在更高的屏幕上进一步上移 */
     }
 }
 
 /* 处理底部导航栏对分页窗口的影响 */
 body.has-bottom-nav .solar-term-info-panel {
-    bottom: max(10px, env(safe-area-inset-bottom) + 80px) !important;
+    bottom: max(140px, env(safe-area-inset-bottom) + 100px) !important;
 }
