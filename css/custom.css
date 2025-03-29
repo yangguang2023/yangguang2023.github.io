@@ -1,0 +1,53 @@
+/* 
+ * 自定义CSS文件，用于防止主题干扰自定义首页 
+ * 这个文件用于覆盖butterfly主题对首页的样式影响
+ */
+
+body.page-index {
+  /* 重置主题可能影响首页的样式 */
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+/* 禁用首页上的butterfly主题元素 */
+body.page-index #nav,
+body.page-index #page-header,
+body.page-index #footer,
+body.page-index #rightside,
+body.page-index .aplayer-fixed,
+body.page-index #recent-posts,
+body.page-index .pagination,
+body.page-index .recent-post-item,
+body.page-index .aside-content,
+body.page-index #post-comment,
+body.page-index #post-info,
+body.page-index #recent-posts > .recent-post-item,
+body.page-index #pagination,
+body.page-index #mobile-sidebar-menus {
+  display: none !important;
+}
+
+/* 确保完全使用自定义首页全屏布局 */
+body.page-index #body-wrap {
+  padding: 0 !important;
+}
+
+body.page-index #content-inner {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 使首页内容全屏显示 */
+body.page-index .layout {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+body.page-index .layout > div:not(.recent-posts) {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+} 
