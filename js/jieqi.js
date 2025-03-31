@@ -930,7 +930,7 @@ document.addEventListener('DOMContentLoaded', function() {
             referenceInfo.style.bottom = '20px';
             referenceInfo.style.left = '50%';
             referenceInfo.style.transform = 'translateX(-50%)';
-            referenceInfo.style.fontSize = '14px';
+            referenceInfo.style.fontSize = '16px';
         }
         
         // 添加到页面

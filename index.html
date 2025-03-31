@@ -126,184 +126,200 @@
         });
         
         // 流星效果
-        // 定义全局变量判断是否为移动设备
-        let isMobileDevice = window.innerWidth <= 768;
+        function checkIsMobile() {
+            return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+        
+        let isMobileDevice = checkIsMobile();
+        let wasMobile = isMobileDevice;
         let meteorIntervalId; // 用于存储流星生成的定时器ID
-
-        // 监听屏幕旋转和窗口大小变化事件
-        window.addEventListener('resize', function() {
-            // 重新计算设备类型
-            const wasMobile = isMobileDevice;
-            isMobileDevice = window.innerWidth <= 768;
+        
+        // 监听窗口大小变化
+        window.addEventListener('resize', () => {
+            isMobileDevice = checkIsMobile();
             
             // 如果设备类型发生变化，重置流星生成频率
             if (wasMobile !== isMobileDevice && meteorIntervalId) {
                 clearInterval(meteorIntervalId);
-                const meteorInterval = isMobileDevice ? 8000 : 4000;
-                meteorIntervalId = setInterval(createSimpleMeteor, meteorInterval);
+                if (!isMobileDevice) {
+                    // 只在非移动设备上设置流星生成
+                    const meteorInterval = 4000;
+                    meteorIntervalId = setInterval(createSimpleMeteor, meteorInterval);
+                }
             }
+            wasMobile = isMobileDevice;
         });
-
+        
         function createSimpleMeteor() {
+            // 移动设备上不创建流星
+            if (isMobileDevice) return;
+            
             const container = document.getElementById('meteorContainer');
             
             // 随机生成流星起始位置
             const startX = Math.random() * window.innerWidth;
-            const startY = Math.random() * (window.innerHeight / 3);
+            const startY = Math.random() * window.innerHeight * 0.5; // 在上半部分生成
             
-            // 根据设备类型设置不同的大小参数
-            const size = isMobileDevice ? 
-                Math.random() * 2 + 0.5 :  // 移动端更小的流星
-                Math.random() * 3 + 1;     // 桌面端保持原来的大小
+            // 流星大小 - 桌面版使用正常大小
+            const size = Math.random() * 3 + 1; // 桌面版流星大小
             
-            const length = isMobileDevice ?
-                Math.random() * 80 + 20 : // 移动端更短的尾巴
-                Math.random() * 150 + 50;  // 桌面端保持原来的长度
+            // 流星速度
+            const speed = Math.random() * 100 + 50;
+            
+            // 流星长度
+            const length = Math.random() * 80 + 40;
             
             // 流星运动角度（135度，右下方向）
-            const angle = 135 * Math.PI / 180;
+            const angle = Math.PI * 0.75;
+            
+            // 创建流星头部
+            const meteor = document.createElement('div');
+            meteor.className = 'meteor';
+            meteor.style.width = `${size}px`;
+            meteor.style.height = `${size}px`;
+            meteor.style.left = `${startX}px`;
+            meteor.style.top = `${startY}px`;
             
             // 创建流星尾巴元素
             const tail = document.createElement('div');
             tail.className = 'meteor-tail';
-            
-            // 设置尾巴样式
             tail.style.left = `${startX}px`;
             tail.style.top = `${startY}px`;
             tail.style.width = `${length}px`;
-            tail.style.height = `${size/2}px`;
-            tail.style.transform = 'rotate(-45deg)'; // 与运动方向一致
+            tail.style.height = `${size / 2}px`;
+            tail.style.transformOrigin = '0% 50%';
+            tail.style.transform = `rotate(${angle - Math.PI}rad)`;
             
-            // 创建流星头部
-            const meteor = document.createElement('div');
-            meteor.className = 'meteor';
-            meteor.style.width = `${size}px`;
-            meteor.style.height = `${size}px`;
-            meteor.style.left = `${startX}px`;
-            meteor.style.top = `${startY}px`;
-            
-            // 先添加尾巴，再添加流星头部
+            // 先添加尾巴，再添加流星头部 (保持尾巴在头部下面的层级)
             container.appendChild(tail);
             container.appendChild(meteor);
             
-            // 动画参数
-            let posX = startX;
-            let posY = startY;
+            // 让流星移动的动画帧
+            const startTime = performance.now();
+            const duration = Math.random() * 1000 + 1000; // 流星持续时间1-2秒
             
-            // 根据设备类型设置不同的速度
-            const speed = isMobileDevice ? 
-                Math.random() * 1.5 + 1 :  // 移动端更慢的速度
-                Math.random() * 5 + 3;     // 桌面端保持原来的速度
-            
-            // 动画函数
-            function animate() {
-                // 计算新位置
-                posX += Math.cos(angle) * speed;
-                posY += Math.sin(angle) * speed;
+            function animateMeteor(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
                 
-                // 更新元素位置
-                tail.style.left = `${posX}px`;
-                tail.style.top = `${posY}px`;
+                // 计算当前位置
+                const distance = speed * progress;
+                const posX = startX + Math.cos(angle) * distance;
+                const posY = startY + Math.sin(angle) * distance;
+                
+                // 更新流星头部位置
                 meteor.style.left = `${posX}px`;
                 meteor.style.top = `${posY}px`;
                 
-                // 检查是否超出屏幕
-                if (posX < -200 || posY > window.innerHeight + 200) {
-                    meteor.remove();
+                // 更新尾巴位置 - 尾巴起点跟随流星头部但指向反方向
+                const tailX = posX;
+                const tailY = posY;
+                tail.style.left = `${tailX}px`;
+                tail.style.top = `${tailY}px`;
+                
+                // 动画结束时移除流星
+                if (progress >= 1 || posX < 0 || posX > window.innerWidth || posY < 0 || posY > window.innerHeight) {
                     tail.remove();
+                    meteor.remove();
                 } else {
-                    requestAnimationFrame(animate);
+                    requestAnimationFrame(animateMeteor);
                 }
             }
             
-            animate();
+            requestAnimationFrame(animateMeteor);
         }
         
-        // 定期创建流星 - 根据设备类型调整频率
-        const meteorInterval = isMobileDevice ? 8000 : 4000; // 移动端降低频率
-        meteorIntervalId = setInterval(createSimpleMeteor, meteorInterval);
-        
-        // 初始创建几个流星 - 移动端减少初始数量
-        const initialMeteors = isMobileDevice ? 1 : 3;
-        for (let i = 0; i < initialMeteors; i++) {
-            setTimeout(createSimpleMeteor, Math.random() * 5000);
-        }
-        
-        // 点击创建流星
-        document.addEventListener('click', function(e) {
-            const container = document.getElementById('meteorContainer');
+        // 只在非移动设备上初始化流星
+        if (!isMobileDevice) {
+            // 定期创建流星
+            const meteorInterval = 4000;
+            meteorIntervalId = setInterval(createSimpleMeteor, meteorInterval);
             
-            // 获取点击位置
-            const startX = e.clientX;
-            const startY = e.clientY;
-            
-            // 根据设备类型设置不同的大小参数
-            const size = isMobileDevice ? 
-                Math.random() * 2 + 1 :    // 移动端更小的流星
-                Math.random() * 3 + 2;     // 桌面端保持原来的大小
-            
-            const length = isMobileDevice ?
-                Math.random() * 100 + 60 : // 移动端更短的尾巴
-                Math.random() * 150 + 100; // 桌面端保持原来的长度
-            
-            // 流星运动角度
-            const angle = 135 * Math.PI / 180;
-            
-            // 创建流星尾巴
-            const tail = document.createElement('div');
-            tail.className = 'meteor-tail';
-            
-            // 设置尾巴样式
-            tail.style.left = `${startX}px`;
-            tail.style.top = `${startY}px`;
-            tail.style.width = `${length}px`;
-            tail.style.height = `${size/2}px`;
-            tail.style.transform = 'rotate(-45deg)';
-            
-            // 创建流星头部
-            const meteor = document.createElement('div');
-            meteor.className = 'meteor';
-            meteor.style.width = `${size}px`;
-            meteor.style.height = `${size}px`;
-            meteor.style.left = `${startX}px`;
-            meteor.style.top = `${startY}px`;
-            
-            // 添加到容器
-            container.appendChild(tail);
-            container.appendChild(meteor);
-            
-            // 动画参数
-            let posX = startX;
-            let posY = startY;
-            
-            // 根据设备类型设置不同的速度
-            const speed = isMobileDevice ? 
-                Math.random() * 2 + 1 :    // 移动端更慢的速度
-                Math.random() * 5 + 5;     // 桌面端保持原来的速度
-            
-            // 动画函数
-            function animate() {
-                // 计算新位置
-                posX += Math.cos(angle) * speed;
-                posY += Math.sin(angle) * speed;
-                
-                // 更新元素位置
-                tail.style.left = `${posX}px`;
-                tail.style.top = `${posY}px`;
-                meteor.style.left = `${posX}px`;
-                meteor.style.top = `${posY}px`;
-                
-                // 检查是否超出屏幕
-                if (posX < -200 || posX > window.innerWidth + 200 || 
-                    posY < -200 || posY > window.innerHeight + 200) {
-                    meteor.remove();
-                    tail.remove();
-                } else {
-                    requestAnimationFrame(animate);
-                }
+            // 初始创建几个流星
+            const initialMeteors = 3;
+            for (let i = 0; i < initialMeteors; i++) {
+                setTimeout(createSimpleMeteor, Math.random() * 5000);
             }
             
-            animate();
-        });
+            // 点击创建流星
+            document.addEventListener('click', (e) => {
+                // 移动设备上不创建流星
+                if (isMobileDevice) return;
+                
+                // 获取点击位置
+                const clickX = e.clientX;
+                const clickY = e.clientY;
+                
+                const container = document.getElementById('meteorContainer');
+                
+                // 流星大小
+                const size = Math.random() * 3 + 1;
+                
+                // 流星速度
+                const speed = Math.random() * 150 + 100;
+                
+                // 流星长度
+                const length = Math.random() * 100 + 50;
+                
+                // 流星运动角度
+                const angle = Math.PI * 0.75;
+                
+                // 创建流星头部
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                meteor.style.width = `${size}px`;
+                meteor.style.height = `${size}px`;
+                meteor.style.left = `${clickX}px`;
+                meteor.style.top = `${clickY}px`;
+                
+                // 创建流星尾巴
+                const tail = document.createElement('div');
+                tail.className = 'meteor-tail';
+                tail.style.left = `${clickX}px`;
+                tail.style.top = `${clickY}px`;
+                tail.style.width = `${length}px`;
+                tail.style.height = `${size / 2}px`;
+                tail.style.transformOrigin = '0% 50%';
+                tail.style.transform = `rotate(${angle - Math.PI}rad)`;
+                
+                // 添加到容器
+                container.appendChild(tail);
+                container.appendChild(meteor);
+                
+                // 流星动画
+                const startTime = performance.now();
+                const duration = Math.random() * 800 + 800; // 流星持续时间0.8-1.6秒
+                
+                function animateMeteor(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // 计算当前位置
+                    const distance = speed * progress;
+                    const posX = clickX + Math.cos(angle) * distance;
+                    const posY = clickY + Math.sin(angle) * distance;
+                    
+                    // 更新流星头部位置
+                    meteor.style.left = `${posX}px`;
+                    meteor.style.top = `${posY}px`;
+                    
+                    // 更新尾巴位置 - 尾巴起点跟随流星头部但指向反方向
+                    const tailX = posX;
+                    const tailY = posY;
+                    tail.style.left = `${tailX}px`;
+                    tail.style.top = `${tailY}px`;
+                    
+                    // 动画结束时移除流星
+                    if (progress >= 1 || posX < 0 || posX > window.innerWidth || posY < 0 || posY > window.innerHeight) {
+                        tail.remove();
+                        meteor.remove();
+                    } else {
+                        requestAnimationFrame(animateMeteor);
+                    }
+                }
+                
+                requestAnimationFrame(animateMeteor);
+            });
+        }
     </script>
 <script>"use strict";if("serviceWorker"in navigator){navigator.serviceWorker.register("service-worker.js").then((function(reg){reg.onupdatefound=function(){var installingWorker=reg.installing;installingWorker.onstatechange=function(){switch(installingWorker.state){case"installed":if(navigator.serviceWorker.controller){console.log("New or updated content is available.")}else{console.log("Content is now available offline!")}break;case"redundant":console.error("The installing service worker became redundant.");break}}}}))["catch"]((function(e){console.error("Error during service worker registration:",e)}))}</script></body></html>

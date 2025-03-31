@@ -11,14 +11,14 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto; /* 允许垂直滚动 */
-    touch-action: pan-y; /* 允许垂直平移 */
+    overflow: hidden;
+    touch-action: none;
     flex-direction: column;
     margin: 0;
     padding: 0;
     position: relative;
     color: #fff;
+    overflow-x: hidden;
 }
 
 .container {
@@ -26,10 +26,12 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100dvh; /* 使用动态视口高度 */
+    height: 100vh;
     margin: 0;
     padding: 0;
-    position: relative; /* 改为相对定位 */
+    position: fixed;
+    top: 0;
+    left: 0;
     background-image: url('/images/xingkong.png');
     background-size: cover;
     background-position: center center;
@@ -89,22 +91,16 @@ body {
 .meteor-tail {
     position: absolute;
     height: 2px; /* 略微增加高度 */
-    background: linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)); /* 从左到右渐变，头部在左侧 */
     transform-origin: 0% 50%; /* 确保从左侧中心开始旋转 */
     filter: blur(1px);
     z-index: 5; /* 尾巴层级在流星之下 */
 }
 
-/* 移动端流星样式调整 */
+/* 在移动端隐藏流星容器及其子元素 */
 @media (max-width: 768px) {
-    .meteor {
-        box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7); /* 减弱光晕效果 */
-        filter: blur(0.3px); /* 减弱模糊效果 */
-    }
-    
-    .meteor-tail {
-        filter: blur(0.6px); /* 减弱尾巴模糊效果 */
-        opacity: 0.8; /* 降低尾巴不透明度 */
+    .meteor-container {
+        display: none !important;
     }
 }
 
@@ -440,7 +436,7 @@ input:checked + .slider:before {
     letter-spacing: 1px;
     white-space: nowrap;
     z-index: 35;
-    text-shadow: 0 0 8px rgba(255, 235, 59, 0.5), 0 0 15px rgba(255, 215, 0, 0.3);
+    text-shadow: 0 0 6px rgba(255, 235, 59, 0.3), 0 0 12px rgba(255, 215, 0, 0.2);
     transition: all 0.3s ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -674,22 +670,25 @@ input:checked + .slider:before {
     }
     
     .text-item {
-        color: #ffeb3b;
         text-rendering: optimizeLegibility;
-        font-weight: 700; /* 移动端加粗 */
+        font-weight: 300; /* 移动端加粗 */
         letter-spacing: 0.5px; /* 移动端字间距略小 */
-        text-shadow: 0 0 8px rgba(255, 215, 0, 0.6), 0 0 12px rgba(255, 215, 0, 0.3);
+        background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
+        text-shadow: none;
     }
     
     .text-item.hexagram-text {
-        font-weight: 800;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.5);
-    }
-    
-    .text-item:hover {
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.4);
+        font-weight: 500;
+        background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: none;
     }
     
     /* 信息面板调整 */
@@ -1456,21 +1455,5 @@ body.has-bottom-nav .scroll-indicator {
     .text-item.hexagram-text {
         font-weight: 700;
         text-shadow: 0 0 12px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.4);
-    }
-}
-
-/* 移动端文本样式优化 */
-@media (max-width: 768px) {
-    .text-item {
-        text-rendering: optimizeLegibility;
-        font-weight: 400; /* 移动端加粗 */
-        letter-spacing: 0.5px; /* 移动端字间距略小 */
-        color: #d4af37;
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-    }
-    
-    .text-item.hexagram-text {
-        font-weight: 500;
     }
 }
