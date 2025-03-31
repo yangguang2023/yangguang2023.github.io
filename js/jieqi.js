@@ -167,7 +167,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 根据设备性能调整动画参数
     const performanceSettings = {
-        frameInterval: 1000 / 60 // 60fps
+        frameInterval: 1000 / 120, // 提高到120fps以获得更流畅的效果
+        rotationSpeed: 0.2 // 设置旋转速度
     };
     
     const settings = performanceSettings;
@@ -995,18 +996,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const compassInner = document.querySelector('.compass-inner');
         if (!compassInner) return;
         
+        // 使用CSS动画代替JavaScript控制的帧动画
+        compassInner.style.transition = 'transform 0.01s linear';
+        
         let lastTimestamp = 0;
+        const autoRotationSpeed = -performanceSettings.rotationSpeed; // 使用负值实现逆时针旋转
         
         function autoRotateStep(timestamp) {
             if (!lastTimestamp) lastTimestamp = timestamp;
             
+            // 计算帧之间的时间差
             const elapsed = timestamp - lastTimestamp;
             
-            if (elapsed >= settings.frameInterval) {
-                currentRotation += autoRotationSpeed;
-                        compassInner.style.transform = `rotate(${currentRotation}deg)`;
-                lastTimestamp = timestamp;
-            }
+            // 计算每帧应该旋转的角度，根据elapsed时间动态调整
+            // 这样即使帧率不稳定，旋转速度也会保持一致
+            const rotationDelta = (autoRotationSpeed * elapsed) / 16.67; // 16.67ms是60fps的帧间隔
+            
+            currentRotation += rotationDelta;
+            compassInner.style.transform = `rotate(${currentRotation}deg)`;
+            lastTimestamp = timestamp;
             
             autoRotationId = requestAnimationFrame(autoRotateStep);
         }
@@ -1021,11 +1029,11 @@ document.addEventListener('DOMContentLoaded', function() {
             autoRotationId = null;
             compass.classList.remove('auto-rotating');
             
-            // 清除transform样式
+            // 清除CSS过渡效果
             const compassInner = document.querySelector('.compass-inner');
             if (compassInner) {
+                compassInner.style.transition = '';
                 compassInner.style.transform = `rotate(${currentRotation}deg)`;
-                // 移除重新创建文字层的逻辑，保持文字渲染一致
             }
         }
     }
@@ -1144,9 +1152,24 @@ document.addEventListener('DOMContentLoaded', function() {
             infoPanel.remove(); // 如果已存在则删除重建
         }
         
+        // 判断是否为移动设备
+        const isMobile = window.innerWidth <= 768;
+        
         // 创建外层容器
         infoPanel = document.createElement('div');
-        infoPanel.className = 'solar-term-info-panel';
+        infoPanel.className = 'solar-term-info-panel' + (isMobile ? ' mobile-panel' : '');
+        
+        // 设置基本样式和显示属性
+        infoPanel.style.position = 'fixed';
+        infoPanel.style.zIndex = '100';
+        infoPanel.style.display = 'flex';
+        
+        // 处理移动端的特殊初始设置
+        if (isMobile) {
+            // 先隐藏面板，等所有内容设置完毕再显示
+            infoPanel.style.visibility = 'hidden';
+        }
+        
         document.querySelector('.container').appendChild(infoPanel);
         
         // 创建左侧信息区域
@@ -1163,9 +1186,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const tabs = [
             { id: 'tab1', label: '节气提醒<br>节气序列', fields: ['date'] },
             { id: 'tab2', label: '三候<br>黄道位置', fields: ['phenomena', 'position'] },
-            { id: 'tab3', label: '八风能量对应<br>四季五行对应<br>五音能量对应', fields: ['wind', 'element', 'sound'] },
-            { id: 'tab4', label: '六气能量主气<br>天地能量主运', fields: ['qi', 'energy'] }
+            { id: 'tab3', label: '八风能量<br>四季五行<br>五音能量', fields: ['wind', 'element', 'sound'] },
+            { id: 'tab4', label: '六气能量<br>天地能量', fields: ['qi', 'energy'] }
         ];
+        
+        // 为移动端预先构建所有按钮，一次性添加，减少DOM操作
+        const buttonsFragment = document.createDocumentFragment();
         
         // 创建分页按钮
         tabs.forEach((tab, index) => {
@@ -1174,265 +1200,100 @@ document.addEventListener('DOMContentLoaded', function() {
             button.setAttribute('data-tab', tab.id);
             button.innerHTML = tab.label;
             
-            // 鼠标悬停事件
-            button.addEventListener('mouseenter', () => {
-                // 移除所有按钮的active类
-                document.querySelectorAll('.tab-button').forEach(btn => {
-                    btn.classList.remove('active');
+            if (isMobile) {
+                // 移动端使用点击事件代替hover事件，减少触发频率
+                button.addEventListener('click', () => {
+                    // 移除所有按钮的active类
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // 给当前按钮添加active类
+                    button.classList.add('active');
+                    
+                    // 更新内容
+                    updateInfoContent(tab.fields);
+                });
+            } else {
+                // 桌面端保持原有的鼠标悬停事件
+                button.addEventListener('mouseenter', () => {
+                    // 移除所有按钮的active类
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // 给当前按钮添加active类
+                    button.classList.add('active');
+                    
+                    // 更新内容
+                    updateInfoContent(tab.fields);
                 });
                 
-                // 给当前按钮添加active类
-                button.classList.add('active');
-                
-                // 更新内容
-                updateInfoContent(tab.fields);
-            });
-            
-            // 添加触摸事件支持
-            button.addEventListener('touchstart', (e) => {
-                e.preventDefault(); // 防止默认行为
-                
-                // 移除所有按钮的active类
-                document.querySelectorAll('.tab-button').forEach(btn => {
-                    btn.classList.remove('active');
+                // 添加触摸事件支持
+                button.addEventListener('touchstart', (e) => {
+                    e.preventDefault(); // 防止默认行为
+                    
+                    // 移除所有按钮的active类
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // 给当前按钮添加active类
+                    button.classList.add('active');
+                    
+                    // 更新内容
+                    updateInfoContent(tab.fields);
                 });
-                
-                // 给当前按钮添加active类
-                button.classList.add('active');
-                
-                // 更新内容
-                updateInfoContent(tab.fields);
-            });
+            }
             
-            tabButtons.appendChild(button);
+            buttonsFragment.appendChild(button);
         });
         
-        // 设置样式
-        const isMobile = window.innerWidth <= 768;
-        
-        // 设置面板位置和样式
-        infoPanel.style.position = 'absolute';
-        infoPanel.style.zIndex = '100';
-        infoPanel.style.display = 'flex';
-        infoPanel.style.color = '#ffeb3b';
-        infoPanel.style.fontFamily = '"PingFang SC", "微软雅黑", sans-serif';
-        infoPanel.style.border = '1px solid rgba(212, 175, 55, 0.4)';
-        infoPanel.style.boxShadow = '0 0 10px rgba(212, 175, 55, 0.3)';
-        infoPanel.style.borderRadius = '8px';
-        infoPanel.style.background = 'transparent';
-        infoPanel.style.backdropFilter = 'blur(3px)';
-        
-        // 根据设备类型设置位置和布局
-        updatePanelLayout(infoPanel, infoContent, tabButtons);
-        
-        // 设置内容区域样式
-        infoContent.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
-        infoContent.style.borderRadius = '4px';
-        infoContent.style.textShadow = '0 0 2px rgba(0, 0, 0, 0.8)';
-        infoContent.style.overflow = 'auto';
-        
-        // 设置按钮区域样式
-        tabButtons.style.display = 'flex';
-        tabButtons.style.gap = '5px'; // 设置按钮之间的间距
+        // 一次性添加所有按钮
+        tabButtons.appendChild(buttonsFragment);
         
         // 显示初始内容
         updateInfoContent(tabs[0].fields);
         
-        // 监听窗口大小变化，调整面板位置
-        window.addEventListener('resize', () => {
-            const newIsMobile = window.innerWidth <= 768;
-            updatePanelLayout(infoPanel, infoContent, tabButtons);
-            updateButtonStyles(document.querySelectorAll('.tab-button'), newIsMobile);
-            
-            // 更新卡片显示状态
-            const cardToggle = document.getElementById('solarTermCardToggle');
-            if (cardToggle) {
-                // 根据开关状态决定是否显示
-                infoPanel.style.display = cardToggle.checked ? 'flex' : 'none';
-            }
-        });
+        // 监听窗口大小变化，但为移动设备降低响应频率
+        const resizeHandler = isMobile ? 
+            debounce(() => updatePanelLayout(infoPanel), 250) : 
+            () => updatePanelLayout(infoPanel);
+        
+        window.addEventListener('resize', resizeHandler);
         
         // 设置初始显示状态 - 根据开关设置
         const cardToggle = document.getElementById('solarTermCardToggle');
         if (cardToggle) {
             infoPanel.style.display = cardToggle.checked ? 'flex' : 'none';
         }
+        
+        // 移动端在最后一步再显示面板，避免闪烁
+        if (isMobile) {
+            // 使用requestAnimationFrame确保在下一帧渲染
+            requestAnimationFrame(() => {
+                infoPanel.style.visibility = 'visible';
+            });
+        }
     }
 
-    // 更新面板布局的函数
-    function updatePanelLayout(panel, content, buttons) {
-        // 使用与CSS相同的断点判断
-        const mobileBreakpoint = 768;
-        const isMobile = window.innerWidth <= mobileBreakpoint;
+    // 修改updatePanelLayout函数，简化布局更新方式
+    function updatePanelLayout(panel) {
+        const isMobile = window.innerWidth <= 768;
         
-        // 设置面板尺寸和位置
+        // 移除可能的mobile-panel类
+        panel.classList.remove('mobile-panel');
+        
+        // 根据设备类型重设类名
         if (isMobile) {
-            // 移动端设置 - 显示在罗盘下方
-            panel.style.position = 'fixed';
-            panel.style.top = 'auto';
-            panel.style.bottom = '10px';
-            panel.style.left = '50%';
-            panel.style.right = 'auto';
-            panel.style.transform = 'translateX(-50%)';
-            panel.style.flexDirection = 'column';
-            panel.style.width = '90%';
-            panel.style.maxWidth = '400px';
-            panel.style.minWidth = '280px';
-            panel.style.backgroundColor = 'transparent'; // 完全透明
-            panel.style.border = '1px solid rgba(212, 175, 55, 0.4)'; // 金色边框
-            
-            // 移动端内容区域样式
-            content.style.flex = 'none';
-            content.style.width = '100%';
-            content.style.maxHeight = '120px'; // 限制高度，避免占用太多空间
-            content.style.minHeight = '60px';
-            content.style.fontSize = '10px';
-            content.style.padding = '8px';
-            content.style.boxSizing = 'border-box';
-            content.style.backgroundColor = 'rgba(0, 0, 0, 0.2)'; // 微透明黑色背景
-            content.style.margin = '5px';
-            content.style.borderRadius = '4px';
-            
-            // 移动端按钮区域样式 - 与图片一致的样式
-            buttons.style.flex = 'none';
-            buttons.style.width = '100%';
-            buttons.style.flexDirection = 'row'; // 按钮横向排列
-            buttons.style.flexWrap = 'wrap'; // 允许按钮换行
-            buttons.style.justifyContent = 'center';
-            buttons.style.alignItems = 'center';
-            buttons.style.padding = '5px';
-            buttons.style.boxSizing = 'border-box';
-            buttons.style.backgroundColor = 'transparent';
-        } else {
-            // 桌面端设置 - 显示在右下角
-            panel.style.position = 'fixed';
-            panel.style.top = 'auto';
-            panel.style.bottom = '20px';
-            panel.style.left = 'auto';
-            panel.style.right = '20px';
-            panel.style.transform = 'none';
-            panel.style.flexDirection = 'row';
-            panel.style.width = '400px';
-            panel.style.maxWidth = '400px';
-            panel.style.minWidth = '400px';
-            panel.style.backgroundColor = 'transparent'; // 完全透明
-            
-            // 桌面端内容区域样式
-            content.style.flex = 'none';
-            content.style.width = '300px';
-            content.style.maxHeight = '350px'; // 限制最大高度
-            content.style.minHeight = '150px';
-            content.style.fontSize = '14px';
-            content.style.padding = '15px';
-            content.style.boxSizing = 'border-box';
-            content.style.backgroundColor = 'rgba(0, 0, 0, 0.2)'; // 微透明黑色背景
-            content.style.borderRadius = '4px';
-            content.style.margin = '0';
-            
-            // 桌面端按钮区域样式
-            buttons.style.flex = 'none';
-            buttons.style.width = '95px';
-            buttons.style.flexDirection = 'column';
-            buttons.style.flexWrap = 'nowrap';
-            buttons.style.justifyContent = 'center';
-            buttons.style.alignItems = 'center';
-            buttons.style.padding = '10px';
-            buttons.style.boxSizing = 'border-box';
-            buttons.style.backgroundColor = 'transparent';
+            panel.classList.add('mobile-panel');
         }
         
-        // 通用样式设置
-        panel.style.backdropFilter = 'blur(3px)';
-        panel.style.boxSizing = 'border-box';
-        panel.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.3)';
-        panel.style.zIndex = '100';
-        
-        // 更新按钮样式
-        updateButtonStyles(buttons.querySelectorAll('.tab-button'), isMobile);
-    }
-
-    // 更新按钮样式的函数
-    function updateButtonStyles(buttons, isMobile) {
-        buttons.forEach((btn, index) => {
-            // 设置固定宽高
-            if (isMobile) {
-                // 移动端固定尺寸 - 按照图片中的样式设计
-                btn.style.width = '70px';
-                btn.style.height = '36px';
-                btn.style.fontSize = '10px';
-                btn.style.marginBottom = '4px';
-                btn.style.marginRight = '4px';
-                btn.style.lineHeight = '1.1';
-                btn.style.padding = '2px 0';
-            } else {
-                // 桌面端固定尺寸
-                btn.style.width = '90px';
-                btn.style.height = '60px';
-                btn.style.fontSize = '12px';
-                btn.style.marginBottom = '6px';
-                btn.style.marginRight = '0';
-                btn.style.lineHeight = '1.4';
-                btn.style.padding = '2px 2px';
-            }
-            
-            // 通用按钮样式
-            btn.style.textAlign = 'center';
-            btn.style.cursor = 'pointer';
-            btn.style.borderRadius = '4px';
-            btn.style.transition = 'background-color 0.3s ease';
-            btn.style.fontWeight = '400';
-            btn.style.textShadow = '0 0 2px rgba(0, 0, 0, 0.8)';
-            btn.style.border = '1px solid rgba(212, 175, 55, 0.4)';
-            btn.style.display = 'flex';
-            btn.style.alignItems = 'center';
-            btn.style.justifyContent = 'center';
-            btn.style.flex = 'none'; // 不使用flex自动调整
-            btn.style.boxSizing = 'border-box';
-            btn.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
-            btn.style.color = '#ffeb3b'; // 设置文字颜色为金色
-            
-            // 根据按钮状态设置不同样式 - 但不改变文字颜色
-            if (btn.classList.contains('active')) {
-                // 只有不是第一个按钮才应用加深背景色
-                if (index !== 0) {
-                    btn.style.backgroundColor = 'rgba(212, 175, 55, 0.2)';
-                }
-                btn.style.boxShadow = '0 0 5px rgba(212, 175, 55, 0.5)';
-                btn.style.border = '1px solid rgba(212, 175, 55, 0.8)';
-                // 不再改变文字颜色，保持金色
-            } else {
-                btn.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
-                btn.style.boxShadow = 'none';
-            }
-            
-            // 添加悬停效果 - 但不为第一个按钮添加
-            if (index !== 0) {
-                btn.onmouseenter = function() {
-                    if (!btn.classList.contains('active')) {
-                        btn.style.backgroundColor = 'rgba(212, 175, 55, 0.2)';
-                    }
-                };
-                
-                btn.onmouseleave = function() {
-                    if (!btn.classList.contains('active')) {
-                        btn.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
-                    }
-                };
-
-                // 添加触摸效果
-                btn.ontouchstart = function() {
-                    if (!btn.classList.contains('active')) {
-                        btn.style.backgroundColor = 'rgba(212, 175, 55, 0.2)';
-                    }
-                };
-                
-                btn.ontouchend = function() {
-                    if (!btn.classList.contains('active')) {
-                        btn.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
-                    }
-                };
-            }
-        });
+        // 设置显示状态
+        const cardToggle = document.getElementById('solarTermCardToggle');
+        if (cardToggle) {
+            panel.style.display = cardToggle.checked ? 'flex' : 'none';
+        }
     }
 
     // 为所有设备创建顶部控件
@@ -1649,43 +1510,55 @@ document.addEventListener('DOMContentLoaded', function() {
         const termData = createSolarTermInfoData().find(term => term.term === currentTerm.name);
         if (!termData) return;
         
-        // 判断设备类型
+        // 判断是否为移动设备
         const isMobile = window.innerWidth <= 768;
-        const currentTermFontSize = isMobile ? '11px' : '14px';
         
-        // 构建显示内容 - 更紧凑的布局
-        let content = `<div style="margin-bottom: 8px; font-size: ${currentTermFontSize}; color: #ffeb3b;">当前节气：${currentTerm.name}</div>`;
+        // 初始化HTML构建数组，比字符串拼接更高效
+        const contentParts = [];
+        
+        // 添加标题
+        contentParts.push(`<div class="current-term">${currentTerm.name}</div>`);
         
         // 显示各字段内容
-        fields.forEach(field => {
+        fields.forEach((field) => {
             let fieldContent = termData[field];
+            let fieldLabel = '';
+            
             // 为不同字段添加对应的前缀
             switch (field) {
                 case 'position':
-                    fieldContent = `黄道位置：${fieldContent}`;
+                    fieldLabel = '黄道位置';
                     break;
                 case 'phenomena':
-                    fieldContent = `三候：${fieldContent}`;
+                    fieldLabel = '三候';
                     break;
                 case 'wind':
-                    fieldContent = `八风能量对应：${fieldContent}`;
+                    fieldLabel = '八风能量对应';
                     break;
                 case 'element':
-                    fieldContent = `四季五行对应：${fieldContent}`;
+                    fieldLabel = '四季五行对应';
                     break;
                 case 'sound':
-                    fieldContent = `五音能量对应：${fieldContent}`;
+                    fieldLabel = '五音能量对应';
                     break;
                 case 'qi':
-                    fieldContent = `六气能量主气对应：${fieldContent}`;
+                    fieldLabel = '六气能量主气对应';
                     break;
                 case 'energy':
-                    fieldContent = `天地能量主运：${fieldContent}`;
+                    fieldLabel = '天地能量主运';
                     break;
             }
-            content += `<div style="margin-bottom: 6px;">
-                <span>${fieldContent}</span>
-            </div>`;
+            
+            if (fieldLabel) {
+                contentParts.push(`<div class="info-item">
+                    <span class="info-label">${fieldLabel}：</span>
+                    <span class="info-value">${fieldContent}</span>
+                </div>`);
+            } else {
+                contentParts.push(`<div class="info-item">
+                    <span class="info-value">${fieldContent}</span>
+                </div>`);
+            }
         });
         
         // 如果是阳历时间页面，添加节气提示语到字段内容下方
@@ -1696,15 +1569,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // 生成提示语
             let tips = '';
             if (todayStr === currentTerm.date) {
-                tips += `🌸 今日${currentTerm.name}有导师的节气课程哦！`;                
+                tips += `<span class="highlight-tip">🌸 今日${currentTerm.name}有导师的节气课程哦！</span>`;                
             } else {
-                tips += `下一个节气是【${nextTerm.name}】，阳历日期：${formatDate(nextTerm.date)}，倒计时${getDaysLeft(nextTerm.date)}天。`;
+                tips += `<span class="next-term">下一个节气是【${nextTerm.name}】阳历日期：${formatDate(nextTerm.date)}，倒计时 <strong>${getDaysLeft(nextTerm.date)}</strong> 天</span>`;
             }
             
-            content += `<div style="margin: 10px 0 4px 0; font-size: 1em;">${tips}</div>`;
+            contentParts.push(`<div class="tips-container">${tips}</div>`);
         }
         
-        infoContent.innerHTML = content;
+        // 一次性更新DOM，减少重排
+        infoContent.innerHTML = contentParts.join('');
     }
 
     // 初始化罗盘
