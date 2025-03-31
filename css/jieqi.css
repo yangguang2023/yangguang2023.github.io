@@ -610,10 +610,10 @@ input:checked + .slider:before {
     /* 罗盘边框样式调整 */
     .compass::after {
         border-width: 1.5px;
-        top: -1.5%;
-        left: -1.5%;
-        width: 103%;
-        height: 103%;
+        top: -2.5%;
+        left: -2.5%;
+        width: 105%;
+        height: 105%;
     }
     
     /* 扇形区域调整 */
@@ -737,7 +737,8 @@ input:checked + .slider:before {
         margin: 3px;
         font-size: 9px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        width: 68px !important;
+        width: 58px !important;
+        height: 28px !important;
         min-height: 34px;
         padding: 4px 2px;
     }
@@ -986,7 +987,7 @@ input:checked + .slider:before {
 /* 移动端内容区域样式 */
 .mobile-panel .info-content {
     width: 100%;
-    max-height: 120px;
+
     min-height: 60px;
     padding: 10px;
     font-size: 12px;
@@ -1069,7 +1070,8 @@ input:checked + .slider:before {
     margin: 3px;
     font-size: 9px; 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    width: 68px !important; 
+    width: 58px !important; 
+    height: 28px !important;
     min-height: 34px;
     padding: 4px 2px;
     transition: none;
@@ -1463,20 +1465,14 @@ body.has-bottom-nav .scroll-indicator {
 @media (max-width: 768px) {
     .text-item {
         text-rendering: optimizeLegibility;
-        font-weight: 700; /* 移动端加粗 */
+        font-weight: 400; /* 移动端加粗 */
         letter-spacing: 0.5px; /* 移动端字间距略小 */
         color: #d4af37;
-        text-shadow: 0 0 8px rgba(255, 215, 0, 0.6), 0 0 12px rgba(255, 215, 0, 0.3);
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
     }
     
     .text-item.hexagram-text {
-        font-weight: 800;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.5);
-    }
-    
-    .text-item:hover {
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.4);
+        font-weight: 500;
     }
 }
