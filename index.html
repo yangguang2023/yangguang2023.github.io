@@ -4,10 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#000000">
-    <title>众眇之门</title>
+    <title>众眇之门 - 弘扬中华优秀传统文化</title>
+    <meta name="description" content="弘扬中华优秀传统文化">
+    <meta name="keywords" content="德慧智,道德根文化,二十四节气,德道经,传统文化,经典诵读,帛书,修身,修心">
+    <meta name="author" content="阳光">
+    <!-- 添加规范链接，确保搜索引擎知道这是主页 -->
+    <link rel="canonical" href="https://www.zhonmiaozhimen.cn/">
+    <!-- 添加Open Graph协议标签，提升社交媒体分享效果 -->
+    <meta property="og:title" content="众眇之门 - 弘扬中华优秀传统文化">
+    <meta property="og:description" content="弘扬中华优秀传统文化">
+    <meta property="og:url" content="https://www.zhonmiaozhimen.cn/">
+    <meta property="og:type" content="website">
+    <!-- 移动端适配标签 -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="//at.alicdn.com/t/c/font_4809197_u4dqklzzzys.css">
     <link rel="stylesheet" href="/css/jieqi.css">
     <link rel="stylesheet" href="/css/custom.css">
+    <!-- 添加网站图标 -->
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- JSON-LD 结构化数据 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "众眇之门",
+        "url": "https://www.zhonmiaozhimen.cn/",
+        "description": "弘扬中华优秀传统文化",
+        "author": {
+            "@type": "Person",
+            "name": "阳光"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.zhonmiaozhimen.cn/blog/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
     <script>
         // 添加页面标识类，帮助CSS选择器识别
         document.documentElement.classList.add('custom-index-page');
@@ -97,7 +134,7 @@
     
     <!-- 添加页面过渡效果元素 -->
     <div id="page-transition" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;"></div>
-
+    
     <script src="/js/jieqi.js"></script>
     <script>
         // 自动旋转功能
@@ -449,24 +486,24 @@
         // 移动设备上不创建流星效果
         if (!isMobileDevice()) {
             // 简化流星创建函数，修复错乱问题
-            function createSimpleMeteor() {
-                const container = document.getElementById('meteorContainer');
+        function createSimpleMeteor() {
+            const container = document.getElementById('meteorContainer');
                 if (!container) return;
-                
+            
                 // 随机生成流星参数
-                const startX = Math.random() * window.innerWidth;
-                const startY = Math.random() * (window.innerHeight / 3);
-                const size = Math.random() * 3 + 1;
-                const length = Math.random() * 150 + 50;
-                
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * (window.innerHeight / 3);
+            const size = Math.random() * 3 + 1;
+            const length = Math.random() * 150 + 50;
+            
                 // 创建流星元素
-                const meteor = document.createElement('div');
-                meteor.className = 'meteor';
-                meteor.style.width = `${size}px`;
-                meteor.style.height = `${size}px`;
-                meteor.style.left = `${startX}px`;
-                meteor.style.top = `${startY}px`;
-                
+            const meteor = document.createElement('div');
+            meteor.className = 'meteor';
+            meteor.style.width = `${size}px`;
+            meteor.style.height = `${size}px`;
+            meteor.style.left = `${startX}px`;
+            meteor.style.top = `${startY}px`;
+            
                 // 创建尾巴元素
                 const tail = document.createElement('div');
                 tail.className = 'meteor-tail';
@@ -477,37 +514,37 @@
                 tail.style.transform = 'rotate(-45deg)';
                 
                 // 单独添加元素，确保正确显示
-                container.appendChild(tail);
-                container.appendChild(meteor);
+            container.appendChild(tail);
+            container.appendChild(meteor);
                 
                 // 跟踪元素
                 resourceManager.addElement(meteor);
                 resourceManager.addElement(tail);
-                
-                // 动画参数
-                let posX = startX;
-                let posY = startY;
-                const speed = Math.random() * 5 + 3;
+            
+            // 动画参数
+            let posX = startX;
+            let posY = startY;
+            const speed = Math.random() * 5 + 3;
                 const angle = 135 * Math.PI / 180;
+            
+            // 动画函数
+            function animate() {
+                // 计算新位置
+                posX += Math.cos(angle) * speed;
+                posY += Math.sin(angle) * speed;
                 
-                // 动画函数
-                function animate() {
-                    // 计算新位置
-                    posX += Math.cos(angle) * speed;
-                    posY += Math.sin(angle) * speed;
-                    
                     // 直接更新位置，不使用transform
                     meteor.style.left = `${posX}px`;
                     meteor.style.top = `${posY}px`;
-                    tail.style.left = `${posX}px`;
-                    tail.style.top = `${posY}px`;
-                    
-                    // 检查是否超出屏幕
-                    if (posX < -200 || posY > window.innerHeight + 200) {
+                tail.style.left = `${posX}px`;
+                tail.style.top = `${posY}px`;
+                
+                // 检查是否超出屏幕
+                if (posX < -200 || posY > window.innerHeight + 200) {
                         // 安全删除
                         if (meteor.parentNode) meteor.remove();
                         if (tail.parentNode) tail.remove();
-                    } else {
+                } else {
                         // 管理动画帧
                         const frameId = requestAnimationFrame(animate);
                         resourceManager.addAnimationFrame(frameId);
@@ -526,25 +563,25 @@
                     return;
                 }
                 
-                const container = document.getElementById('meteorContainer');
+            const container = document.getElementById('meteorContainer');
                 if (!container || isMobileDevice()) return;
-                
-                // 获取点击位置
-                const startX = e.clientX;
-                const startY = e.clientY;
+            
+            // 获取点击位置
+            const startX = e.clientX;
+            const startY = e.clientY;
                 
                 // 创建流星元素
-                const size = Math.random() * 3 + 2;
-                const length = Math.random() * 150 + 100;
-                const angle = 135 * Math.PI / 180;
-                
-                // 创建流星头部
-                const meteor = document.createElement('div');
-                meteor.className = 'meteor';
-                meteor.style.width = `${size}px`;
-                meteor.style.height = `${size}px`;
-                meteor.style.left = `${startX}px`;
-                meteor.style.top = `${startY}px`;
+            const size = Math.random() * 3 + 2;
+            const length = Math.random() * 150 + 100;
+            const angle = 135 * Math.PI / 180;
+            
+            // 创建流星头部
+            const meteor = document.createElement('div');
+            meteor.className = 'meteor';
+            meteor.style.width = `${size}px`;
+            meteor.style.height = `${size}px`;
+            meteor.style.left = `${startX}px`;
+            meteor.style.top = `${startY}px`;
                 
                 // 创建流星尾巴
                 const tail = document.createElement('div');
@@ -554,35 +591,35 @@
                 tail.style.width = `${length}px`;
                 tail.style.height = `${size/2}px`;
                 tail.style.transform = 'rotate(-45deg)';
-                
-                // 添加到容器
-                container.appendChild(tail);
-                container.appendChild(meteor);
+            
+            // 添加到容器
+            container.appendChild(tail);
+            container.appendChild(meteor);
                 
                 // 跟踪元素
                 resourceManager.addElement(meteor);
                 resourceManager.addElement(tail);
+            
+            // 动画参数
+            let posX = startX;
+            let posY = startY;
+            const speed = Math.random() * 5 + 5;
+            
+            // 动画函数
+            function animate() {
+                // 计算新位置
+                posX += Math.cos(angle) * speed;
+                posY += Math.sin(angle) * speed;
                 
-                // 动画参数
-                let posX = startX;
-                let posY = startY;
-                const speed = Math.random() * 5 + 5;
-                
-                // 动画函数
-                function animate() {
-                    // 计算新位置
-                    posX += Math.cos(angle) * speed;
-                    posY += Math.sin(angle) * speed;
-                    
                     // 直接更新位置
                     meteor.style.left = `${posX}px`;
                     meteor.style.top = `${posY}px`;
-                    tail.style.left = `${posX}px`;
-                    tail.style.top = `${posY}px`;
-                    
-                    // 检查是否超出屏幕
-                    if (posX < -200 || posX > window.innerWidth + 200 || 
-                        posY < -200 || posY > window.innerHeight + 200) {
+                tail.style.left = `${posX}px`;
+                tail.style.top = `${posY}px`;
+                
+                // 检查是否超出屏幕
+                if (posX < -200 || posX > window.innerWidth + 200 || 
+                    posY < -200 || posY > window.innerHeight + 200) {
                         if (meteor.parentNode) meteor.remove();
                         if (tail.parentNode) tail.remove();
                     } else {
@@ -596,27 +633,17 @@
                 resourceManager.addAnimationFrame(frameId);
             });
             
-            // 使用页面生命周期事件 - 保持不变
-            resourceManager.addEventListeners(window, 'load', function() {
-                // 创建定时产生流星
-                const intervalId = setInterval(createSimpleMeteor, 4000);
-                resourceManager.addTimer(intervalId);
-                
-                // 初始创建几个流星
-                for (let i = 0; i < 3; i++) {
-                    const timerId = setTimeout(createSimpleMeteor, Math.random() * 3000);
-                    resourceManager.addTimer(timerId);
-                }
-            });
+            // 页面可见性变化处理
+            let pageHiddenTime = 0; // 记录页面隐藏的时间戳
+            const METEOR_SHOWER_THRESHOLD = 10000; // 触发流星雨的时间阈值（毫秒）
             
-            // 页面卸载前清理 - 保持不变
-            resourceManager.addEventListeners(window, 'beforeunload', cleanupAllResources);
-            
-            // 页面可见性变化 - 保持不变
             resourceManager.addEventListeners(document, 'visibilitychange', function() {
                 const container = document.getElementById('meteorContainer');
                 
                 if (document.hidden) {
+                    // 记录页面隐藏的时间戳
+                    pageHiddenTime = Date.now();
+                    
                     // 暂停所有流星动画
                     resourceManager.animationFrames.forEach(id => {
                         cancelAnimationFrame(id);
@@ -629,21 +656,126 @@
                         clearTimeout(id);
                     });
                     resourceManager.timers = [];
+                    
+                    // 清除所有现有流星元素
+                    if (container) {
+                        container.innerHTML = '';
+                    }
+                    resourceManager.elements = [];
                 } else {
+                    // 计算页面隐藏的时间
+                    const hiddenDuration = Date.now() - pageHiddenTime;
+                    
                     // 重新开始流星创建
                     if (!resourceManager.timers.length && container) {
-                        // 创建几个初始流星
-                        for (let i = 0; i < 2; i++) {
-                            const timerId = setTimeout(createSimpleMeteor, Math.random() * 2000);
-                            resourceManager.addTimer(timerId);
+                        // 只有当页面隐藏超过阈值时间才触发流星雨
+                        if (hiddenDuration > METEOR_SHOWER_THRESHOLD) {
+                            // 页面回来时创建流星雨效果
+                            createMeteorShower();
                         }
                         
-                        // 重新启动定时器
-                        const intervalId = setInterval(createSimpleMeteor, 4000);
+                        // 无论如何都重新启动正常的流星生成
+                        const intervalId = setInterval(createSimpleMeteor, 2500);
                         resourceManager.addTimer(intervalId);
+                        
+                        // 创建几个初始流星
+                        for (let i = 0; i < 2; i++) {
+                            const timerId = setTimeout(createSimpleMeteor, 1000 + Math.random() * 1000);
+                            resourceManager.addTimer(timerId);
+                        }
                     }
                 }
             });
+            
+            // 添加流星雨效果函数
+            function createMeteorShower() {
+                const container = document.getElementById('meteorContainer');
+                if (!container) return;
+                
+                // 创建多个流星形成流星雨效果
+                for (let i = 0; i < 10; i++) {
+                    // 随机生成流星参数
+                    const startX = Math.random() * window.innerWidth;
+                    const startY = Math.random() * (window.innerHeight / 4);
+                    const size = Math.random() * 3 + 1;
+                    const length = Math.random() * 150 + 50;
+                    
+                    // 创建流星元素
+                    const meteor = document.createElement('div');
+                    meteor.className = 'meteor';
+                    meteor.style.width = `${size}px`;
+                    meteor.style.height = `${size}px`;
+                    meteor.style.left = `${startX}px`;
+                    meteor.style.top = `${startY}px`;
+                    
+                    // 创建尾巴元素
+                    const tail = document.createElement('div');
+                    tail.className = 'meteor-tail';
+                    tail.style.left = `${startX}px`;
+                    tail.style.top = `${startY}px`;
+                    tail.style.width = `${length}px`;
+                    tail.style.height = `${size/2}px`;
+                    tail.style.transform = 'rotate(-45deg)';
+                    
+                    // 单独添加元素，确保正确显示
+                    container.appendChild(tail);
+                    container.appendChild(meteor);
+                    
+                    // 跟踪元素
+                    resourceManager.addElement(meteor);
+                    resourceManager.addElement(tail);
+                    
+                    // 动画参数
+                    let posX = startX;
+                    let posY = startY;
+                    const speed = Math.random() * 5 + 4;
+                    const angle = 135 * Math.PI / 180;
+                    
+                    // 动画函数
+                    function animate() {
+                        // 计算新位置
+                        posX += Math.cos(angle) * speed;
+                        posY += Math.sin(angle) * speed;
+                        
+                        // 直接更新位置，不使用transform
+                        meteor.style.left = `${posX}px`;
+                        meteor.style.top = `${posY}px`;
+                        tail.style.left = `${posX}px`;
+                        tail.style.top = `${posY}px`;
+                        
+                        // 检查是否超出屏幕
+                        if (posX < -200 || posY > window.innerHeight + 200) {
+                            // 安全删除
+                            if (meteor.parentNode) meteor.remove();
+                            if (tail.parentNode) tail.remove();
+                        } else {
+                            // 管理动画帧
+                            const frameId = requestAnimationFrame(animate);
+                            resourceManager.addAnimationFrame(frameId);
+                        }
+                    }
+                    
+                    // 开始动画并管理
+                    const frameId = requestAnimationFrame(animate);
+                    resourceManager.addAnimationFrame(frameId);
+                }
+            }
+            
+            // 初始加载时只创建单个流星，不创建流星雨
+            resourceManager.addEventListeners(window, 'load', function() {
+                // 创建定时产生流星，降低流星生成间隔
+                const intervalId = setInterval(createSimpleMeteor, 12000);
+                resourceManager.addTimer(intervalId);
+                
+                // 初始创建几个流星
+                for (let i = 0; i < 3; i++) {
+                    const timerId = setTimeout(createSimpleMeteor, Math.random() * 3000);
+                    resourceManager.addTimer(timerId);
+                }
+            });
+            
+            // 页面卸载前清理
+            resourceManager.addEventListeners(window, 'beforeunload', cleanupAllResources);
         }
     </script>
 <script>"use strict";if("serviceWorker"in navigator){navigator.serviceWorker.register("service-worker.js").then((function(reg){reg.onupdatefound=function(){var installingWorker=reg.installing;installingWorker.onstatechange=function(){switch(installingWorker.state){case"installed":if(navigator.serviceWorker.controller){console.log("New or updated content is available.")}else{console.log("Content is now available offline!")}break;case"redundant":console.error("The installing service worker became redundant.");break}}}}))["catch"]((function(e){console.error("Error during service worker registration:",e)}))}</script></body></html>
