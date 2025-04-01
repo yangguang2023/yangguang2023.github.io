@@ -890,7 +890,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 根据设备类型设置不同的位置
         const isMobile = window.innerWidth <= 768;
         if (isMobile) {
-            referenceInfo.style.bottom= '130px'; // 在移动端显示在顶部，位于导航栏下方
+            referenceInfo.style.top= '80px'; // 在移动端显示在顶部，位于导航栏下方
             referenceInfo.style.left = '0';
             referenceInfo.style.transform = 'none';
             referenceInfo.style.fontSize = '10px'; // 移动端字体稍小

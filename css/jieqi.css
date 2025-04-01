@@ -178,6 +178,7 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    white-space: nowrap;
 }
 
 .site-title:hover {
@@ -481,18 +482,6 @@ input:checked + .slider:before {
     perspective: none;
 }
 
-/* 卦符文字特殊样式 */
-.text-item.hexagram-text {
-    font-weight: 700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6), 0 0 18px rgba(255, 215, 0, 0.4);
-}
-
-.text-item:hover {
-    text-shadow: 0 0 12px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.4);
-    color: #ffffff;
-    opacity: 1;
-}
-
 /* 添加金色边框样式 */
 .compass::after {
     content: '';
@@ -572,30 +561,29 @@ input:checked + .slider:before {
     /* 导航栏响应式 */
     .site-header {
         padding: 15px 20px;
+        height: 60px; /* 固定高度 */
     }
 
     .site-title {
         font-size: 24px;
+        flex-shrink: 0; /* 防止标题被压缩 */
     }
 
     .main-menu {
         position: fixed;
-        top: 0;
+        top: 60px; /* 与header高度相同 */
         right: -100%;
-        height: 100vh;
-        width: 80%;
-        max-width: 300px;
+        width: 100%;
+        height: calc(100vh - 60px);
         background-color: rgba(0, 0, 0, 0.95);
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
+        padding: 20px 0;
+        gap: 20px;
         transition: right 0.3s ease;
-        z-index: 1000;
-        padding: 50px 20px;
-        gap: 40px;
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border-left: 1px solid rgba(212, 175, 55, 0.2);
     }
 
     .main-menu.active {
@@ -604,16 +592,54 @@ input:checked + .slider:before {
 
     .menu-item {
         font-size: 20px;
-        opacity: 0.8;
-        padding: 12px 15px; /* 增大点击区域 */
-    }
-
-    .menu-item:hover {
-        opacity: 1;
+        padding: 15px 0;
+        width: 100%;
+        text-align: center;
     }
 
     .menu-toggle {
         display: block;
+        width: 30px;
+        height: 24px;
+        position: relative;
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .menu-toggle span {
+        display: block;
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: #d4af37;
+        border-radius: 2px;
+        transition: .25s ease-in-out;
+    }
+
+    .menu-toggle span:nth-child(1) {
+        top: 0;
+    }
+
+    .menu-toggle span:nth-child(2) {
+        top: 10px;
+    }
+
+    .menu-toggle span:nth-child(3) {
+        top: 20px;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+        top: 10px;
+        transform: rotate(45deg);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+        top: 10px;
+        transform: rotate(-45deg);
     }
 
     /* 罗盘响应式样式 */
@@ -704,6 +730,7 @@ input:checked + .slider:before {
         -webkit-transform-style: flat;
     }
     
+    /* 整合所有移动端的text-item样式 */
     .text-item {
         text-rendering: optimizeLegibility;
         font-weight: normal;
@@ -715,7 +742,7 @@ input:checked + .slider:before {
         transform: translateZ(0);
         -webkit-transform: translateZ(0);
         backface-visibility: hidden;
-        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+        transition: none;
     }
     
     .text-item.hexagram-text {
@@ -725,15 +752,28 @@ input:checked + .slider:before {
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+        backface-visibility: hidden;
+        transition: none;
     }
     
+    /* 移动端禁用悬停效果 */
     .text-item:hover {
         background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37) !important;
         -webkit-background-clip: text !important;
         background-clip: text !important;
         color: transparent !important;
+        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5) !important;
+        transform: none !important;
     }
+    
+    /* 自动旋转时优化文字性能 */
+    .compass.auto-rotating .text-item {
+        opacity: 1;
+        text-shadow: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+
     
     /* 底部箭头指示器调整 */
     .scroll-indicator {
@@ -832,13 +872,6 @@ input:checked + .slider:before {
     -webkit-transform: translateZ(0);
 }
 
-.compass.auto-rotating .text-item {
-    opacity: 1;
-    /* 移除所有可能影响性能的复杂效果 */
-    text-shadow: none;
-    transition: none !important;
-}
-
 /* 确保自动旋转时的过渡效果 */
 .compass.auto-rotating .compass-inner {
     transition: none !important;
@@ -879,9 +912,7 @@ input:checked + .slider:before {
 }
 
 /* 禁用光晕动画，提高性能 */
-.compass.auto-rotating .text-item {
-    animation: none;
-}
+/* 此处删除重复的text-item动画禁用代码，已在其他处理 */
 
 /* 添加自动旋转CSS动画 */
 @keyframes autoRotate {
@@ -1403,8 +1434,9 @@ body.has-bottom-nav .scroll-indicator {
     z-index: 60 !important; /* 确保中心图标始终在最上层 */
 }
 
-/* 针对不同设备的文字清晰度优化 */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+/* 针对高DPI屏幕的文字清晰度优化 - 仅桌面端 */
+@media (-webkit-min-device-pixel-ratio: 2) and (min-width: 769px), 
+       (min-resolution: 192dpi) and (min-width: 769px) {
     .text-item {
         font-weight: 600;
         text-shadow: 0 0 10px rgba(255, 235, 59, 0.5), 0 0 18px rgba(255, 215, 0, 0.3);
@@ -1435,31 +1467,8 @@ body.has-bottom-nav .scroll-indicator {
     font-size: 0.9em;
 }
 
-/* 移动端优化 */
-@media (max-width: 768px) {
-    /* 禁用复杂的3D效果和阴影 */
-    .text-item {
-        text-rendering: optimizeLegibility;
-        font-weight: normal;
-        letter-spacing: 0.5px;
-        background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        backface-visibility: hidden;
-    }
-    
-    .text-item.hexagram-text {
-        font-weight: 600;
-        font-size: 1.1em;
-        background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-    }
-
+/* 移动端优化 - 综合所有移动端样式 */
+@media (max-width: 768px) {    
     /* 移动端导航栏优化 */
     .site-header {
         transform: translateZ(0);
@@ -1472,13 +1481,6 @@ body.has-bottom-nav .scroll-indicator {
         transform: none !important;
         filter: none !important;
         background-color: transparent !important;
-    }
-    
-    .text-item:hover {
-        background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37) !important;
-        -webkit-background-clip: text !important;
-        background-clip: text !important;
-        color: transparent !important;
     }
     
     .menu-item:hover {
@@ -1527,43 +1529,57 @@ body.has-bottom-nav .scroll-indicator {
         -webkit-backdrop-filter: none;
         background: rgba(0, 0, 0, 0.7);
     }
+    
+    /* 移动端禁用流星效果 */
+    .meteor-container,
+    .meteor, 
+    .meteor-tail {
+        display: none !important;
+        animation: none !important;
+    }
+    
+    /* 移动端隐藏节气卡片 */
+    .solar-term-info-panel {
+        display: none !important;
+    }
 }
 
-/* 添加移动设备样式标识 */
-.mobile-device .meteor-container {
-    display: none !important;
-}
-
-/* 设备类型特定样式 */
+/* 设备类型标识 - 整合所有相关样式 */
+.mobile-device .meteor-container,
+.mobile-device .meteor,
+.mobile-device .meteor-tail,
 .mobile-device .solar-term-info-panel {
     display: none !important;
 }
 
-/* 禁用移动设备上的流星效果相关动画 */
-@media screen and (max-width: 768px) {
-    .meteor-container {
-        display: none !important;
-    }
-    
-    .meteor, .meteor-tail {
-        display: none !important;
-        animation: none !important;
-    }
-}
-
-/* 针对移动设备减少不必要的动画 */
+/* 减少动画对性能的影响 - 整合所有相关样式 */
 @media (prefers-reduced-motion: reduce) {
-    .meteor-container {
-        display: none !important;
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
     
-    .meteor, .meteor-tail {
-        display: none !important;
+    .compass-inner,
+    .text-item, 
+    .sector, 
+    .compass::after,
+    .solar-term-info-panel,
+    .info-item,
+    .current-term,
+    .tips-container,
+    .highlight-tip,
+    .tab-button.active::before {
+        transition: none !important;
         animation: none !important;
     }
     
-    .compass-inner {
-        transition: none !important;
+    .meteor-container,
+    .meteor, 
+    .meteor-tail {
+        display: none !important;
+        animation: none !important;
     }
 }
 

@@ -26,6 +26,35 @@
         
         window.onload = function() {
             document.body.classList.add('page-index');
+            
+            // 移动端菜单处理
+            const menuToggle = document.querySelector('.menu-toggle');
+            const mainMenu = document.querySelector('.main-menu');
+            const siteHeader = document.querySelector('.site-header');
+            
+            if (menuToggle && mainMenu) {
+                menuToggle.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡
+                    menuToggle.classList.toggle('active');
+                    mainMenu.classList.toggle('active');
+                });
+                
+                // 点击菜单项时关闭菜单
+                mainMenu.querySelectorAll('.menu-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        menuToggle.classList.remove('active');
+                        mainMenu.classList.remove('active');
+                    });
+                });
+                
+                // 点击页面其他区域关闭菜单
+                document.addEventListener('click', function(e) {
+                    if (!mainMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                        menuToggle.classList.remove('active');
+                        mainMenu.classList.remove('active');
+                    }
+                });
+            }
         };
     </script>
     <!-- 节气卡片显示逻辑：
@@ -88,7 +117,7 @@
                 buttonContainer.style.right = '15px';
                 buttonContainer.style.zIndex = '1000';
                 buttonContainer.style.backgroundColor = 'rgba(0,0,0,0.7)';
-                buttonContainer.style.padding = '10px';
+                buttonContainer.style.padding = '2px';
                 buttonContainer.style.borderRadius = '5px';
                 buttonContainer.style.display = 'flex';
                 buttonContainer.style.flexDirection = 'column';
@@ -96,22 +125,22 @@
                 
                 // 移动端特别设置
                 if (isMobileDevice()) {
-                    buttonContainer.style.top = '70px';
+                    buttonContainer.style.top = '120px';
                     buttonContainer.style.right = '10px';
-                    buttonContainer.style.padding = '8px';
+                    buttonContainer.style.padding = '2px';
                 }
                 
                 // 创建标题
                 const title = document.createElement('div');
                 title.textContent = '自动旋转';
                 title.style.color = '#d4af37';
-                title.style.fontSize = '14px';
-                title.style.marginBottom = '8px';
+                title.style.fontSize = '12px';
+                title.style.marginBottom = '2px';
                 
                 // 移动端设置更小的标题
                 if (isMobileDevice()) {
-                    title.style.fontSize = '12px';
-                    title.style.marginBottom = '5px';
+                    title.style.fontSize = '10px';
+                    title.style.marginBottom = '2px';
                 }
                 
                 // 创建开关按钮
@@ -128,8 +157,8 @@
                 
                 // 移动端设置更小的按钮
                 if (isMobileDevice()) {
-                    button.style.padding = '4px 8px';
-                    button.style.fontSize = '12px';
+                    button.style.padding = '2px 2px';
+                    button.style.fontSize = '10px';
                 }
                 
                 // 添加按钮事件
@@ -192,31 +221,6 @@
                 
                 // 防止控件区域触发流星效果
                 autoRotateToggle.parentElement.addEventListener('click', function(e) {
-                    e.stopPropagation(); // 阻止事件冒泡
-                });
-            }
-            
-            // 移动端菜单切换
-            const menuToggle = document.querySelector('.menu-toggle');
-            const mainMenu = document.querySelector('.main-menu');
-            
-            if (menuToggle && mainMenu) {
-                menuToggle.addEventListener('click', function(e) {
-                    e.stopPropagation(); // 阻止事件冒泡
-                    this.classList.toggle('active');
-                    mainMenu.classList.toggle('active');
-                });
-                
-                // 点击菜单项时关闭菜单
-                document.querySelectorAll('.menu-item').forEach(item => {
-                    item.addEventListener('click', function() {
-                        menuToggle.classList.remove('active');
-                        mainMenu.classList.remove('active');
-                    });
-                });
-                
-                // 防止菜单区域触发流星效果
-                mainMenu.addEventListener('click', function(e) {
                     e.stopPropagation(); // 阻止事件冒泡
                 });
             }
