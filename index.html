@@ -11,10 +11,27 @@
     <script>
         // 添加页面标识类，帮助CSS选择器识别
         document.documentElement.classList.add('custom-index-page');
+        
+        // 提前检测是否为移动设备并标记
+        function isMobileDevice() {
+            return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+        
+        // 在HTML解析时就添加设备类型标记，优化初始渲染
+        if (isMobileDevice()) {
+            document.documentElement.classList.add('mobile-device');
+        } else {
+            document.documentElement.classList.add('desktop-device');
+        }
+        
         window.onload = function() {
             document.body.classList.add('page-index');
         };
     </script>
+    <!-- 节气卡片显示逻辑：
+        1. 桌面端：自动显示节气卡片，无需控件
+        2. 移动端：不显示节气卡片，减少性能开销
+    -->
 </head>
 <body>
     <!-- 导航栏 -->
@@ -32,7 +49,7 @@
         </div>
     </header>
     
-    <!-- 流星容器 -->
+    <!-- 流星容器 - 移动端通过CSS隐藏 -->
     <div class="meteor-container" id="meteorContainer"></div>
     
     <!-- 主要内容区域 -->
@@ -49,24 +66,134 @@
         </div>
     </div>
     
+    <!-- 添加页面过渡效果元素 -->
+    <div id="page-transition" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;"></div>
+
     <script src="/js/jieqi.js"></script>
     <script>
         // 自动旋转功能
         document.addEventListener('DOMContentLoaded', function() {
+            // 直接创建自动旋转按钮，不依赖jieqi.js中的控件
+            const createRotateButton = function() {
+                // 检查按钮是否已存在
+                if (document.getElementById('manual-rotate-button')) {
+                    return;
+                }
+                
+                // 创建按钮容器
+                const buttonContainer = document.createElement('div');
+                buttonContainer.id = 'manual-rotate-controls';
+                buttonContainer.style.position = 'fixed';
+                buttonContainer.style.top = '100px';
+                buttonContainer.style.right = '15px';
+                buttonContainer.style.zIndex = '1000';
+                buttonContainer.style.backgroundColor = 'rgba(0,0,0,0.7)';
+                buttonContainer.style.padding = '10px';
+                buttonContainer.style.borderRadius = '5px';
+                buttonContainer.style.display = 'flex';
+                buttonContainer.style.flexDirection = 'column';
+                buttonContainer.style.alignItems = 'center';
+                
+                // 移动端特别设置
+                if (isMobileDevice()) {
+                    buttonContainer.style.top = '70px';
+                    buttonContainer.style.right = '10px';
+                    buttonContainer.style.padding = '8px';
+                }
+                
+                // 创建标题
+                const title = document.createElement('div');
+                title.textContent = '自动旋转';
+                title.style.color = '#d4af37';
+                title.style.fontSize = '14px';
+                title.style.marginBottom = '8px';
+                
+                // 移动端设置更小的标题
+                if (isMobileDevice()) {
+                    title.style.fontSize = '12px';
+                    title.style.marginBottom = '5px';
+                }
+                
+                // 创建开关按钮
+                const button = document.createElement('button');
+                button.id = 'manual-rotate-button';
+                button.textContent = '开始';
+                button.style.backgroundColor = '#333';
+                button.style.color = '#d4af37';
+                button.style.border = '1px solid #d4af37';
+                button.style.borderRadius = '4px';
+                button.style.padding = '5px 10px';
+                button.style.cursor = 'pointer';
+                button.style.outline = 'none';
+                
+                // 移动端设置更小的按钮
+                if (isMobileDevice()) {
+                    button.style.padding = '4px 8px';
+                    button.style.fontSize = '12px';
+                }
+                
+                // 添加按钮事件
+                let isRotating = false;
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡
+                    
+                    if (!isRotating) {
+                        // 开始旋转
+                        console.log('开始自动旋转');
+                        window.startAutoRotation();
+                        button.textContent = '停止';
+                        button.style.backgroundColor = '#d4af37';
+                        button.style.color = '#333';
+                        isRotating = true;
+                    } else {
+                        // 停止旋转
+                        console.log('停止自动旋转');
+                        window.stopAutoRotation();
+                        button.textContent = '开始';
+                        button.style.backgroundColor = '#333';
+                        button.style.color = '#d4af37';
+                        isRotating = false;
+                    }
+                });
+                
+                // 防止容器冒泡
+                buttonContainer.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+                
+                // 组装并添加到页面
+                buttonContainer.appendChild(title);
+                buttonContainer.appendChild(button);
+                document.body.appendChild(buttonContainer);
+                
+                console.log('自动旋转按钮已创建');
+            };
+            
+            // 创建自动旋转按钮
+            setTimeout(createRotateButton, 500);
+            
             // 获取旋转开关元素
             const autoRotateToggle = document.getElementById('autoRotateToggle');
             
             // 添加事件监听，使用script.js中的实现
             if (autoRotateToggle) {
-                autoRotateToggle.addEventListener('change', function() {
-                    if (this.checked) {
-                        window.startAutoRotation(); // 使用script.js中的函数
-                    } else {
-                        window.stopAutoRotation(); // 使用script.js中的函数
-                    }
-                });
-                
+                autoRotateToggle.addEventListener('change', function(e) {
+                    // 阻止事件冒泡，防止触发document上的点击事件
+                    e.stopPropagation();
+                    
+                if (this.checked) {
+                    window.startAutoRotation(); // 使用script.js中的函数
+                } else {
+                    window.stopAutoRotation(); // 使用script.js中的函数
+                }
+            });
+            
                 autoRotateToggle.checked = false;
+                
+                // 防止控件区域触发流星效果
+                autoRotateToggle.parentElement.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡
+                });
             }
             
             // 移动端菜单切换
@@ -74,7 +201,8 @@
             const mainMenu = document.querySelector('.main-menu');
             
             if (menuToggle && mainMenu) {
-                menuToggle.addEventListener('click', function() {
+                menuToggle.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡
                     this.classList.toggle('active');
                     mainMenu.classList.toggle('active');
                 });
@@ -86,10 +214,20 @@
                         mainMenu.classList.remove('active');
                     });
                 });
+                
+                // 防止菜单区域触发流星效果
+                mainMenu.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡
+                });
+            }
+            
+            // 简化设备检测函数
+            function isMobileDevice() {
+                return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             }
             
             // 添加向上滑动和点击箭头跳转到博客页面的功能
-            const isMobile = window.innerWidth <= 768;
+            const isDeviceMobile = isMobileDevice();
             const container = document.querySelector('.container');
             const scrollIndicator = document.querySelector('.scroll-indicator');
             
@@ -103,7 +241,7 @@
             }
             
             // 在移动端添加上滑手势
-            if (isMobile && container) {
+            if (isDeviceMobile && container) {
                 let touchStartY = 0;
                 let touchEndY = 0;
                 
@@ -123,202 +261,384 @@
                     }
                 }, { passive: true });
             }
+            
+            // 防止控制区域触发流星效果
+            document.querySelectorAll('.header-controls, .rotate-controls').forEach(control => {
+                if (control) {
+                    control.addEventListener('click', function(e) {
+                        e.stopPropagation(); // 阻止事件冒泡到document
+                    });
+                }
+            });
+            
+            // 页面跳转过渡处理
+            function setupPageTransitions() {
+                // 获取所有需要跳转的链接
+                const links = document.querySelectorAll('a[href]:not([target="_blank"])');
+                
+                // 为所有链接添加过渡效果
+                links.forEach(link => {
+                    // 排除锚点链接和外部链接
+                    if (link.getAttribute('href').startsWith('#') || 
+                        link.getAttribute('href').startsWith('http') ||
+                        link.getAttribute('href').startsWith('//')) {
+                        return;
+                    }
+                    
+                    // 添加点击事件
+                    link.addEventListener('click', handleLinkClick);
+                });
+                
+                // 处理底部箭头点击
+                const scrollIndicator = document.querySelector('.scroll-indicator');
+                if (scrollIndicator) {
+                    scrollIndicator.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        smoothPageTransition('/blog/');
+                    });
+                }
+                
+                // 处理向上滑动手势
+                if (isMobileDevice()) {
+                    setupMobileSwipeGesture();
+                }
+            }
+            
+            // 处理链接点击
+            function handleLinkClick(e) {
+                e.preventDefault();
+                const targetUrl = this.getAttribute('href');
+                smoothPageTransition(targetUrl);
+            }
+            
+            // 平滑页面过渡
+            function smoothPageTransition(targetUrl) {
+                // 清理所有资源
+                cleanupAllResources();
+                
+                // 显示过渡层
+                const transitionLayer = document.getElementById('page-transition');
+                transitionLayer.style.opacity = '1';
+                
+                // 延迟导航，让过渡效果显示
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 300);
+            }
+            
+            // 设置移动端滑动手势
+            function setupMobileSwipeGesture() {
+                const container = document.querySelector('.container');
+                if (!container) return;
+                
+                let touchStartY = 0;
+                
+                container.addEventListener('touchstart', function(e) {
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+                
+                container.addEventListener('touchend', function(e) {
+                    const touchEndY = e.changedTouches[0].clientY;
+                    const swipeDistance = touchStartY - touchEndY;
+                    
+                    // 向上滑动手势
+                    if (swipeDistance > 100) {
+                        smoothPageTransition('/blog/');
+                    }
+                }, { passive: true });
+            }
+            
+            // 初始化页面跳转处理
+            setupPageTransitions();
         });
         
-        // 流星效果
-        function checkIsMobile() {
+        // ====== 优化的流星效果代码 ======
+        
+        // 简化设备检测
+        function isMobileDevice() {
             return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
         
-        let isMobileDevice = checkIsMobile();
-        let wasMobile = isMobileDevice;
-        let meteorIntervalId; // 用于存储流星生成的定时器ID
-        
-        // 监听窗口大小变化
-        window.addEventListener('resize', () => {
-            isMobileDevice = checkIsMobile();
+        // 集中管理所有动画和资源
+        const resourceManager = {
+            // 存储所有animation frame IDs
+            animationFrames: [],
             
-            // 如果设备类型发生变化，重置流星生成频率
-            if (wasMobile !== isMobileDevice && meteorIntervalId) {
-                clearInterval(meteorIntervalId);
-                if (!isMobileDevice) {
-                    // 只在非移动设备上设置流星生成
-                    const meteorInterval = 4000;
-                    meteorIntervalId = setInterval(createSimpleMeteor, meteorInterval);
+            // 存储所有定时器
+            timers: [],
+            
+            // 存储所有事件监听器
+            eventListeners: [],
+            
+            // 存储所有创建的DOM元素
+            elements: [],
+            
+            // 添加动画帧
+            addAnimationFrame(id) {
+                this.animationFrames.push(id);
+                return id;
+            },
+            
+            // 添加定时器
+            addTimer(id) {
+                this.timers.push(id);
+                return id;
+            },
+            
+            // 添加事件监听器
+            addEventListeners(element, type, handler, options) {
+                element.addEventListener(type, handler, options);
+                this.eventListeners.push({ element, type, handler });
+                return handler;
+            },
+            
+            // 添加元素引用
+            addElement(element) {
+                this.elements.push(element);
+                return element;
+            },
+            
+            // 清理所有资源
+            cleanupAll() {
+                // 取消所有动画帧
+                this.animationFrames.forEach(id => {
+                    cancelAnimationFrame(id);
+                });
+                this.animationFrames = [];
+                
+                // 清除所有定时器
+                this.timers.forEach(id => {
+                    clearTimeout(id);
+                    clearInterval(id);
+                });
+                this.timers = [];
+                
+                // 移除所有事件监听器
+                this.eventListeners.forEach(({ element, type, handler }) => {
+                    element.removeEventListener(type, handler);
+                });
+                this.eventListeners = [];
+                
+                // 清除DOM元素
+                const meteorContainer = document.getElementById('meteorContainer');
+                if (meteorContainer) {
+                    meteorContainer.innerHTML = '';
                 }
+                
+                // 重置元素引用
+                this.elements = [];
             }
-            wasMobile = isMobileDevice;
-        });
+        };
         
-        function createSimpleMeteor() {
-            // 移动设备上不创建流星
-            if (isMobileDevice) return;
+        // 全局清理函数
+        function cleanupAllResources() {
+            resourceManager.cleanupAll();
             
-            const container = document.getElementById('meteorContainer');
-            
-            // 随机生成流星起始位置
-            const startX = Math.random() * window.innerWidth;
-            const startY = Math.random() * window.innerHeight * 0.5; // 在上半部分生成
-            
-            // 流星大小 - 桌面版使用正常大小
-            const size = Math.random() * 3 + 1; // 桌面版流星大小
-            
-            // 流星速度
-            const speed = Math.random() * 100 + 50;
-            
-            // 流星长度
-            const length = Math.random() * 80 + 40;
-            
-            // 流星运动角度（135度，右下方向）
-            const angle = Math.PI * 0.75;
-            
-            // 创建流星头部
-            const meteor = document.createElement('div');
-            meteor.className = 'meteor';
-            meteor.style.width = `${size}px`;
-            meteor.style.height = `${size}px`;
-            meteor.style.left = `${startX}px`;
-            meteor.style.top = `${startY}px`;
-            
-            // 创建流星尾巴元素
-            const tail = document.createElement('div');
-            tail.className = 'meteor-tail';
-            tail.style.left = `${startX}px`;
-            tail.style.top = `${startY}px`;
-            tail.style.width = `${length}px`;
-            tail.style.height = `${size / 2}px`;
-            tail.style.transformOrigin = '0% 50%';
-            tail.style.transform = `rotate(${angle - Math.PI}rad)`;
-            
-            // 先添加尾巴，再添加流星头部 (保持尾巴在头部下面的层级)
-            container.appendChild(tail);
-            container.appendChild(meteor);
-            
-            // 让流星移动的动画帧
-            const startTime = performance.now();
-            const duration = Math.random() * 1000 + 1000; // 流星持续时间1-2秒
-            
-            function animateMeteor(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                // 计算当前位置
-                const distance = speed * progress;
-                const posX = startX + Math.cos(angle) * distance;
-                const posY = startY + Math.sin(angle) * distance;
-                
-                // 更新流星头部位置
-                meteor.style.left = `${posX}px`;
-                meteor.style.top = `${posY}px`;
-                
-                // 更新尾巴位置 - 尾巴起点跟随流星头部但指向反方向
-                const tailX = posX;
-                const tailY = posY;
-                tail.style.left = `${tailX}px`;
-                tail.style.top = `${tailY}px`;
-                
-                // 动画结束时移除流星
-                if (progress >= 1 || posX < 0 || posX > window.innerWidth || posY < 0 || posY > window.innerHeight) {
-                    tail.remove();
-                    meteor.remove();
-                } else {
-                    requestAnimationFrame(animateMeteor);
-                }
+            // 额外清理其他可能的全局资源
+            const meteorContainer = document.getElementById('meteorContainer');
+            if (meteorContainer) {
+                meteorContainer.innerHTML = '';
             }
-            
-            requestAnimationFrame(animateMeteor);
         }
         
-        // 只在非移动设备上初始化流星
-        if (!isMobileDevice) {
-            // 定期创建流星
-            const meteorInterval = 4000;
-            meteorIntervalId = setInterval(createSimpleMeteor, meteorInterval);
-            
-            // 初始创建几个流星
-            const initialMeteors = 3;
-            for (let i = 0; i < initialMeteors; i++) {
-                setTimeout(createSimpleMeteor, Math.random() * 5000);
+        // 移动设备上不创建流星效果
+        if (!isMobileDevice()) {
+            // 简化流星创建函数，修复错乱问题
+            function createSimpleMeteor() {
+                const container = document.getElementById('meteorContainer');
+                if (!container) return;
+                
+                // 随机生成流星参数
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * (window.innerHeight / 3);
+                const size = Math.random() * 3 + 1;
+                const length = Math.random() * 150 + 50;
+                
+                // 创建流星元素
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                meteor.style.width = `${size}px`;
+                meteor.style.height = `${size}px`;
+                meteor.style.left = `${startX}px`;
+                meteor.style.top = `${startY}px`;
+                
+                // 创建尾巴元素
+                const tail = document.createElement('div');
+                tail.className = 'meteor-tail';
+                tail.style.left = `${startX}px`;
+                tail.style.top = `${startY}px`;
+                tail.style.width = `${length}px`;
+                tail.style.height = `${size/2}px`;
+                tail.style.transform = 'rotate(-45deg)';
+                
+                // 单独添加元素，确保正确显示
+                container.appendChild(tail);
+                container.appendChild(meteor);
+                
+                // 跟踪元素
+                resourceManager.addElement(meteor);
+                resourceManager.addElement(tail);
+                
+                // 动画参数
+                let posX = startX;
+                let posY = startY;
+                const speed = Math.random() * 5 + 3;
+                const angle = 135 * Math.PI / 180;
+                
+                // 动画函数
+                function animate() {
+                    // 计算新位置
+                    posX += Math.cos(angle) * speed;
+                    posY += Math.sin(angle) * speed;
+                    
+                    // 直接更新位置，不使用transform
+                    meteor.style.left = `${posX}px`;
+                    meteor.style.top = `${posY}px`;
+                    tail.style.left = `${posX}px`;
+                    tail.style.top = `${posY}px`;
+                    
+                    // 检查是否超出屏幕
+                    if (posX < -200 || posY > window.innerHeight + 200) {
+                        // 安全删除
+                        if (meteor.parentNode) meteor.remove();
+                        if (tail.parentNode) tail.remove();
+                    } else {
+                        // 管理动画帧
+                        const frameId = requestAnimationFrame(animate);
+                        resourceManager.addAnimationFrame(frameId);
+                    }
+                }
+                
+                // 开始动画并管理
+                const frameId = requestAnimationFrame(animate);
+                resourceManager.addAnimationFrame(frameId);
             }
             
-            // 点击创建流星
-            document.addEventListener('click', (e) => {
-                // 移动设备上不创建流星
-                if (isMobileDevice) return;
-                
-                // 获取点击位置
-                const clickX = e.clientX;
-                const clickY = e.clientY;
+            // 点击生成流星 - 恢复正常显示
+            resourceManager.addEventListeners(document, 'click', function(e) {
+                // 排除特定区域的点击
+                if (e.target.closest('.manual-rotate-controls, .menu-toggle, .main-menu, .rotate-controls')) {
+                    return;
+                }
                 
                 const container = document.getElementById('meteorContainer');
+                if (!container || isMobileDevice()) return;
                 
-                // 流星大小
-                const size = Math.random() * 3 + 1;
+                // 获取点击位置
+                const startX = e.clientX;
+                const startY = e.clientY;
                 
-                // 流星速度
-                const speed = Math.random() * 150 + 100;
-                
-                // 流星长度
-                const length = Math.random() * 100 + 50;
-                
-                // 流星运动角度
-                const angle = Math.PI * 0.75;
+                // 创建流星元素
+                const size = Math.random() * 3 + 2;
+                const length = Math.random() * 150 + 100;
+                const angle = 135 * Math.PI / 180;
                 
                 // 创建流星头部
                 const meteor = document.createElement('div');
                 meteor.className = 'meteor';
                 meteor.style.width = `${size}px`;
                 meteor.style.height = `${size}px`;
-                meteor.style.left = `${clickX}px`;
-                meteor.style.top = `${clickY}px`;
+                meteor.style.left = `${startX}px`;
+                meteor.style.top = `${startY}px`;
                 
                 // 创建流星尾巴
                 const tail = document.createElement('div');
                 tail.className = 'meteor-tail';
-                tail.style.left = `${clickX}px`;
-                tail.style.top = `${clickY}px`;
+                tail.style.left = `${startX}px`;
+                tail.style.top = `${startY}px`;
                 tail.style.width = `${length}px`;
-                tail.style.height = `${size / 2}px`;
-                tail.style.transformOrigin = '0% 50%';
-                tail.style.transform = `rotate(${angle - Math.PI}rad)`;
+                tail.style.height = `${size/2}px`;
+                tail.style.transform = 'rotate(-45deg)';
                 
                 // 添加到容器
                 container.appendChild(tail);
                 container.appendChild(meteor);
                 
-                // 流星动画
-                const startTime = performance.now();
-                const duration = Math.random() * 800 + 800; // 流星持续时间0.8-1.6秒
+                // 跟踪元素
+                resourceManager.addElement(meteor);
+                resourceManager.addElement(tail);
                 
-                function animateMeteor(currentTime) {
-                    const elapsed = currentTime - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
+                // 动画参数
+                let posX = startX;
+                let posY = startY;
+                const speed = Math.random() * 5 + 5;
+                
+                // 动画函数
+                function animate() {
+                    // 计算新位置
+                    posX += Math.cos(angle) * speed;
+                    posY += Math.sin(angle) * speed;
                     
-                    // 计算当前位置
-                    const distance = speed * progress;
-                    const posX = clickX + Math.cos(angle) * distance;
-                    const posY = clickY + Math.sin(angle) * distance;
-                    
-                    // 更新流星头部位置
+                    // 直接更新位置
                     meteor.style.left = `${posX}px`;
                     meteor.style.top = `${posY}px`;
+                    tail.style.left = `${posX}px`;
+                    tail.style.top = `${posY}px`;
                     
-                    // 更新尾巴位置 - 尾巴起点跟随流星头部但指向反方向
-                    const tailX = posX;
-                    const tailY = posY;
-                    tail.style.left = `${tailX}px`;
-                    tail.style.top = `${tailY}px`;
-                    
-                    // 动画结束时移除流星
-                    if (progress >= 1 || posX < 0 || posX > window.innerWidth || posY < 0 || posY > window.innerHeight) {
-                        tail.remove();
-                        meteor.remove();
+                    // 检查是否超出屏幕
+                    if (posX < -200 || posX > window.innerWidth + 200 || 
+                        posY < -200 || posY > window.innerHeight + 200) {
+                        if (meteor.parentNode) meteor.remove();
+                        if (tail.parentNode) tail.remove();
                     } else {
-                        requestAnimationFrame(animateMeteor);
+                        const frameId = requestAnimationFrame(animate);
+                        resourceManager.addAnimationFrame(frameId);
                     }
                 }
                 
-                requestAnimationFrame(animateMeteor);
+                // 启动并管理动画
+                const frameId = requestAnimationFrame(animate);
+                resourceManager.addAnimationFrame(frameId);
+            });
+            
+            // 使用页面生命周期事件 - 保持不变
+            resourceManager.addEventListeners(window, 'load', function() {
+                // 创建定时产生流星
+                const intervalId = setInterval(createSimpleMeteor, 4000);
+                resourceManager.addTimer(intervalId);
+                
+                // 初始创建几个流星
+                for (let i = 0; i < 3; i++) {
+                    const timerId = setTimeout(createSimpleMeteor, Math.random() * 3000);
+                    resourceManager.addTimer(timerId);
+                }
+            });
+            
+            // 页面卸载前清理 - 保持不变
+            resourceManager.addEventListeners(window, 'beforeunload', cleanupAllResources);
+            
+            // 页面可见性变化 - 保持不变
+            resourceManager.addEventListeners(document, 'visibilitychange', function() {
+                const container = document.getElementById('meteorContainer');
+                
+                if (document.hidden) {
+                    // 暂停所有流星动画
+                    resourceManager.animationFrames.forEach(id => {
+                        cancelAnimationFrame(id);
+                    });
+                    resourceManager.animationFrames = [];
+                    
+                    // 清除定时创建
+                    resourceManager.timers.forEach(id => {
+                        clearInterval(id);
+                        clearTimeout(id);
+                    });
+                    resourceManager.timers = [];
+                } else {
+                    // 重新开始流星创建
+                    if (!resourceManager.timers.length && container) {
+                        // 创建几个初始流星
+                        for (let i = 0; i < 2; i++) {
+                            const timerId = setTimeout(createSimpleMeteor, Math.random() * 2000);
+                            resourceManager.addTimer(timerId);
+                        }
+                        
+                        // 重新启动定时器
+                        const intervalId = setInterval(createSimpleMeteor, 4000);
+                        resourceManager.addTimer(intervalId);
+                    }
+                }
             });
         }
     </script>

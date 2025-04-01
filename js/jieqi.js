@@ -165,51 +165,38 @@ document.addEventListener('DOMContentLoaded', function() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < mobileBreakpoint;
     }
     
-    // 根据设备性能调整动画参数
+    // 根据设备性能调整参数
     const performanceSettings = {
-        frameInterval: 1000 / 120, // 提高到120fps以获得更流畅的效果
-        rotationSpeed: 0.2 // 设置旋转速度
+        frameInterval: 1000 / 60, // 降低到60fps，足够流畅且更节能
+        rotationSpeed: 0.2 
     };
     
     const settings = performanceSettings;
     
-    // 获取当前设备类型
-    let isMobile = checkIfMobile();
+    // 获取当前设备类型 - 只在初始化时计算一次
+    const isMobile = checkIfMobile();
     
     // 根据设备类型定义字体大小
     const fontSizes = {
         desktop: {
             normal: 20,
-            hexagram: 22 // 卦符更大
+            hexagram: 22 
         },
         mobile: {
-            normal: 12,  // 减小移动端字体
-            hexagram: 14 // 减小移动端卦符字体
+            normal: 12,
+            hexagram: 14
         }
     };
     
-    // 更新圆环半径比例函数
-    function updateCircleRadios() {
-        // 预计算好的值，避免在循环中重复计算
-        const mobileRatios = [0.14, 0.19, 0.24, 0.29, 0.34, 0.39, 0.44, 0.49, 0.54, 0.59];
-        const desktopRatios = [0.1, 0.142, 0.184, 0.228, 0.270, 0.312, 0.354, 0.398, 0.442, 0.486];
-        
-        // 直接复制整个数组
-        if (isMobile) {
-            for (let i = 0; i < circleRadiusRatios.length; i++) {
-                circleRadiusRatios[i] = mobileRatios[i];
-            }
-        } else {
-            for (let i = 0; i < circleRadiusRatios.length; i++) {
-                circleRadiusRatios[i] = desktopRatios[i];
-            }
-        }
+    // 更新圆环半径比例函数 - 优化为预先计算好的值
+    const mobileRatios = [0.14, 0.19, 0.24, 0.29, 0.34, 0.39, 0.44, 0.49, 0.54, 0.59];
+    const desktopRatios = [0.1, 0.142, 0.184, 0.228, 0.270, 0.312, 0.354, 0.398, 0.442, 0.486];
+    
+    // 根据设备类型直接设置正确的圆环半径
+    for (let i = 0; i < circleRadiusRatios.length; i++) {
+        circleRadiusRatios[i] = isMobile ? mobileRatios[i] : desktopRatios[i];
     }
     
-    // 初始化圆环半径
-    updateCircleRadios();
-
-    // 即时初始化罗盘（删除延迟）
     // 立即隐藏所有不需要的元素
     document.querySelectorAll('.circle, .center-circle').forEach(el => {
         if(el) {
@@ -218,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
             el.style.opacity = '0';
         }
     });
-
+    
     // 获取DOM元素
     const compass = document.querySelector('.compass');
     
@@ -346,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // 统一处理窗口大小变化和设备方向变化
+    // 统一处理窗口大小变化 - 简化版本
     function handleViewportChange() {
         // 获取当前视口尺寸
         const viewportWidth = window.innerWidth;
@@ -355,34 +342,20 @@ document.addEventListener('DOMContentLoaded', function() {
         // 检测设备类型是否变化
         const newIsMobile = checkIfMobile();
         
-        // 保存当前旋转角度
-        const currentRotationValue = currentRotation;
-        
-        // 更新设备类型标记
-        isMobile = newIsMobile;
-        
-        // 更新圆环半径，适应不同设备
-        updateCircleRadios();
-        
-        // 重新初始化整个罗盘，确保所有元素重新创建并定位
-        initCompass();
-        
-        // 恢复旋转角度
-        if (currentRotationValue !== 0) {
-            const compassInner = document.querySelector('.compass-inner');
-            if (compassInner) {
-                compassInner.style.transform = `rotate(${currentRotationValue}deg)`;
+        // 如果设备类型没有变化，只执行基本的样式调整
+        if (newIsMobile === isMobile) {
+            adjustAdditionalElements();
+            
+            // 仅更新信息面板布局，不重新创建罗盘
+            const infoPanel = document.querySelector('.solar-term-info-panel');
+            if (infoPanel) {
+                updatePanelLayout(infoPanel);
             }
+            return;
         }
         
-        // 更新信息面板布局
-        const infoPanel = document.querySelector('.solar-term-info-panel');
-        if (infoPanel) {
-            updatePanelLayout(infoPanel, document.querySelector('.info-content'), document.querySelector('.tab-buttons'));
-        }
-        
-        // 添加额外的响应式调整
-        adjustAdditionalElements();
+        // 设备类型变化时执行完整的初始化
+        location.reload(); // 直接刷新页面是处理设备类型变化的最简单方法
     }
 
     // 调整其他响应式元素
@@ -422,31 +395,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 防抖函数，避免频繁触发重绘
-    function debounce(func, wait) {
-        let timeout;
-        return function() {
-            const context = this;
-            const args = arguments;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                func.apply(context, args);
-            }, wait);
-        };
-    }
-
-    // 创建防抖处理函数的实例
+    // 创建统一的事件处理函数
     const debouncedViewportChange = debounce(handleViewportChange, 150);
     const debouncedOrientationChange = debounce(handleViewportChange, 350);
 
-    // 窗口大小变化事件，使用150ms的防抖
+    // 移除原有事件监听器以避免重复
     window.removeEventListener('resize', debouncedViewportChange);
-    window.addEventListener('resize', debouncedViewportChange);
-
-    // 设备方向变化事件，方向变化后等待更长时间重绘
     window.removeEventListener('orientationchange', debouncedOrientationChange);
+
+    // 添加新的事件监听器
+    window.addEventListener('resize', debouncedViewportChange);
     window.addEventListener('orientationchange', debouncedOrientationChange);
-    
+
     // 添加特殊处理，针对iOS设备方向变化后的延迟重绘
     window.addEventListener('orientationchange', function() {
         // iOS设备在方向变化后可能需要额外时间来正确报告viewport尺寸
@@ -647,6 +607,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const textLayer = document.createElement('div');
         textLayer.className = 'text-layer';
+        // 添加will-change属性以启用硬件加速
+        textLayer.style.willChange = 'transform';
         
         const compassInner = document.querySelector('.compass-inner');
         compassInner.appendChild(textLayer);
@@ -666,19 +628,18 @@ document.addEventListener('DOMContentLoaded', function() {
         // 创建文档片段以减少DOM操作
         const fragment = document.createDocumentFragment();
         
-        // 为每个圆环创建文字
+        // 预计算角度和位置
+        const anglePositions = {};
+        
+        // 为每个圆环预计算角度和位置，减少三角函数计算
         circleTexts.forEach((texts, circleIndex) => {
             const numSegments = texts.length;
             const angleStep = 360 / numSegments;
-            
-            // 使用预定义的半径比例
             const radius = compassSize * circleRadiusRatios[circleIndex];
             
-            // 当前圆环使用的字体大小
-            const fontSize = (circleIndex === 7) ? hexagramFontSize : normalFontSize;
+            anglePositions[circleIndex] = [];
             
-            // 添加文字
-            texts.forEach((text, i) => {
+            for (let i = 0; i < numSegments; i++) {
                 // 计算角度，从正上方开始，顺时针旋转
                 const angle = (i * angleStep + 90) % 360;
                 // 转换为弧度并预计算余弦和正弦值（只计算一次）
@@ -686,25 +647,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 const cosVal = Math.cos(radians);
                 const sinVal = Math.sin(radians);
                 
+                // 计算文字位置
+                const x = centerX + cosVal * radius;
+                const y = centerY + sinVal * radius;
+                
+                anglePositions[circleIndex].push({
+                    angle,
+                    x,
+                    y
+                });
+            }
+        });
+        
+        // 创建文字元素
+        circleTexts.forEach((texts, circleIndex) => {
+            // 当前圆环使用的字体大小
+            const fontSize = (circleIndex === 7) ? hexagramFontSize : normalFontSize;
+            
+            // 添加文字
+            texts.forEach((text, i) => {
+                const pos = anglePositions[circleIndex][i];
+                
                 const textElement = document.createElement('div');
                 textElement.className = 'text-item';
                 textElement.innerText = text;
-                const opacityBase = 0.3;
                 
                 // 添加圆环特定的样式类别
                 if (circleIndex === 7) {
                     textElement.classList.add('hexagram-text');
                 }
                 
-                // 计算文字位置
-                const x = centerX + cosVal * radius;
-                const y = centerY + sinVal * radius;
-                
                 // 只设置位置和旋转相关的样式，其他样式交由CSS处理
                 textElement.style.fontSize = `${fontSize}px`;
-                textElement.style.left = `${x}px`;
-                textElement.style.top = `${y}px`;
-                textElement.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+                textElement.style.left = `${pos.x}px`;
+                textElement.style.top = `${pos.y}px`;
+                textElement.style.transform = `translate(-50%, -50%) rotate(${pos.angle}deg)`;
                 
                 fragment.appendChild(textElement);
             });
@@ -819,7 +796,7 @@ document.addEventListener('DOMContentLoaded', function() {
         compassInner.appendChild(centerIcon);
     }
 
-    // 修改初始化罗盘的函数
+    // 修改初始化罗盘的函数 - 优化资源加载
     function initCompass() {
         // 清空罗盘内容
         compass.innerHTML = '';
@@ -828,18 +805,14 @@ document.addEventListener('DOMContentLoaded', function() {
         compass.style.position = 'absolute';
         
         // 计算合适的罗盘尺寸（取视口宽度和高度的较小值的90%）
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const viewportMin = Math.min(viewportWidth, viewportHeight);
-        
-        // 统一使用相同的计算逻辑
+        const viewportMin = Math.min(window.innerWidth, window.innerHeight);
         const compassSize = viewportMin * 0.9;
         
         // 设置罗盘容器尺寸
         compass.style.width = `${compassSize}px`;
         compass.style.height = `${compassSize}px`;
         
-        // 确保罗盘在视口中居中 - 直接使用CSS定位到中心
+        // 确保罗盘在视口中居中
         compass.style.top = '50%';
         compass.style.left = '50%';
         compass.style.transform = 'translate(-50%, -50%)';
@@ -853,19 +826,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // 设置基本样式
         compass.style.overflow = 'visible';
         compass.style.borderRadius = '50%';
-        
-        // 设置最大尺寸，防止在大屏幕上过大
         compass.style.maxWidth = '800px';
         compass.style.maxHeight = '800px';
-        
-        // 设置z-index确保罗盘在正确的层级
         compass.style.zIndex = '50';
         
         // 移除不需要的样式
-        compass.style.marginTop = '0';
-        compass.style.marginBottom = '0';
-        compass.style.marginLeft = '0';
-        compass.style.marginRight = '0';
+        compass.style.margin = '0';
         
         // 始终添加边框
         compass.classList.add('border-enabled');
@@ -883,14 +849,16 @@ document.addEventListener('DOMContentLoaded', function() {
         compass.style.visibility = 'visible';
         compass.style.opacity = '1';
         
-        // 添加节气信息分页窗口
-        addSolarTermInfoPanel();
+        // 只在桌面端添加节气信息分页窗口
+        if (!isMobile) {
+            addSolarTermInfoPanel();
+        }
         
         // 添加参考信息
         addReferenceInfo();
         
-        // 添加自动旋转控件（所有设备）
-        addAutoRotateControlsToHeader();
+        // 注释掉原有旋转控件的创建函数调用
+        // addAutoRotateControlsToHeader();
     }
     
     // 添加引用信息到罗盘底部
@@ -922,7 +890,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 根据设备类型设置不同的位置
         const isMobile = window.innerWidth <= 768;
         if (isMobile) {
-            referenceInfo.style.top = '70px'; // 在移动端显示在顶部，位于导航栏下方
+            referenceInfo.style.bottom= '130px'; // 在移动端显示在顶部，位于导航栏下方
             referenceInfo.style.left = '0';
             referenceInfo.style.transform = 'none';
             referenceInfo.style.fontSize = '10px'; // 移动端字体稍小
@@ -986,56 +954,63 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 处理自动旋转的开始，确保中心图标随罗盘旋转
     function startAutoRotation() {
+        // 如果已经在旋转，先停止
         if (autoRotationId) {
             stopAutoRotation();
         }
         
+        console.log("开始自动旋转");
         compass.classList.add('auto-rotating');
         
         // 缓存DOM元素引用
         const compassInner = document.querySelector('.compass-inner');
-        if (!compassInner) return;
-        
-        // 使用CSS动画代替JavaScript控制的帧动画
-        compassInner.style.transition = 'transform 0.01s linear';
-        
-        let lastTimestamp = 0;
-        const autoRotationSpeed = -performanceSettings.rotationSpeed; // 使用负值实现逆时针旋转
-        
-        function autoRotateStep(timestamp) {
-            if (!lastTimestamp) lastTimestamp = timestamp;
-            
-            // 计算帧之间的时间差
-            const elapsed = timestamp - lastTimestamp;
-            
-            // 计算每帧应该旋转的角度，根据elapsed时间动态调整
-            // 这样即使帧率不稳定，旋转速度也会保持一致
-            const rotationDelta = (autoRotationSpeed * elapsed) / 16.67; // 16.67ms是60fps的帧间隔
-            
-            currentRotation += rotationDelta;
-            compassInner.style.transform = `rotate(${currentRotation}deg)`;
-            lastTimestamp = timestamp;
-            
-            autoRotationId = requestAnimationFrame(autoRotateStep);
+        if (!compassInner) {
+            console.error("找不到compass-inner元素");
+            return;
         }
         
-        autoRotationId = requestAnimationFrame(autoRotateStep);
+        // 使用JavaScript控制的帧动画代替CSS动画，确保兼容性
+        let lastTimestamp = 0;
+        const rotationSpeed = -0.05; // 每毫秒旋转的角度
+        
+        function rotateStep(timestamp) {
+            if (!lastTimestamp) {
+                lastTimestamp = timestamp;
+            }
+            
+            // 计算时间差
+            const elapsed = timestamp - lastTimestamp;
+            lastTimestamp = timestamp;
+            
+            // 更新旋转角度
+            currentRotation += rotationSpeed * elapsed;
+            
+            // 应用旋转
+            compassInner.style.transform = `rotate(${currentRotation}deg)`;
+            
+            // 继续动画循环
+            autoRotationId = requestAnimationFrame(rotateStep);
+        }
+        
+        // 启动动画
+        autoRotationId = requestAnimationFrame(rotateStep);
+        console.log("动画已启动，ID:", autoRotationId);
     }
 
     // 处理自动旋转的停止
     function stopAutoRotation() {
+        console.log("停止自动旋转，当前ID:", autoRotationId);
+        
+        // 取消动画
         if (autoRotationId) {
             cancelAnimationFrame(autoRotationId);
             autoRotationId = null;
-            compass.classList.remove('auto-rotating');
-            
-            // 清除CSS过渡效果
-            const compassInner = document.querySelector('.compass-inner');
-            if (compassInner) {
-                compassInner.style.transition = '';
-                compassInner.style.transform = `rotate(${currentRotation}deg)`;
-            }
         }
+        
+        // 移除自动旋转类
+        compass.classList.remove('auto-rotating');
+        
+        console.log("旋转已停止，当前角度:", currentRotation);
     }
 
     // 将自动旋转函数暴露到全局
@@ -1144,31 +1119,23 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
     }
 
-    // 只在桌面端添加节气表格分页窗口
+    // 只在桌面端添加节气表格分页窗口 - 优化版本
     function addSolarTermInfoPanel() {
-        // 检查容器是否已存在
+        // 移动端不创建面板
+        if (isMobile) {
+            return;
+        }
+        
+        // 检查是否已存在面板
         let infoPanel = document.querySelector('.solar-term-info-panel');
         if (infoPanel) {
-            infoPanel.remove(); // 如果已存在则删除重建
+            return;
         }
         
-        // 判断是否为移动设备
-        const isMobile = window.innerWidth <= 768;
-        
-        // 创建外层容器
+        // 创建面板
         infoPanel = document.createElement('div');
-        infoPanel.className = 'solar-term-info-panel' + (isMobile ? ' mobile-panel' : '');
-        
-        // 设置基本样式和显示属性
-        infoPanel.style.position = 'fixed';
-        infoPanel.style.zIndex = '100';
+        infoPanel.className = 'solar-term-info-panel';
         infoPanel.style.display = 'flex';
-        
-        // 处理移动端的特殊初始设置
-        if (isMobile) {
-            // 先隐藏面板，等所有内容设置完毕再显示
-            infoPanel.style.visibility = 'hidden';
-        }
         
         document.querySelector('.container').appendChild(infoPanel);
         
@@ -1190,7 +1157,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { id: 'tab4', label: '六气能量<br>天地能量', fields: ['qi', 'energy'] }
         ];
         
-        // 为移动端预先构建所有按钮，一次性添加，减少DOM操作
+        // 为桌面端预先构建所有按钮，一次性添加
         const buttonsFragment = document.createDocumentFragment();
         
         // 创建分页按钮
@@ -1200,51 +1167,19 @@ document.addEventListener('DOMContentLoaded', function() {
             button.setAttribute('data-tab', tab.id);
             button.innerHTML = tab.label;
             
-            if (isMobile) {
-                // 移动端使用点击事件代替hover事件，减少触发频率
-                button.addEventListener('click', () => {
-                    // 移除所有按钮的active类
-                    document.querySelectorAll('.tab-button').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    
-                    // 给当前按钮添加active类
-                    button.classList.add('active');
-                    
-                    // 更新内容
-                    updateInfoContent(tab.fields);
-                });
-            } else {
-                // 桌面端保持原有的鼠标悬停事件
-                button.addEventListener('mouseenter', () => {
-                    // 移除所有按钮的active类
-                    document.querySelectorAll('.tab-button').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    
-                    // 给当前按钮添加active类
-                    button.classList.add('active');
-                    
-                    // 更新内容
-                    updateInfoContent(tab.fields);
+            // 桌面端使用鼠标悬停事件
+            button.addEventListener('mouseenter', () => {
+                // 移除所有按钮的active类
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
                 });
                 
-                // 添加触摸事件支持
-                button.addEventListener('touchstart', (e) => {
-                    e.preventDefault(); // 防止默认行为
-                    
-                    // 移除所有按钮的active类
-                    document.querySelectorAll('.tab-button').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    
-                    // 给当前按钮添加active类
-                    button.classList.add('active');
-                    
-                    // 更新内容
-                    updateInfoContent(tab.fields);
-                });
-            }
+                // 给当前按钮添加active类
+                button.classList.add('active');
+                
+                // 更新内容
+                updateInfoContent(tab.fields);
+            });
             
             buttonsFragment.appendChild(button);
         });
@@ -1254,46 +1189,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 显示初始内容
         updateInfoContent(tabs[0].fields);
-        
-        // 监听窗口大小变化，但为移动设备降低响应频率
-        const resizeHandler = isMobile ? 
-            debounce(() => updatePanelLayout(infoPanel), 250) : 
-            () => updatePanelLayout(infoPanel);
-        
-        window.addEventListener('resize', resizeHandler);
-        
-        // 设置初始显示状态 - 根据开关设置
-        const cardToggle = document.getElementById('solarTermCardToggle');
-        if (cardToggle) {
-            infoPanel.style.display = cardToggle.checked ? 'flex' : 'none';
-        }
-        
-        // 移动端在最后一步再显示面板，避免闪烁
-        if (isMobile) {
-            // 使用requestAnimationFrame确保在下一帧渲染
-            requestAnimationFrame(() => {
-                infoPanel.style.visibility = 'visible';
-            });
-        }
     }
 
-    // 修改updatePanelLayout函数，简化布局更新方式
+    // 简化面板布局更新函数
     function updatePanelLayout(panel) {
-        const isMobile = window.innerWidth <= 768;
+        if (!panel) return;
         
-        // 移除可能的mobile-panel类
-        panel.classList.remove('mobile-panel');
-        
-        // 根据设备类型重设类名
-        if (isMobile) {
-            panel.classList.add('mobile-panel');
-        }
-        
-        // 设置显示状态
-        const cardToggle = document.getElementById('solarTermCardToggle');
-        if (cardToggle) {
-            panel.style.display = cardToggle.checked ? 'flex' : 'none';
-        }
+        // 根据设备类型设置显示状态 - 简化为只管显示和隐藏
+        panel.style.display = isMobile ? 'none' : 'flex';
     }
 
     // 为所有设备创建顶部控件
@@ -1366,55 +1269,6 @@ document.addEventListener('DOMContentLoaded', function() {
         slider.style.transition = '0.4s';
         slider.style.borderRadius = '10px';
         
-        // 创建节气卡片控件组
-        const cardGroup = document.createElement('div');
-        cardGroup.className = 'control-group';
-        cardGroup.style.display = 'flex';
-        cardGroup.style.flexDirection = 'column'; // 垂直排列
-        cardGroup.style.alignItems = 'center';
-        
-        // 节气卡片文本标签
-        const cardText = document.createElement('span');
-        cardText.innerText = '节气卡片';
-        cardText.style.fontSize = '12px';
-        cardText.style.fontWeight = 'bold';
-        cardText.style.color = '#d4af37';
-        cardText.style.marginBottom = '5px';
-        cardText.style.textAlign = 'center';
-        
-        // 创建节气卡片开关
-        const cardToggleSwitch = document.createElement('label');
-        cardToggleSwitch.className = 'switch';
-        cardToggleSwitch.style.position = 'relative';
-        cardToggleSwitch.style.display = 'inline-block';
-        cardToggleSwitch.style.width = '30px';
-        cardToggleSwitch.style.height = '16px';
-        
-        // 创建节气卡片复选框
-        const cardCheckbox = document.createElement('input');
-        cardCheckbox.type = 'checkbox';
-        cardCheckbox.id = 'solarTermCardToggle';
-        cardCheckbox.style.opacity = '0';
-        cardCheckbox.style.width = '0';
-        cardCheckbox.style.height = '0';
-        
-        // 设置默认状态：桌面端默认打开，移动端默认关闭
-        const isMobile = window.innerWidth <= 768;
-        cardCheckbox.checked = !isMobile;
-        
-        // 创建节气卡片滑块
-        const cardSlider = document.createElement('span');
-        cardSlider.className = 'slider round';
-        cardSlider.style.position = 'absolute';
-        cardSlider.style.cursor = 'pointer';
-        cardSlider.style.top = '0';
-        cardSlider.style.left = '0';
-        cardSlider.style.right = '0';
-        cardSlider.style.bottom = '0';
-        cardSlider.style.backgroundColor = '#333';
-        cardSlider.style.transition = '0.4s';
-        cardSlider.style.borderRadius = '10px';
-        
         // 添加滑块样式
         const style = document.createElement('style');
         style.textContent = `
@@ -1444,19 +1298,16 @@ document.addEventListener('DOMContentLoaded', function() {
         rotateGroup.appendChild(rotateText);
         rotateGroup.appendChild(toggleSwitch);
         
-        cardToggleSwitch.appendChild(cardCheckbox);
-        cardToggleSwitch.appendChild(cardSlider);
-        cardGroup.appendChild(cardText);
-        cardGroup.appendChild(cardToggleSwitch);
-        
         headerControls.appendChild(rotateGroup);
-        headerControls.appendChild(cardGroup);
         
         // 添加到文档中
         document.querySelector('.container').appendChild(headerControls);
         
         // 添加自动旋转事件监听
-        checkbox.addEventListener('change', function() {
+        checkbox.addEventListener('change', function(e) {
+            // 阻止事件冒泡，防止触发document上的点击事件
+            e.stopPropagation();
+            
             if (this.checked) {
                 startAutoRotation();
             } else {
@@ -1464,35 +1315,53 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // 添加节气卡片事件监听
-        cardCheckbox.addEventListener('change', function() {
-            const infoPanel = document.querySelector('.solar-term-info-panel');
-            
-            if (this.checked) {
-                // 打开节气卡片
-                if (!infoPanel) {
-                    // 如果不存在则创建
-                    addSolarTermInfoPanel();
-                } else {
-                    // 如果已存在则显示
-                    infoPanel.style.display = 'flex';
-                }
-            } else {
-                // 关闭节气卡片
-                if (infoPanel) {
-                    infoPanel.style.display = 'none';
-                }
-            }
+        // 阻止控件区域点击事件冒泡，防止触发document上的流星效果
+        headerControls.addEventListener('click', function(e) {
+            e.stopPropagation();
         });
-        
-        // 初始根据卡片开关显示或隐藏节气卡片
-        if (cardCheckbox.checked) {
-            // 如果开关打开，确保卡片显示
-            if (!document.querySelector('.solar-term-info-panel')) {
-                addSolarTermInfoPanel();
-            } else {
-                const existingPanel = document.querySelector('.solar-term-info-panel');
-                existingPanel.style.display = 'flex';
+    }
+
+    // 格式化日期为中文显示格式（例如：2023年10月1日 星期日）
+    function formatCurrentDate(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        const weekDay = weekDays[date.getDay()];
+        return `${year}年${month}月${day}日 ${weekDay}`;
+    }
+
+    // 更新当前日期显示
+    function updateCurrentDateDisplay() {
+        const currentDateElements = document.querySelectorAll('.current-date');
+        if (currentDateElements.length > 0) {
+            const beijingTime = getBeijingTime();
+            const formattedDate = formatCurrentDate(beijingTime);
+            
+            // 更新所有current-date元素
+            currentDateElements.forEach(element => {
+                element.innerHTML = formattedDate;
+            });
+            
+            // 更新面板内容 - 重新生成节气卡片内容
+            updateSolarTermInfo();
+        }
+    }
+
+    // 更新节气卡片信息
+    function updateSolarTermInfo() {
+        const activeTabButton = document.querySelector('.tab-button.active');
+        if (activeTabButton) {
+            const tabId = activeTabButton.getAttribute('data-tab');
+            const tabData = [
+                { id: 'tab1', fields: ['date'] },
+                { id: 'tab2', fields: ['phenomena', 'position'] },
+                { id: 'tab3', fields: ['wind', 'element', 'sound'] },
+                { id: 'tab4', fields: ['qi', 'energy'] }
+            ].find(tab => tab.id === tabId);
+            
+            if (tabData) {
+                updateInfoContent(tabData.fields);
             }
         }
     }
@@ -1510,16 +1379,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const termData = createSolarTermInfoData().find(term => term.term === currentTerm.name);
         if (!termData) return;
         
-        // 判断是否为移动设备
-        const isMobile = window.innerWidth <= 768;
+        // 获取北京时间
+        const beijingTime = getBeijingTime();
+        const todayStr = beijingTime.toISOString().split('T')[0]; // 格式如 "2025-03-20"
         
-        // 初始化HTML构建数组，比字符串拼接更高效
-        const contentParts = [];
+        // 创建文档片段以减少DOM操作
+        const fragment = document.createDocumentFragment();
         
-        // 添加标题
-        contentParts.push(`<div class="current-term">${currentTerm.name}</div>`);
+        // 创建标题元素
+        const titleElement = document.createElement('div');
+        titleElement.className = 'current-term';
+        titleElement.textContent = currentTerm.name;
+        fragment.appendChild(titleElement);
         
-        // 显示各字段内容
+        // 创建当前日期显示元素
+        const dateElement = document.createElement('div');
+        dateElement.className = 'current-date';
+        dateElement.textContent = formatCurrentDate(beijingTime);
+        fragment.appendChild(dateElement);
+        
+        // 为每个字段创建内容
         fields.forEach((field) => {
             let fieldContent = termData[field];
             let fieldLabel = '';
@@ -1549,36 +1428,63 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
             }
             
+            // 创建信息项元素
+            const infoItem = document.createElement('div');
+            infoItem.className = 'info-item';
+            
             if (fieldLabel) {
-                contentParts.push(`<div class="info-item">
-                    <span class="info-label">${fieldLabel}：</span>
-                    <span class="info-value">${fieldContent}</span>
-                </div>`);
+                const labelSpan = document.createElement('span');
+                labelSpan.className = 'info-label';
+                labelSpan.textContent = `${fieldLabel}：`;
+                infoItem.appendChild(labelSpan);
+                
+                const valueSpan = document.createElement('span');
+                valueSpan.className = 'info-value';
+                valueSpan.textContent = fieldContent;
+                infoItem.appendChild(valueSpan);
             } else {
-                contentParts.push(`<div class="info-item">
-                    <span class="info-value">${fieldContent}</span>
-                </div>`);
+                const valueSpan = document.createElement('span');
+                valueSpan.className = 'info-value';
+                valueSpan.textContent = fieldContent;
+                infoItem.appendChild(valueSpan);
             }
+            
+            fragment.appendChild(infoItem);
         });
         
-        // 如果是阳历时间页面，添加节气提示语到字段内容下方
+        // 如果是阳历时间页面，添加节气提示语
         if (fields.includes('date')) {
-            const beijingTime = getBeijingTime();
-            const todayStr = beijingTime.toISOString().split('T')[0]; // 格式如 "2025-03-20"
+            const tipsContainer = document.createElement('div');
+            tipsContainer.className = 'tips-container';
             
-            // 生成提示语
-            let tips = '';
             if (todayStr === currentTerm.date) {
-                tips += `<span class="highlight-tip">🌸 今日${currentTerm.name}有导师的节气课程哦！</span>`;                
+                const highlightTip = document.createElement('span');
+                highlightTip.className = 'highlight-tip';
+                highlightTip.textContent = `🌸 今日${currentTerm.name}有导师的节气课程哦！`;
+                tipsContainer.appendChild(highlightTip);
             } else {
-                tips += `<span class="next-term">下一个节气是【${nextTerm.name}】阳历日期：${formatDate(nextTerm.date)}，倒计时 <strong>${getDaysLeft(nextTerm.date)}</strong> 天</span>`;
+                const nextTermInfo = document.createElement('span');
+                nextTermInfo.className = 'next-term';
+                
+                // 创建文本和强调部分
+                const textNode = document.createTextNode(`下一个节气是【${nextTerm.name}】阳历日期：${formatDate(nextTerm.date)}，倒计时 `);
+                nextTermInfo.appendChild(textNode);
+                
+                const strongElement = document.createElement('strong');
+                strongElement.textContent = getDaysLeft(nextTerm.date);
+                nextTermInfo.appendChild(strongElement);
+                
+                nextTermInfo.appendChild(document.createTextNode(' 天'));
+                
+                tipsContainer.appendChild(nextTermInfo);
             }
             
-            contentParts.push(`<div class="tips-container">${tips}</div>`);
+            fragment.appendChild(tipsContainer);
         }
         
-        // 一次性更新DOM，减少重排
-        infoContent.innerHTML = contentParts.join('');
+        // 清空现有内容并一次性添加所有新元素
+        infoContent.innerHTML = '';
+        infoContent.appendChild(fragment);
     }
 
     // 初始化罗盘
@@ -1586,6 +1492,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 罗盘初始化后，自动旋转到当前节气位置
     rotateCompassToCurrentSolarTerm();
+
+    // 只在桌面端自动显示节气卡片，不需要判断
+    if (!isMobile) {
+        // 初始更新一次当前日期
+        updateCurrentDateDisplay();
+        
+        // 设置定时器，每分钟更新一次日期显示
+        setInterval(updateCurrentDateDisplay, 60000); // 60000毫秒 = 1分钟
+    }
 
     // 添加页面滚动导航功能
     const scrollIndicator = document.querySelector('.scroll-indicator');
