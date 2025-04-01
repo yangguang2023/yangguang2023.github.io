@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 中国传统罗盘上的文字（简化版）
+    // 中国传统罗盘上的文字
     const circleTexts = [
         // 内圈到外圈的文字
         ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"],
@@ -1465,10 +1465,10 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 const nextTermInfo = document.createElement('span');
                 nextTermInfo.className = 'next-term';
+                nextTermInfo.style.display = 'inline-block'; // 确保span可以正常显示换行
                 
-                // 创建文本和强调部分
-                const textNode = document.createTextNode(`下一个节气是【${nextTerm.name}】阳历日期：${formatDate(nextTerm.date)}，倒计时 `);
-                nextTermInfo.appendChild(textNode);
+                // 创建包含换行的文本内容
+                nextTermInfo.innerHTML = `下一个节气是【${nextTerm.name}】<br>阳历日期：${formatDate(nextTerm.date)}，倒计时 `;
                 
                 const strongElement = document.createElement('strong');
                 strongElement.textContent = getDaysLeft(nextTerm.date);
@@ -1499,7 +1499,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCurrentDateDisplay();
         
         // 设置定时器，每分钟更新一次日期显示
-        setInterval(updateCurrentDateDisplay, 60000); // 60000毫秒 = 1分钟
+        setInterval(updateCurrentDateDisplay, 600000); // 60000毫秒 = 1分钟
     }
 
     // 添加页面滚动导航功能
