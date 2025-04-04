@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+﻿document.addEventListener('DOMContentLoaded', function() {
     // 中国传统罗盘上的文字
     const circleTexts = [
         // 内圈到外圈的文字
@@ -72,19 +72,59 @@ document.addEventListener('DOMContentLoaded', function() {
         "小雪": 11, "大雪": 11
     };
 
-    // 获取当前客户端时间，并转换为北京时间（UTC+8）
+    // 获取当前客户端时间，确保返回最新时间
     function getBeijingTime() {
-        const now = new Date();
-        // 方法：客户端时间 + 时区偏移 => 转换为UTC+8
-        return new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (8 * 3600000));
+        // 强制创建新的Date对象，确保每次都是最新时间
+        const now = new Date(); 
+        
+        // 强制系统刷新时间
+        now.setTime(Date.now());
+        
+        console.log("getBeijingTime 获取的系统时间:", now.toLocaleString());
+        return now;
+    }
+    
+    /**
+     * 获取当前日期的标准格式字符串 YYYY-MM-DD
+     * 此函数每次都会强制获取最新的系统时间
+     */
+    function getCurrentDateStr() {
+        // 强制获取最新系统时间
+        const now = new Date(Date.now());
+        
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        
+        // 确保月和日是两位数
+        const formattedMonth = month < 10 ? `0${month}` : month;
+        const formattedDay = day < 10 ? `0${day}` : day;
+        
+        const dateStr = `${year}-${formattedMonth}-${formattedDay}`;
+        console.log("getCurrentDateStr 获取的系统日期:", dateStr);
+        
+        return dateStr;
     }
 
     // 获取当前或下一个节气
     function getCurrentSolarTerm() {
-        const beijingTime = getBeijingTime();
-        const todayStr = beijingTime.toISOString().split('T')[0]; // 格式如 "2025-03-20"
+        // 直接使用辅助函数获取当前日期字符串，避免依赖Date对象的方法
+        const todayStr = getCurrentDateStr(); // 格式如 "2025-03-20"
         
-        // 找到当前日期所处的节气区间
+        console.log("获取节气信息 - 检测当前日期:", todayStr);
+        
+        // 首先直接检查今天是否是节气日期
+        const todayTermIndex = solarTerms2025.findIndex(term => term.date === todayStr);
+        
+        // 如果今天正好是某个节气的日期
+        if (todayTermIndex !== -1) {
+            console.log("今天正是节气日！节气名称:", solarTerms2025[todayTermIndex].name);
+            const currentTerm = solarTerms2025[todayTermIndex];
+            const nextTerm = solarTerms2025[todayTermIndex + 1] || solarTerms2025[0];
+            return { currentTerm, nextTerm };
+        }
+        
+        // 如果今天不是节气日期，继续正常逻辑
         let currentTerm = null;
         let nextTerm = null;
         
@@ -104,15 +144,30 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
+        console.log("常规节气判断 - 当前节气:", currentTerm?.name, "下一节气:", nextTerm?.name);
+        
         return { currentTerm, nextTerm };
     }
 
     // 辅助函数：计算剩余天数
     function getDaysLeft(targetDate) {
-        const target = new Date(targetDate);
-        const beijingTime = getBeijingTime();
-        const diff = target - beijingTime;
-        return Math.ceil(diff / (1000 * 3600 * 24));
+        // 解析目标日期，确保时间部分为00:00:00
+        const [year, month, day] = targetDate.split('-').map(Number);
+        const target = new Date(year, month - 1, day);
+        
+        // 获取当前日期，只保留日期部分
+        const now = getBeijingTime();
+        const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        
+        // 计算日期差异（毫秒）
+        const diff = target.getTime() - currentDate.getTime();
+        
+        // 转换为天数
+        const days = Math.round(diff / (1000 * 3600 * 24));
+        
+        console.log("倒计时计算 - 目标日期:", targetDate, "当前日期:", currentDate.toISOString().split('T')[0], "差异天数:", days);
+        
+        return days;
     }
 
     // 辅助函数：格式化日期（将 "2025-02-03" 转为 "2月3日"）
@@ -1333,36 +1388,114 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 更新当前日期显示
     function updateCurrentDateDisplay() {
+        // 获取最新的北京时间
+        const beijingTime = getBeijingTime();
+        const formattedDate = formatCurrentDate(beijingTime);
+        
+        // 更新日期显示
         const currentDateElements = document.querySelectorAll('.current-date');
-        if (currentDateElements.length > 0) {
-            const beijingTime = getBeijingTime();
-            const formattedDate = formatCurrentDate(beijingTime);
-            
-            // 更新所有current-date元素
-            currentDateElements.forEach(element => {
-                element.innerHTML = formattedDate;
-            });
-            
-            // 更新面板内容 - 重新生成节气卡片内容
-            updateSolarTermInfo();
-        }
+        currentDateElements.forEach(element => {
+            element.innerHTML = formattedDate;
+        });
+        
+        // 直接更新节气信息，不依赖DOM状态
+        updateSolarTermInfo();
+        
+        // 确保日期信息被更新
+        updateDateInfo();
     }
 
     // 更新节气卡片信息
     function updateSolarTermInfo() {
+        // 获取所有选项卡数据
+        const allTabs = [
+            { id: 'tab1', fields: ['date'] },
+            { id: 'tab2', fields: ['phenomena', 'position'] },
+            { id: 'tab3', fields: ['wind', 'element', 'sound'] },
+            { id: 'tab4', fields: ['qi', 'energy'] }
+        ];
+        
+        // 查找激活的选项卡
         const activeTabButton = document.querySelector('.tab-button.active');
+        let activeTabData = allTabs[0]; // 默认使用第一个选项卡
+        
+        // 如果找到激活的选项卡，则使用对应数据
         if (activeTabButton) {
             const tabId = activeTabButton.getAttribute('data-tab');
-            const tabData = [
-                { id: 'tab1', fields: ['date'] },
-                { id: 'tab2', fields: ['phenomena', 'position'] },
-                { id: 'tab3', fields: ['wind', 'element', 'sound'] },
-                { id: 'tab4', fields: ['qi', 'energy'] }
-            ].find(tab => tab.id === tabId);
-            
-            if (tabData) {
-                updateInfoContent(tabData.fields);
+            const foundTab = allTabs.find(tab => tab.id === tabId);
+            if (foundTab) {
+                activeTabData = foundTab;
             }
+        }
+        
+        // 直接调用更新函数，确保更新节气信息
+        updateInfoContent(activeTabData.fields);
+        
+        // 额外确保日期信息始终更新
+        if (!activeTabData.fields.includes('date')) {
+            // 如果当前选项卡不包含日期信息，则额外更新日期信息
+            updateDateInfo();
+        }
+    }
+    
+    // 添加单独更新日期信息的函数
+    function updateDateInfo() {
+        const infoContent = document.querySelector('.info-content');
+        if (!infoContent) return;
+        
+        // 获取当前节气信息
+        const { currentTerm, nextTerm } = getCurrentSolarTerm();
+        if (!currentTerm || !nextTerm) return;
+        
+        // 查找或创建提示容器
+        let tipsContainer = infoContent.querySelector('.tips-container');
+        if (!tipsContainer) {
+            tipsContainer = document.createElement('div');
+            tipsContainer.className = 'tips-container';
+            infoContent.appendChild(tipsContainer);
+        } else {
+            // 清空现有内容
+            tipsContainer.innerHTML = '';
+        }
+        
+        // 直接使用辅助函数获取当前日期字符串
+        const todayStr = getCurrentDateStr();
+        
+        console.log("更新日期信息 - 当前日期:", todayStr, "当前节气:", currentTerm.name, "日期:", currentTerm.date, "下一节气:", nextTerm.name, "日期:", nextTerm.date);
+        
+        // 检查今天是否是节气日期
+        const isTodayCurrentTermDay = todayStr === currentTerm.date;
+        const isTodayNextTermDay = todayStr === nextTerm.date;
+        
+        // 更新节气提示信息
+        if (isTodayCurrentTermDay || isTodayNextTermDay) {
+            // 如果今天是节气日，显示节气提示语
+            const termName = isTodayCurrentTermDay ? currentTerm.name : nextTerm.name;
+            const highlightTip = document.createElement('span');
+            highlightTip.className = 'highlight-tip';
+            highlightTip.textContent = `🌸 今日${termName}有导师的节气课程哦！`;
+            console.log("显示节气提示语:", highlightTip.textContent);
+            tipsContainer.appendChild(highlightTip);
+        } else {
+            // 如果今天不是节气日，显示下一个节气信息和倒计时
+            const nextTermInfo = document.createElement('span');
+            nextTermInfo.className = 'next-term';
+            nextTermInfo.style.display = 'inline-block';
+            
+            // 创建包含换行的文本内容
+            nextTermInfo.innerHTML = `下一个节气是【${nextTerm.name}】<br>阳历日期：${formatDate(nextTerm.date)}，倒计时 `;
+            
+            // 获取最新的倒计时
+            const daysLeft = getDaysLeft(nextTerm.date);
+            
+            const strongElement = document.createElement('strong');
+            strongElement.textContent = daysLeft;
+            nextTermInfo.appendChild(strongElement);
+            
+            nextTermInfo.appendChild(document.createTextNode(' 天'));
+            
+            console.log("显示下一节气信息:", nextTerm.name, "倒计时:", daysLeft, "天");
+            tipsContainer.appendChild(nextTermInfo);
         }
     }
 
@@ -1493,15 +1626,37 @@ document.addEventListener('DOMContentLoaded', function() {
     // 罗盘初始化后，自动旋转到当前节气位置
     rotateCompassToCurrentSolarTerm();
 
-    // 只在桌面端自动显示节气卡片，不需要判断
-    if (!isMobile) {
-        // 初始更新一次当前日期
-        updateCurrentDateDisplay();
+    // 定义一个可靠的刷新时间函数，确保获取最新系统时间
+    function refreshTimeAndUpdateInfo() {
+        // 强制获取最新系统时间 - 使用Date.now()确保每次都是新时间
+        const currentTime = new Date(Date.now());
+        console.log("正在获取最新系统时间:", currentTime.toLocaleString());
         
-        // 设置定时器，每分钟更新一次日期显示
-        setInterval(updateCurrentDateDisplay, 600000); // 60000毫秒 = 1分钟
+        // 刷新所有依赖时间的显示
+        if (!isMobile) {
+            // 更新当前日期显示
+            updateCurrentDateDisplay();
+            
+            // 更新节气信息
+            updateDateInfo();
+            
+            console.log("时间信息已更新完成");
+        }
     }
-
+    
+    // 立即执行时间刷新 - 使用直接调用确保立即执行
+    console.log("页面加载完成，立即刷新时间信息");
+    refreshTimeAndUpdateInfo();
+    
+    // 再次刷新一次，确保万无一失
+    setTimeout(refreshTimeAndUpdateInfo, 100);
+    
+    // 如果不是移动设备，设置定期刷新
+    if (!isMobile) {
+        // 设置定期刷新时间信息
+        setInterval(refreshTimeAndUpdateInfo, 30000); // 30秒刷新一次
+    }
+    
     // 添加页面滚动导航功能
     const scrollIndicator = document.querySelector('.scroll-indicator');
     let lastScrollTime = 0;
