@@ -1,0 +1,653 @@
+已导航到http://localhost:4000/
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:1699 [Intervention]Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: http://at.alicdn.com/t/c/font_4809197_u4dqklzzzys.woff2?t=1743210808546
+jieqi.js:322 [节气罗盘] 错误: 节气数据未正确初始化，尝试重新加载
+jieqi.js:322 [节气罗盘] 使用硬编码的节气数据
+jieqi.js:322 [节气罗盘] 确认2026年1月5日是小寒节气: 2026-01-05T16:22:53+08:00
+jieqi.js:322 [节气罗盘] 节气数据初始化状态已保存到localStorage
+jieqi.js:322 [节气罗盘] 节气数据加载成功，共有2025年: 24 个节气，2026年: 24 个节气
+jieqi.js:322 [节气罗盘] 数据成功加载并同步到window对象
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.395Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:39.405Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.416Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.417Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 页面加载完成，立即刷新时间信息
+jieqi.js:322 [节气罗盘] 设置定时刷新间隔为10分钟
+jieqi.js:322 [节气罗盘] 罗盘初始化开始...
+jieqi.js:322 [节气罗盘] 节气数据已初始化，跳过加载步骤
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.418Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 所有事件监听器已绑定
+jieqi.js:322 [节气罗盘] 罗盘初始化完成
+jieqi.js:322 [节气罗盘] 窗口大小变化
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.537Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:39.538Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.538Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:39.538Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.539Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:39.539Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.539Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:39.539Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.539Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:39.540Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:39.540Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:39
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:39.540Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+(索引):149 节气罗盘函数检查结果: {loadSolarTermData: true, init: true}
+localhost/:1  <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">
+(索引):189 开始加载节气数据并初始化罗盘...
+jieqi.js:322 [节气罗盘] 节气数据已经正确初始化，跳过加载
+(索引):192 节气数据加载成功
+(索引):378 桌面设备：初始化流星效果
+(索引):660 流星系统初始化完成
+jieqi.js:322 [节气罗盘] 滚轮事件
+已导航到http://localhost:4000/blog/
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+local-search.js:175 提取 已完成加载:GET "http://localhost:4000/search.xml"。
+fetchData @ local-search.js:175
+searchFnOnce @ local-search.js:340
+(匿名) @ local-search.js:352
+pjax.min.js:1  Pjax switch fail:  DOM doesn’t look the same on new loaded page: ’#config-diff’ - new 0, old 1
+module.exports @ pjax.min.js:1
+request.onreadystatechange @ pjax.min.js:1
+XMLHttpRequest.send
+module.exports @ pjax.min.js:1
+loadUrl @ pjax.min.js:1
+linkAction @ pjax.min.js:1
+(匿名) @ pjax.min.js:1
+ XHR 已完成加载:GET "http://localhost:4000/"。
+module.exports @ pjax.min.js:1
+loadUrl @ pjax.min.js:1
+linkAction @ pjax.min.js:1
+(匿名) @ pjax.min.js:1
+已导航到http://localhost:4000/
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 错误: 节气数据未正确初始化，尝试重新加载
+jieqi.js:322 [节气罗盘] 使用硬编码的节气数据
+jieqi.js:322 [节气罗盘] 确认2026年1月5日是小寒节气: 2026-01-05T16:22:53+08:00
+jieqi.js:322 [节气罗盘] 节气数据初始化状态已保存到localStorage
+jieqi.js:322 [节气罗盘] 节气数据加载成功，共有2025年: 24 个节气，2026年: 24 个节气
+jieqi.js:322 [节气罗盘] 数据成功加载并同步到window对象
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.632Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:44.633Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.635Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.636Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 页面加载完成，立即刷新时间信息
+jieqi.js:322 [节气罗盘] 设置定时刷新间隔为10分钟
+jieqi.js:322 [节气罗盘] 罗盘初始化开始...
+jieqi.js:322 [节气罗盘] 节气数据已初始化，跳过加载步骤
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.638Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 所有事件监听器已绑定
+jieqi.js:322 [节气罗盘] 罗盘初始化完成
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.720Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:44.720Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.720Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:44.721Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.721Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:44.721Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.721Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:44.721Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.722Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:44.722Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:44.722Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:44
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:05:44.722Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+(索引):149 节气罗盘函数检查结果: {loadSolarTermData: true, init: true}
+localhost/:1  <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">
+(索引):189 开始加载节气数据并初始化罗盘...
+jieqi.js:322 [节气罗盘] 节气数据已经正确初始化，跳过加载
+(索引):192 节气数据加载成功
+(索引):378 桌面设备：初始化流星效果
+(索引):660 流星系统初始化完成
+jieqi.js:322 [节气罗盘] 窗口大小变化
+jieqi.js:322 [节气罗盘] 窗口大小变化
+jieqi.js:322 [节气罗盘] 页面不可见，停止定时刷新
+jieqi.js:322 [节气罗盘] 页面不可见，暂停部分功能
+ 页面隐藏，暂停流星效果
+已导航到http://localhost:4000/
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 错误: 节气数据未正确初始化，尝试重新加载
+jieqi.js:322 [节气罗盘] 使用硬编码的节气数据
+jieqi.js:322 [节气罗盘] 确认2026年1月5日是小寒节气: 2026-01-05T16:22:53+08:00
+jieqi.js:322 [节气罗盘] 节气数据初始化状态已保存到localStorage
+jieqi.js:322 [节气罗盘] 节气数据加载成功，共有2025年: 24 个节气，2026年: 24 个节气
+jieqi.js:322 [节气罗盘] 数据成功加载并同步到window对象
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:46
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:46.471Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:46
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:46.473Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 页面加载完成，立即刷新时间信息
+jieqi.js:322 [节气罗盘] 设置定时刷新间隔为10分钟
+jieqi.js:322 [节气罗盘] 罗盘初始化开始...
+jieqi.js:322 [节气罗盘] 节气数据已初始化，跳过加载步骤
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:46
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:46.476Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 移动设备: 已启用旋转到当前节气
+jieqi.js:322 [节气罗盘] 所有事件监听器已绑定
+jieqi.js:322 [节气罗盘] 罗盘初始化完成
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:05:46
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:05:46
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:46
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:46
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+(索引):149 节气罗盘函数检查结果: {loadSolarTermData: true, init: true}
+localhost/:1  <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">
+(索引):189 开始加载节气数据并初始化罗盘...
+jieqi.js:322 [节气罗盘] 节气数据已经正确初始化，跳过加载
+(索引):192 节气数据加载成功
+(索引):374 移动设备：跳过流星效果初始化
+jieqi.js:322 [节气罗盘] 拖拽开始 - 未实现完整功能
+已导航到http://localhost:4000/blog/
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+local-search.js:175 提取 已完成加载:GET "http://localhost:4000/search.xml"。
+fetchData @ local-search.js:175
+searchFnOnce @ local-search.js:340
+(匿名) @ local-search.js:352
+pjax.min.js:1  Pjax switch fail:  DOM doesn’t look the same on new loaded page: ’#config-diff’ - new 0, old 1
+module.exports @ pjax.min.js:1
+request.onreadystatechange @ pjax.min.js:1
+XMLHttpRequest.send
+module.exports @ pjax.min.js:1
+loadUrl @ pjax.min.js:1
+linkAction @ pjax.min.js:1
+(匿名) @ pjax.min.js:1
+ XHR 已完成加载:GET "http://localhost:4000/"。
+module.exports @ pjax.min.js:1
+loadUrl @ pjax.min.js:1
+linkAction @ pjax.min.js:1
+(匿名) @ pjax.min.js:1
+已导航到http://localhost:4000/
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 错误: 节气数据未正确初始化，尝试重新加载
+jieqi.js:322 [节气罗盘] 使用硬编码的节气数据
+jieqi.js:322 [节气罗盘] 确认2026年1月5日是小寒节气: 2026-01-05T16:22:53+08:00
+jieqi.js:322 [节气罗盘] 节气数据初始化状态已保存到localStorage
+jieqi.js:322 [节气罗盘] 节气数据加载成功，共有2025年: 24 个节气，2026年: 24 个节气
+jieqi.js:322 [节气罗盘] 数据成功加载并同步到window对象
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:53
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:53.445Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:53
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:53.447Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 页面加载完成，立即刷新时间信息
+jieqi.js:322 [节气罗盘] 设置定时刷新间隔为10分钟
+jieqi.js:322 [节气罗盘] 罗盘初始化开始...
+jieqi.js:322 [节气罗盘] 节气数据已初始化，跳过加载步骤
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:53
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:05:53.452Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 移动设备: 已启用旋转到当前节气
+jieqi.js:322 [节气罗盘] 所有事件监听器已绑定
+jieqi.js:322 [节气罗盘] 罗盘初始化完成
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:05:53
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:05:53
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:53
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:05:53
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+(索引):149 节气罗盘函数检查结果: {loadSolarTermData: true, init: true}
+localhost/:1  <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">
+(索引):189 开始加载节气数据并初始化罗盘...
+jieqi.js:322 [节气罗盘] 节气数据已经正确初始化，跳过加载
+(索引):192 节气数据加载成功
+(索引):374 移动设备：跳过流星效果初始化
+jieqi.js:322 [节气罗盘] 拖拽开始 - 未实现完整功能
+已导航到http://localhost:4000/blog/
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+local-search.js:175 提取 已完成加载:GET "http://localhost:4000/search.xml"。
+fetchData @ local-search.js:175
+searchFnOnce @ local-search.js:340
+(匿名) @ local-search.js:352
+pjax.min.js:1  Pjax switch fail:  DOM doesn’t look the same on new loaded page: ’#config-diff’ - new 0, old 1
+module.exports @ pjax.min.js:1
+request.onreadystatechange @ pjax.min.js:1
+XMLHttpRequest.send
+module.exports @ pjax.min.js:1
+loadUrl @ pjax.min.js:1
+linkAction @ pjax.min.js:1
+(匿名) @ pjax.min.js:1
+ XHR 已完成加载:GET "http://localhost:4000/"。
+module.exports @ pjax.min.js:1
+loadUrl @ pjax.min.js:1
+linkAction @ pjax.min.js:1
+(匿名) @ pjax.min.js:1
+已导航到http://localhost:4000/
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+Microsoft Edge is moving towards a new experience that allows users to choose to browse without third-party cookies.
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 错误: 节气数据未正确初始化，尝试重新加载
+jieqi.js:322 [节气罗盘] 使用硬编码的节气数据
+jieqi.js:322 [节气罗盘] 确认2026年1月5日是小寒节气: 2026-01-05T16:22:53+08:00
+jieqi.js:322 [节气罗盘] 节气数据初始化状态已保存到localStorage
+jieqi.js:322 [节气罗盘] 节气数据加载成功，共有2025年: 24 个节气，2026年: 24 个节气
+jieqi.js:322 [节气罗盘] 数据成功加载并同步到window对象
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:01
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:01.841Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:01
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:01.842Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 页面加载完成，立即刷新时间信息
+jieqi.js:322 [节气罗盘] 设置定时刷新间隔为10分钟
+jieqi.js:322 [节气罗盘] 罗盘初始化开始...
+jieqi.js:322 [节气罗盘] 节气数据已初始化，跳过加载步骤
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:01
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:01.846Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 移动设备: 已启用旋转到当前节气
+jieqi.js:322 [节气罗盘] 所有事件监听器已绑定
+jieqi.js:322 [节气罗盘] 罗盘初始化完成
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:06:01
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:06:01
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:01
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:01
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 注意: 当前页面没有info-content元素，可能在其他页面
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+(索引):149 节气罗盘函数检查结果: {loadSolarTermData: true, init: true}
+localhost/:1  <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">
+(索引):189 开始加载节气数据并初始化罗盘...
+jieqi.js:322 [节气罗盘] 节气数据已经正确初始化，跳过加载
+(索引):192 节气数据加载成功
+(索引):374 移动设备：跳过流星效果初始化
+jieqi.js:322 [节气罗盘] 窗口大小变化
+jieqi.js:322 [节气罗盘] 页面不可见，停止定时刷新
+jieqi.js:322 [节气罗盘] 页面不可见，暂停部分功能
+已导航到http://localhost:4000/
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 从localStorage读取初始化状态: 已初始化
+jieqi.js:322 [节气罗盘] 错误: 节气数据未正确初始化，尝试重新加载
+jieqi.js:322 [节气罗盘] 使用硬编码的节气数据
+jieqi.js:322 [节气罗盘] 确认2026年1月5日是小寒节气: 2026-01-05T16:22:53+08:00
+jieqi.js:322 [节气罗盘] 节气数据初始化状态已保存到localStorage
+jieqi.js:322 [节气罗盘] 节气数据加载成功，共有2025年: 24 个节气，2026年: 24 个节气
+jieqi.js:322 [节气罗盘] 数据成功加载并同步到window对象
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.434Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:06:03.435Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.436Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.437Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 页面加载完成，立即刷新时间信息
+jieqi.js:322 [节气罗盘] 设置定时刷新间隔为10分钟
+jieqi.js:322 [节气罗盘] 罗盘初始化开始...
+jieqi.js:322 [节气罗盘] 节气数据已初始化，跳过加载步骤
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.439Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 已旋转罗盘到当前节气:古谷雨，索引:3，角度:180度
+jieqi.js:322 [节气罗盘] 所有事件监听器已绑定
+jieqi.js:322 [节气罗盘] 罗盘初始化完成
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 正在获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.517Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:06:03.517Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.517Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:06:03.518Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.518Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:06:03.518Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.518Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:06:03.519Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.519Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:06:03.519Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:03.519Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:03
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 更新日期信息 - 当前日期: 2025-04-05 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 倒计时计算 - 目标日期: 2025-04-20T03:55:45+08:00 当前日期: 2025-04-05T10:06:03.519Z 差异天数: 15
+jieqi.js:322 [节气罗盘] 显示下一节气信息: 古清明 倒计时: 15 天
+jieqi.js:322 [节气罗盘] 时间信息已更新完成
+(索引):149 节气罗盘函数检查结果: {loadSolarTermData: true, init: true}
+localhost/:1  <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">
+(索引):189 开始加载节气数据并初始化罗盘...
+jieqi.js:322 [节气罗盘] 节气数据已经正确初始化，跳过加载
+(索引):192 节气数据加载成功
+(索引):378 桌面设备：初始化流星效果
+(索引):660 流星系统初始化完成
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:08
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:08.722Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:08
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:09
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:09.050Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:09
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:09
+jieqi.js:322 [节气罗盘] 格式化的日期字符串: 2025-04-05
+jieqi.js:322 [节气罗盘] 获取节气信息 - 检测当前时间: 2025-04-05T10:06:09.186Z 日期: 2025-04-05 年份: 2025
+jieqi.js:322 [节气罗盘] 节气判断 - 当前节气: 古谷雨 日期: 2025-04-04 下一节气: 古清明 日期: 2025-04-20
+jieqi.js:322 [节气罗盘] 使用硬编码的节气详细数据
+jieqi.js:322 [节气罗盘] 获取最新系统时间: 2025/4/5 18:06:09

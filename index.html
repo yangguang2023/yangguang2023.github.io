@@ -137,131 +137,90 @@
     
     <script src="/js/jieqi.js"></script>
     <script>
-        // 自动旋转功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 直接创建自动旋转按钮，不依赖jieqi.js中的控件
-            const createRotateButton = function() {
-                // 检查按钮是否已存在
-                if (document.getElementById('manual-rotate-button')) {
-                    return;
-                }
-                
-                // 创建按钮容器
-                const buttonContainer = document.createElement('div');
-                buttonContainer.id = 'manual-rotate-controls';
-                buttonContainer.style.position = 'fixed';
-                buttonContainer.style.top = '100px';
-                buttonContainer.style.right = '15px';
-                buttonContainer.style.zIndex = '1000';
-                buttonContainer.style.backgroundColor = 'rgba(0,0,0,0.7)';
-                buttonContainer.style.padding = '2px';
-                buttonContainer.style.borderRadius = '5px';
-                buttonContainer.style.display = 'flex';
-                buttonContainer.style.flexDirection = 'column';
-                buttonContainer.style.alignItems = 'center';
-                
-                // 移动端特别设置
-                if (isMobileDevice()) {
-                    buttonContainer.style.top = '120px';
-                    buttonContainer.style.right = '10px';
-                    buttonContainer.style.padding = '2px';
-                }
-                
-                // 创建标题
-                const title = document.createElement('div');
-                title.textContent = '自动旋转';
-                title.style.color = '#d4af37';
-                title.style.fontSize = '12px';
-                title.style.marginBottom = '2px';
-                
-                // 移动端设置更小的标题
-                if (isMobileDevice()) {
-                    title.style.fontSize = '10px';
-                    title.style.marginBottom = '2px';
-                }
-                
-                // 创建开关按钮
-                const button = document.createElement('button');
-                button.id = 'manual-rotate-button';
-                button.textContent = '开始';
-                button.style.backgroundColor = '#333';
-                button.style.color = '#d4af37';
-                button.style.border = '1px solid #d4af37';
-                button.style.borderRadius = '4px';
-                button.style.padding = '5px 10px';
-                button.style.cursor = 'pointer';
-                button.style.outline = 'none';
-                
-                // 移动端设置更小的按钮
-                if (isMobileDevice()) {
-                    button.style.padding = '2px 2px';
-                    button.style.fontSize = '10px';
-                }
-                
-                // 添加按钮事件
-                let isRotating = false;
-                button.addEventListener('click', function(e) {
-                    e.stopPropagation(); // 阻止事件冒泡
-                    
-                    if (!isRotating) {
-                        // 开始旋转
-                        console.log('开始自动旋转');
-                        window.startAutoRotation();
-                        button.textContent = '停止';
-                        button.style.backgroundColor = '#d4af37';
-                        button.style.color = '#333';
-                        isRotating = true;
-                    } else {
-                        // 停止旋转
-                        console.log('停止自动旋转');
-                        window.stopAutoRotation();
-                        button.textContent = '开始';
-                        button.style.backgroundColor = '#333';
-                        button.style.color = '#d4af37';
-                        isRotating = false;
-                    }
-                });
-                
-                // 防止容器冒泡
-                buttonContainer.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-                
-                // 组装并添加到页面
-                buttonContainer.appendChild(title);
-                buttonContainer.appendChild(button);
-                document.body.appendChild(buttonContainer);
-                
-                console.log('自动旋转按钮已创建');
-            };
+        // 检查关键函数是否存在及其可用性
+        function checkCompassFunctions() {
+            const functionNames = ['loadSolarTermData', 'init'];
+            const results = {};
             
-            // 创建自动旋转按钮
-            setTimeout(createRotateButton, 500);
-            
-            // 获取旋转开关元素
-            const autoRotateToggle = document.getElementById('autoRotateToggle');
-            
-            // 添加事件监听，使用script.js中的实现
-            if (autoRotateToggle) {
-                autoRotateToggle.addEventListener('change', function(e) {
-                    // 阻止事件冒泡，防止触发document上的点击事件
-                    e.stopPropagation();
-                    
-                if (this.checked) {
-                    window.startAutoRotation(); // 使用script.js中的函数
-                } else {
-                    window.stopAutoRotation(); // 使用script.js中的函数
-                }
+            functionNames.forEach(name => {
+                results[name] = typeof window[name] === 'function';
             });
             
-                autoRotateToggle.checked = false;
-                
-                // 防止控件区域触发流星效果
-                autoRotateToggle.parentElement.addEventListener('click', function(e) {
-                    e.stopPropagation(); // 阻止事件冒泡
-                });
-            }
+            console.log('节气罗盘函数检查结果:', results);
+            return results;
+        }
+    
+        // 确保罗盘内部元素存在
+        function ensureCompassInner() {
+            const compass = document.querySelector('.compass');
+            if (!compass) return false;
             
+            // 创建compass-inner元素如果不存在
+            let compassInner = document.querySelector('.compass-inner');
+            if (!compassInner) {
+                compassInner = document.createElement('div');
+                compassInner.className = 'compass-inner';
+                compassInner.style.cssText = `
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    transform-origin: center center;
+                    transition: none;
+                `;
+                compass.appendChild(compassInner);
+                console.log('创建了.compass-inner元素');
+            }
+            return true;
+        }
+        
+        // 确保DOM加载完毕后再调用节气数据加载和初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 先检查所有函数
+            setTimeout(checkCompassFunctions, 50);
+            
+            // 确保compass-inner元素存在
+            setTimeout(ensureCompassInner, 100);
+            
+            // 延迟200毫秒执行，确保jieqi.js中的基本函数已定义
+            setTimeout(() => {
+                if (typeof window.loadSolarTermData === 'function') {
+                    console.log('开始加载节气数据并初始化罗盘...');
+                    // 同步调用loadSolarTermData
+                    const success = window.loadSolarTermData();
+                    console.log('节气数据加载' + (success ? '成功' : '失败，使用回退数据'));
+                } else {
+                    console.error('loadSolarTermData函数未定义，可能jieqi.js未正确加载');
+                    // 尝试直接调用init函数作为回退
+                    if (typeof window.init === 'function') {
+                        window.init();
+                    } else {
+                        console.error('init函数也未定义，尝试重新加载jieqi.js');
+                        // 检查是否已加载过jieqi.js，避免重复加载
+                        if (!window.jieqiJsLoaded) {
+                            window.jieqiJsLoaded = true; // 标记为已加载
+                            const script = document.createElement('script');
+                            script.src = '/js/jieqi.js';
+                            script.onload = function() {
+                                console.log('jieqi.js重新加载完成，重试初始化');
+                                setTimeout(() => {
+                                    if (typeof window.init === 'function') {
+                                        window.init();
+                                    }
+                                }, 100);
+                            };
+                            document.body.appendChild(script);
+                        } else {
+                            console.log('jieqi.js已加载过，不再重复加载');
+                        }
+                    }
+                }
+            }, 200);
+        });
+        
+        // 页面功能
+        document.addEventListener('DOMContentLoaded', function() {
             // 简化设备检测函数
             function isMobileDevice() {
                 return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -355,8 +314,12 @@
             
             // 平滑页面过渡
             function smoothPageTransition(targetUrl) {
-                // 清理所有资源
-                cleanupAllResources();
+                // 使用jieqi.js中的资源管理器清理资源（如果可用）
+                if (window.ResourceManager && typeof window.ResourceManager.clearAll === 'function') {
+                    window.ResourceManager.clearAll();
+                } else if (typeof clearAllManagedResources === 'function') {
+                    clearAllManagedResources();
+                }
                 
                 // 显示过渡层
                 const transitionLayer = document.getElementById('page-transition');
@@ -396,339 +359,242 @@
         
         // ====== 优化的流星效果代码 ======
         
-        // 简化设备检测
-        function isMobileDevice() {
+        // 判断设备类型的代码要尽早执行
+        window.isMobileDevice = function() {
             return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-        
-        // 集中管理所有动画和资源
-        const resourceManager = {
-            // 存储所有animation frame IDs
-            animationFrames: [],
-            
-            // 存储所有定时器
-            timers: [],
-            
-            // 存储所有事件监听器
-            eventListeners: [],
-            
-            // 存储所有创建的DOM元素
-            elements: [],
-            
-            // 添加动画帧
-            addAnimationFrame(id) {
-                this.animationFrames.push(id);
-                return id;
-            },
-            
-            // 添加定时器
-            addTimer(id) {
-                this.timers.push(id);
-                return id;
-            },
-            
-            // 添加事件监听器
-            addEventListeners(element, type, handler, options) {
-                element.addEventListener(type, handler, options);
-                this.eventListeners.push({ element, type, handler });
-                return handler;
-            },
-            
-            // 添加元素引用
-            addElement(element) {
-                this.elements.push(element);
-                return element;
-            },
-            
-            // 清理所有资源
-            cleanupAll() {
-                // 取消所有动画帧
-                this.animationFrames.forEach(id => {
-                    cancelAnimationFrame(id);
-                });
-                this.animationFrames = [];
-                
-                // 清除所有定时器
-                this.timers.forEach(id => {
-                    clearTimeout(id);
-                    clearInterval(id);
-                });
-                this.timers = [];
-                
-                // 移除所有事件监听器
-                this.eventListeners.forEach(({ element, type, handler }) => {
-                    element.removeEventListener(type, handler);
-                });
-                this.eventListeners = [];
-                
-                // 清除DOM元素
-                const meteorContainer = document.getElementById('meteorContainer');
-                if (meteorContainer) {
-                    meteorContainer.innerHTML = '';
-                }
-                
-                // 重置元素引用
-                this.elements = [];
-            }
         };
         
-        // 全局清理函数
-        function cleanupAllResources() {
-            resourceManager.cleanupAll();
-            
-            // 额外清理其他可能的全局资源
-            const meteorContainer = document.getElementById('meteorContainer');
-            if (meteorContainer) {
-                meteorContainer.innerHTML = '';
-            }
-        }
+        // 提前标记设备类型
+        document.documentElement.classList.add(window.isMobileDevice() ? 'mobile-device' : 'desktop-device');
         
-        // 移动设备上不创建流星效果
-        if (!isMobileDevice()) {
-            // 简化流星创建函数，修复错乱问题
-        function createSimpleMeteor() {
-            const container = document.getElementById('meteorContainer');
-                if (!container) return;
-            
-                // 随机生成流星参数
-            const startX = Math.random() * window.innerWidth;
-            const startY = Math.random() * (window.innerHeight / 3);
-            const size = Math.random() * 3 + 1;
-            const length = Math.random() * 150 + 50;
-            
-                // 创建流星元素
-            const meteor = document.createElement('div');
-            meteor.className = 'meteor';
-            meteor.style.width = `${size}px`;
-            meteor.style.height = `${size}px`;
-            meteor.style.left = `${startX}px`;
-            meteor.style.top = `${startY}px`;
-            
-                // 创建尾巴元素
-                const tail = document.createElement('div');
-                tail.className = 'meteor-tail';
-                tail.style.left = `${startX}px`;
-                tail.style.top = `${startY}px`;
-                tail.style.width = `${length}px`;
-                tail.style.height = `${size/2}px`;
-                tail.style.transform = 'rotate(-45deg)';
-                
-                // 单独添加元素，确保正确显示
-            container.appendChild(tail);
-            container.appendChild(meteor);
-                
-                // 跟踪元素
-                resourceManager.addElement(meteor);
-                resourceManager.addElement(tail);
-            
-            // 动画参数
-            let posX = startX;
-            let posY = startY;
-            const speed = Math.random() * 5 + 3;
-                const angle = 135 * Math.PI / 180;
-            
-            // 动画函数
-            function animate() {
-                // 计算新位置
-                posX += Math.cos(angle) * speed;
-                posY += Math.sin(angle) * speed;
-                
-                    // 直接更新位置，不使用transform
-                    meteor.style.left = `${posX}px`;
-                    meteor.style.top = `${posY}px`;
-                tail.style.left = `${posX}px`;
-                tail.style.top = `${posY}px`;
-                
-                // 检查是否超出屏幕
-                if (posX < -200 || posY > window.innerHeight + 200) {
-                        // 安全删除
-                        if (meteor.parentNode) meteor.remove();
-                        if (tail.parentNode) tail.remove();
-                } else {
-                        // 管理动画帧
-                        const frameId = requestAnimationFrame(animate);
-                        resourceManager.addAnimationFrame(frameId);
-                    }
-                }
-                
-                // 开始动画并管理
-                const frameId = requestAnimationFrame(animate);
-                resourceManager.addAnimationFrame(frameId);
+        // 流星系统初始化函数 - 仅在非移动设备上执行
+        function initMeteorSystem() {
+            // 移动设备完全跳过
+            if (window.isMobileDevice()) {
+                console.log('移动设备：跳过流星效果初始化');
+                return;
             }
             
-            // 点击生成流星 - 恢复正常显示
-            resourceManager.addEventListeners(document, 'click', function(e) {
-                // 排除特定区域的点击
-                if (e.target.closest('.manual-rotate-controls, .menu-toggle, .main-menu, .rotate-controls')) {
-                    return;
-                }
-                
-            const container = document.getElementById('meteorContainer');
-                if (!container || isMobileDevice()) return;
+            console.log('桌面设备：初始化流星效果');
             
-            // 获取点击位置
-            const startX = e.clientX;
-            const startY = e.clientY;
-                
-                // 创建流星元素
-            const size = Math.random() * 3 + 2;
-            const length = Math.random() * 150 + 100;
-            const angle = 135 * Math.PI / 180;
-            
-            // 创建流星头部
-            const meteor = document.createElement('div');
-            meteor.className = 'meteor';
-            meteor.style.width = `${size}px`;
-            meteor.style.height = `${size}px`;
-            meteor.style.left = `${startX}px`;
-            meteor.style.top = `${startY}px`;
-                
-                // 创建流星尾巴
-                const tail = document.createElement('div');
-                tail.className = 'meteor-tail';
-                tail.style.left = `${startX}px`;
-                tail.style.top = `${startY}px`;
-                tail.style.width = `${length}px`;
-                tail.style.height = `${size/2}px`;
-                tail.style.transform = 'rotate(-45deg)';
-            
-            // 添加到容器
-            container.appendChild(tail);
-            container.appendChild(meteor);
-                
-                // 跟踪元素
-                resourceManager.addElement(meteor);
-                resourceManager.addElement(tail);
-            
-            // 动画参数
-            let posX = startX;
-            let posY = startY;
-            const speed = Math.random() * 5 + 5;
-            
-            // 动画函数
-            function animate() {
-                // 计算新位置
-                posX += Math.cos(angle) * speed;
-                posY += Math.sin(angle) * speed;
-                
-                    // 直接更新位置
-                    meteor.style.left = `${posX}px`;
-                    meteor.style.top = `${posY}px`;
-                tail.style.left = `${posX}px`;
-                tail.style.top = `${posY}px`;
-                
-                // 检查是否超出屏幕
-                if (posX < -200 || posX > window.innerWidth + 200 || 
-                    posY < -200 || posY > window.innerHeight + 200) {
-                        if (meteor.parentNode) meteor.remove();
-                        if (tail.parentNode) tail.remove();
-                    } else {
-                        const frameId = requestAnimationFrame(animate);
-                        resourceManager.addAnimationFrame(frameId);
-                    }
-                }
-                
-                // 启动并管理动画
-                const frameId = requestAnimationFrame(animate);
-                resourceManager.addAnimationFrame(frameId);
-            });
-            
-            // 页面可见性变化处理
-            let pageHiddenTime = 0; // 记录页面隐藏的时间戳
-            const METEOR_SHOWER_THRESHOLD = 10000; // 触发流星雨的时间阈值（毫秒）
-            
-            resourceManager.addEventListeners(document, 'visibilitychange', function() {
-                const container = document.getElementById('meteorContainer');
-                
-                if (document.hidden) {
-                    // 记录页面隐藏的时间戳
-                    pageHiddenTime = Date.now();
-                    
-                    // 暂停所有流星动画
-                    resourceManager.animationFrames.forEach(id => {
-                        cancelAnimationFrame(id);
-                    });
-                    resourceManager.animationFrames = [];
-                    
-                    // 清除定时创建
-                    resourceManager.timers.forEach(id => {
-                        clearInterval(id);
-                        clearTimeout(id);
-                    });
-                    resourceManager.timers = [];
-                    
-                    // 清除所有现有流星元素
-                    if (container) {
-                        container.innerHTML = '';
-                    }
-                    resourceManager.elements = [];
-                } else {
-                    // 计算页面隐藏的时间
-                    const hiddenDuration = Date.now() - pageHiddenTime;
-                    
-                    // 重新开始流星创建
-                    if (!resourceManager.timers.length && container) {
-                        // 只有当页面隐藏超过阈值时间才触发流星雨
-                        if (hiddenDuration > METEOR_SHOWER_THRESHOLD) {
-                            // 页面回来时创建流星雨效果
-                            createMeteorShower();
-                        }
-                        
-                        // 无论如何都重新启动正常的流星生成
-                        const intervalId = setInterval(createSimpleMeteor, 2500);
-                        resourceManager.addTimer(intervalId);
-                        
-                        // 创建几个初始流星
-                        for (let i = 0; i < 2; i++) {
-                            const timerId = setTimeout(createSimpleMeteor, 1000 + Math.random() * 1000);
-                            resourceManager.addTimer(timerId);
-                        }
-                    }
-                }
-            });
-            
-            // 添加流星雨效果函数
-            function createMeteorShower() {
+            // 简化流星创建函数
+            function createSimpleMeteor() {
                 const container = document.getElementById('meteorContainer');
                 if (!container) return;
                 
-                // 创建多个流星形成流星雨效果
-                for (let i = 0; i < 10; i++) {
-                    // 随机生成流星参数
-                    const startX = Math.random() * window.innerWidth;
-                    const startY = Math.random() * (window.innerHeight / 4);
-                    const size = Math.random() * 3 + 1;
-                    const length = Math.random() * 150 + 50;
-                    
-                    // 创建流星元素
-                    const meteor = document.createElement('div');
+                // 随机生成流星参数
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * (window.innerHeight / 3);
+                const size = Math.random() * 3 + 1;
+                const length = Math.random() * 150 + 50;
+                
+                // 使用全局资源管理器创建元素
+                const meteor = window.ResourceManager ? 
+                    window.ResourceManager.createElement('div', {
+                        className: 'meteor',
+                        style: {
+                            width: `${size}px`,
+                            height: `${size}px`,
+                            left: `${startX}px`,
+                            top: `${startY}px`
+                        }
+                    }, container) :
+                    document.createElement('div');
+                
+                if (!window.ResourceManager) {
                     meteor.className = 'meteor';
                     meteor.style.width = `${size}px`;
                     meteor.style.height = `${size}px`;
                     meteor.style.left = `${startX}px`;
                     meteor.style.top = `${startY}px`;
-                    
-                    // 创建尾巴元素
-                    const tail = document.createElement('div');
+                    container.appendChild(meteor);
+                }
+                
+                // 创建尾巴元素
+                const tail = window.ResourceManager ?
+                    window.ResourceManager.createElement('div', {
+                        className: 'meteor-tail',
+                        style: {
+                            left: `${startX}px`,
+                            top: `${startY}px`,
+                            width: `${length}px`,
+                            height: `${size/2}px`,
+                            transform: 'rotate(-45deg)'
+                        }
+                    }, container) :
+                    document.createElement('div');
+                
+                if (!window.ResourceManager) {
                     tail.className = 'meteor-tail';
                     tail.style.left = `${startX}px`;
                     tail.style.top = `${startY}px`;
                     tail.style.width = `${length}px`;
                     tail.style.height = `${size/2}px`;
                     tail.style.transform = 'rotate(-45deg)';
-                    
-                    // 单独添加元素，确保正确显示
                     container.appendChild(tail);
-                    container.appendChild(meteor);
+                }
+                
+                // 动画参数
+                let posX = startX;
+                let posY = startY;
+                const speed = Math.random() * 5 + 3;
+                const angle = 135 * Math.PI / 180;
+                
+                // 动画函数
+                function animate() {
+                    // 计算新位置
+                    posX += Math.cos(angle) * speed;
+                    posY += Math.sin(angle) * speed;
                     
-                    // 跟踪元素
-                    resourceManager.addElement(meteor);
-                    resourceManager.addElement(tail);
+                    // 直接更新位置，不使用transform
+                    meteor.style.left = `${posX}px`;
+                    meteor.style.top = `${posY}px`;
+                    tail.style.left = `${posX}px`;
+                    tail.style.top = `${posY}px`;
+                    
+                    // 检查是否超出屏幕
+                    if (posX < -200 || posY > window.innerHeight + 200) {
+                        // 安全删除
+                        if (meteor.parentNode) meteor.remove();
+                        if (tail.parentNode) tail.remove();
+                    } else {
+                        // 注册下一帧动画
+                        const animateNext = () => animate();
+                        if (window.ResourceManager) {
+                            window.ResourceManager.registerAnimation(animateNext, 'meteor');
+                        } else {
+                            requestAnimationFrame(animateNext);
+                        }
+                    }
+                }
+                
+                // 启动动画
+                const animateStart = () => animate();
+                if (window.ResourceManager) {
+                    window.ResourceManager.registerAnimation(animateStart, 'meteor');
+                } else {
+                    requestAnimationFrame(animateStart);
+                }
+            }
+            
+            // 创建流星雨效果
+            function createMeteorShower() {
+                for (let i = 0; i < 10; i++) {
+                    // 随机延迟创建流星，避免同时出现
+                    const delay = Math.random() * 2000;
+                    if (window.ResourceManager) {
+                        window.ResourceManager.setTimeout(() => createSimpleMeteor(), delay);
+                    } else {
+                        setTimeout(() => createSimpleMeteor(), delay);
+                    }
+                }
+            }
+            
+            // 页面可见性变化时的处理
+            function handleVisibilityChange() {
+                if (document.hidden) {
+                    console.log('页面隐藏，暂停流星效果');
+                    // 清理流星相关资源
+                    if (window.ResourceManager) {
+                        window.ResourceManager.cancelAnimation('meteor');
+                        window.ResourceManager.cancelAnimation('clickMeteor');
+                    }
+                } else {
+                    console.log('页面恢复可见，重新启动流星效果');
+                    
+                    // 清理所有现有的流星元素
+                    const container = document.getElementById('meteorContainer');
+                    if (container) {
+                        const meteors = container.querySelectorAll('.meteor');
+                        const tails = container.querySelectorAll('.meteor-tail');
+                        
+                        // 移除所有流星元素
+                        meteors.forEach(meteor => {
+                            if (meteor.parentNode) meteor.remove();
+                        });
+                        
+                        // 移除所有尾巴元素
+                        tails.forEach(tail => {
+                            if (tail.parentNode) tail.remove();
+                        });
+                        
+                        console.log('已清理现有流星元素:', meteors.length, '个流星,', tails.length, '个尾巴');
+                    }
+                    
+                    // 页面回来后重新创建流星
+                    createMeteorShower();
+                }
+            }
+            
+            // 点击页面创建流星
+            function setupClickMeteor() {
+                document.addEventListener('click', function(e) {
+                    // 排除特定区域的点击
+                    if (e.target.closest('.manual-rotate-controls, .menu-toggle, .main-menu, .rotate-controls')) {
+                        return;
+                    }
+                    
+                    const container = document.getElementById('meteorContainer');
+                    if (!container) return;
+                    
+                    // 获取点击位置
+                    const startX = e.clientX;
+                    const startY = e.clientY;
+                    
+                    // 随机参数
+                    const size = Math.random() * 3 + 2;
+                    const length = Math.random() * 150 + 100;
+                    
+                    // 创建流星
+                    const meteor = window.ResourceManager ? 
+                        window.ResourceManager.createElement('div', {
+                            className: 'meteor',
+                            style: {
+                                width: `${size}px`,
+                                height: `${size}px`,
+                                left: `${startX}px`,
+                                top: `${startY}px`
+                            }
+                        }, container) :
+                        document.createElement('div');
+                    
+                    if (!window.ResourceManager) {
+                        meteor.className = 'meteor';
+                        meteor.style.width = `${size}px`;
+                        meteor.style.height = `${size}px`;
+                        meteor.style.left = `${startX}px`;
+                        meteor.style.top = `${startY}px`;
+                        container.appendChild(meteor);
+                    }
+                    
+                    // 创建尾巴
+                    const tail = window.ResourceManager ?
+                        window.ResourceManager.createElement('div', {
+                            className: 'meteor-tail',
+                            style: {
+                                left: `${startX}px`,
+                                top: `${startY}px`,
+                                width: `${length}px`,
+                                height: `${size/2}px`,
+                                transform: 'rotate(-45deg)'
+                            }
+                        }, container) :
+                        document.createElement('div');
+                    
+                    if (!window.ResourceManager) {
+                        tail.className = 'meteor-tail';
+                        tail.style.left = `${startX}px`;
+                        tail.style.top = `${startY}px`;
+                        tail.style.width = `${length}px`;
+                        tail.style.height = `${size/2}px`;
+                        tail.style.transform = 'rotate(-45deg)';
+                        container.appendChild(tail);
+                    }
                     
                     // 动画参数
                     let posX = startX;
                     let posY = startY;
-                    const speed = Math.random() * 5 + 4;
+                    const speed = Math.random() * 5 + 5;
                     const angle = 135 * Math.PI / 180;
                     
                     // 动画函数
@@ -737,7 +603,7 @@
                         posX += Math.cos(angle) * speed;
                         posY += Math.sin(angle) * speed;
                         
-                        // 直接更新位置，不使用transform
+                        // 更新位置
                         meteor.style.left = `${posX}px`;
                         meteor.style.top = `${posY}px`;
                         tail.style.left = `${posX}px`;
@@ -745,37 +611,59 @@
                         
                         // 检查是否超出屏幕
                         if (posX < -200 || posY > window.innerHeight + 200) {
-                            // 安全删除
                             if (meteor.parentNode) meteor.remove();
                             if (tail.parentNode) tail.remove();
                         } else {
-                            // 管理动画帧
-                            const frameId = requestAnimationFrame(animate);
-                            resourceManager.addAnimationFrame(frameId);
+                            // 注册下一帧
+                            const animateNext = () => animate();
+                            if (window.ResourceManager) {
+                                window.ResourceManager.registerAnimation(animateNext, 'clickMeteor');
+                            } else {
+                                requestAnimationFrame(animateNext);
+                            }
                         }
                     }
                     
-                    // 开始动画并管理
-                    const frameId = requestAnimationFrame(animate);
-                    resourceManager.addAnimationFrame(frameId);
+                    // 启动动画
+                    const animateStart = () => animate();
+                    if (window.ResourceManager) {
+                        window.ResourceManager.registerAnimation(animateStart, 'clickMeteor');
+                    } else {
+                        requestAnimationFrame(animateStart);
+                    }
+                });
+            }
+            
+            // 绑定页面可见性事件
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            
+            // 设置点击创建流星
+            setupClickMeteor();
+            
+            // 初始化流星效果 - 使用较少的流星数量
+            for (let i = 0; i < 3; i++) {
+                const delay = 1000 + Math.random() * 2000;
+                if (window.ResourceManager) {
+                    window.ResourceManager.setTimeout(createSimpleMeteor, delay);
+                } else {
+                    setTimeout(createSimpleMeteor, delay);
                 }
             }
             
-            // 初始加载时只创建单个流星，不创建流星雨
-            resourceManager.addEventListeners(window, 'load', function() {
-                // 创建定时产生流星，降低流星生成间隔
-                const intervalId = setInterval(createSimpleMeteor, 12000);
-                resourceManager.addTimer(intervalId);
-                
-                // 初始创建几个流星
-                for (let i = 0; i < 3; i++) {
-                    const timerId = setTimeout(createSimpleMeteor, Math.random() * 3000);
-                    resourceManager.addTimer(timerId);
-                }
-            });
+            // 定期创建流星
+            if (window.ResourceManager) {
+                window.ResourceManager.setInterval(createSimpleMeteor, 15000);
+            } else {
+                setInterval(createSimpleMeteor, 15000);
+            }
             
-            // 页面卸载前清理
-            resourceManager.addEventListeners(window, 'beforeunload', cleanupAllResources);
+            console.log('流星系统初始化完成');
         }
+        
+        // 在window加载完成后初始化流星系统
+        window.addEventListener('load', function() {
+            // 延迟初始化，确保其他资源已加载
+            setTimeout(initMeteorSystem, 500);
+        });
     </script>
 <script>"use strict";if("serviceWorker"in navigator){navigator.serviceWorker.register("service-worker.js").then((function(reg){reg.onupdatefound=function(){var installingWorker=reg.installing;installingWorker.onstatechange=function(){switch(installingWorker.state){case"installed":if(navigator.serviceWorker.controller){console.log("New or updated content is available.")}else{console.log("Content is now available offline!")}break;case"redundant":console.error("The installing service worker became redundant.");break}}}}))["catch"]((function(e){console.error("Error during service worker registration:",e)}))}</script></body></html>

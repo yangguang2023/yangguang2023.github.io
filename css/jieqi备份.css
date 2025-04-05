@@ -1,0 +1,1623 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    font-family: "PingFang SC", "微软雅黑", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    touch-action: none;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-image: url('/images/xingkong.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #000;
+    animation: subtlePulse 15s ease-in-out infinite;
+}
+
+@keyframes subtlePulse {
+    0%, 100% { background-size: 100% 100%; }
+    50% { background-size: 105% 105%; }
+}
+
+/* 添加背景图标尺寸控制 */
+.container::before {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 删除背景图像，避免与旋转的中心图标重复 */
+    /* background-image: url('center-icon.png'); */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 40;
+    pointer-events: none;
+    display: none; /* 隐藏此元素 */
+}
+
+/* 流星样式优化 - 使用备份中更高效的样式 */
+.meteor-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.meteor {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.9);
+    filter: blur(0.5px);
+    z-index: 6; /* 确保流星在尾巴之上 */
+    transform: translate(-50%, -50%); /* 居中定位 */
+    pointer-events: none;
+}
+
+.meteor-tail {
+    position: absolute;
+    height: 2px; 
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    transform-origin: 0% 50%; /* 确保从左侧中心开始旋转 */
+    filter: blur(1px);
+    z-index: 5; /* 尾巴层级在流星之下 */
+    pointer-events: none;
+}
+
+/* 移动端隐藏流星 */
+@media (max-width: 768px) {
+    .meteor-container, .meteor, .meteor-tail {
+        display: none !important;
+    }
+}
+
+/* 设备类型标识 */
+.mobile-device .meteor-container, 
+.mobile-device .meteor, 
+.mobile-device .meteor-tail {
+    display: none !important;
+}
+
+/* 移除旧的流星相关样式和动画 */
+@keyframes meteorFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 优化流星的显示 */
+.meteor, .meteor-tail {
+    opacity: 0.9;
+    animation: meteorFadeIn 0.1s ease-out forwards;
+    will-change: transform, left, top;
+}
+
+/* 确保高性能流星动画 */
+@media (prefers-reduced-motion: reduce) {
+    .meteor, .meteor-tail {
+        animation: none !important;
+    }
+}
+
+.particle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    filter: blur(0.5px);
+}
+
+/* 网站导航栏样式 */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 2px 5px rgba(212, 175, 55, 0.1);
+    transition: all 0.3s ease;
+}
+
+.site-header:hover {
+    background-color: rgba(0, 0, 0, 0.85);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.5);
+}
+
+.site-title {
+    color: #d4af37;
+    font-size: 28px;
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    white-space: nowrap;
+}
+
+.site-title:hover {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    transform: scale(1.03);
+    letter-spacing: 1.2px;
+}
+
+.main-menu {
+    display: flex;
+    gap: 40px;
+}
+
+.menu-item {
+    color: #d4af37;
+    text-decoration: none;
+    font-size: 18px;
+    position: relative;
+    padding: 5px 0;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+}
+
+.menu-item:hover {
+    color: #ffd700;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+.menu-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #ffd700, transparent);
+    transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+.menu-item:hover::after {
+    width: 100%;
+}
+
+/* 移动端菜单按钮 */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    width: 30px;
+    height: 24px;
+    position: relative;
+    z-index: 1001;
+}
+
+.menu-toggle span {
+    display: block;
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(to right, #d4af37, #ffd700);
+    border-radius: 2px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+.menu-toggle span:nth-child(1) {
+    top: 0px;
+}
+
+.menu-toggle span:nth-child(2) {
+    top: 10px;
+}
+
+.menu-toggle span:nth-child(3) {
+    top: 20px;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    top: 10px;
+    transform: rotate(135deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+    left: -60px;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    top: 10px;
+    transform: rotate(-135deg);
+}
+
+/* 自动旋转控制样式 */
+.auto-rotate-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.control-label {
+    color: #d4af37;
+    margin-left: 10px;
+    font-size: 16px;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s ease;
+}
+
+.control-label:hover {
+    color: #ffd700;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+}
+
+/* 开关样式 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 22px;
+    margin: 0 5px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(51, 51, 51, 0.8);
+    transition: .4s;
+    border: 1px solid #d4af37;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 1px;
+    background: linear-gradient(145deg, #ffd700, #d4af37);
+    transition: .4s;
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}
+
+input:checked + .slider {
+    background-color: rgba(212, 175, 55, 0.3);
+}
+
+input:checked + .slider:before {
+    transform: translateX(23px);
+}
+
+.slider.round {
+    border-radius: 20px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.rotate-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 25px;
+    border-radius: 30px;
+    z-index: 1000;
+    pointer-events: auto;
+    white-space: nowrap;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 10px rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.rotate-controls:hover {
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+.rotate-text, .auto-rotate-text, .border-text {
+    color: #d4af37;
+    font-size: 14px;
+    user-select: none;
+    margin: 0 5px;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s ease;
+}
+
+.rotate-text:hover, .auto-rotate-text:hover, .border-text:hover {
+    color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.compass {
+    position: relative;
+    max-width: 800px;
+    max-height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: glow 5s infinite alternate;
+    cursor: default;
+    z-index: 5;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.compass:hover {
+    transform: scale(1.01);
+}
+
+.compass-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    transform-origin: center center;
+    z-index: 10;
+    transform-style: flat;
+    -webkit-transform-style: flat;
+    transition: transform 0.3s ease;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+.compass-rotate-area {
+    position: absolute;
+    width: 130%;
+    height: 130%;
+    top: -15%;
+    left: -15%;
+    border-radius: 50%;
+    z-index: 5;
+    cursor: grab;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.text-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 30;
+    top: 0;
+    left: 0;
+    transform-origin: center center;
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+.text-item {
+    position: absolute;
+    color: #ffeb3b;
+    font-weight: 600;
+    transform-origin: center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    z-index: 35;
+    text-shadow: 0 0 6px rgba(255, 235, 59, 0.3), 0 0 12px rgba(255, 215, 0, 0.2);
+    transition: all 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    perspective: none;
+}
+
+/* 添加金色边框样式 */
+.compass::after {
+    content: '';
+    position: absolute;
+    width: 84%;
+    height: 84%;
+    border: 2px solid rgba(212, 175, 55, 0.7);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(212, 175, 55, 0.1);
+    pointer-events: none;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 45;
+}
+
+.compass.border-enabled::after {
+    opacity: 1;
+    animation: pulseBorder 4s infinite alternate;
+}
+
+@keyframes pulseBorder {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), inset 0 0 20px rgba(212, 175, 55, 0.15);
+        border-color: rgba(212, 175, 55, 0.6);
+    }
+    50% { 
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.4), inset 0 0 25px rgba(255, 215, 0, 0.2);
+        border-color: rgba(255, 215, 0, 0.7);
+    }
+}
+
+@keyframes glow {
+    0% { filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.15)); }
+    100% { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3)); }
+}
+
+.segment-sector {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 20;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.sector {
+    position: absolute;
+    transform-origin: center center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.sector:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+    z-index: 25;
+}
+
+.sector:active {
+    transform: scale(0.98);
+}
+
+/* 统一的响应式断点 */
+:root {
+    --bp-xs: 360px;   /* 小型手机 */
+    --bp-sm: 480px;   /* 普通手机 */
+    --bp-md: 768px;   /* 平板设备 */
+    --bp-lg: 1024px;  /* 较小笔记本 */
+    --bp-xl: 1366px;  /* 大型显示器 */
+}
+
+/* 响应式设计 - 整合移动端样式 */
+@media (max-width: 768px) {
+    /* 导航栏响应式 */
+    .site-header {
+        padding: 15px 20px;
+        height: 60px; /* 固定高度 */
+    }
+
+    .site-title {
+        font-size: 24px;
+        flex-shrink: 0; /* 防止标题被压缩 */
+    }
+
+    .main-menu {
+        position: fixed;
+        top: 60px; /* 与header高度相同 */
+        right: -100%;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background-color: rgba(0, 0, 0, 0.95);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 20px 0;
+        gap: 20px;
+        transition: right 0.3s ease;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .main-menu.active {
+        right: 0;
+    }
+
+    .menu-item {
+        font-size: 20px;
+        padding: 15px 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu-toggle {
+        display: block;
+        width: 30px;
+        height: 24px;
+        position: relative;
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .menu-toggle span {
+        display: block;
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: #d4af37;
+        border-radius: 2px;
+        transition: .25s ease-in-out;
+    }
+
+    .menu-toggle span:nth-child(1) {
+        top: 0;
+    }
+
+    .menu-toggle span:nth-child(2) {
+        top: 10px;
+    }
+
+    .menu-toggle span:nth-child(3) {
+        top: 20px;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+        top: 10px;
+        transform: rotate(45deg);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+        top: 10px;
+        transform: rotate(-45deg);
+    }
+
+    /* 罗盘响应式样式 */
+    .compass {
+        max-width: none;
+        max-height: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+    }
+    
+    .container {
+        width: 100%;
+        height: 100vh;
+        padding-bottom: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* 罗盘边框样式调整 */
+    .compass::after {
+        border-width: 1.5px;
+        top: -2.5%;
+        left: -2.5%;
+        width: 105%;
+        height: 105%;
+    }
+    
+    /* 扇形区域调整 */
+    .segment-sector {
+        width: 103%;
+        height: 103%;
+        top: -1.5%;
+        left: -1.5%;
+        z-index: 8;
+    }
+    
+    .sector {
+        z-index: 8;
+    }
+    
+    .sector:hover {
+        z-index: 8 !important;
+        transform: scale(1.03);
+    }
+    
+    /* 中心图标调整 */
+    .center-icon {
+        z-index: 40;
+        position: relative;
+    }
+    
+    .container::before {
+        width: calc(90vmin * 0.15);  /* 移动端罗盘尺寸的15% */
+        height: calc(90vmin * 0.15);
+    }
+    
+    /* 控制区域调整 */
+    .rotate-controls {
+        padding: 4px 15px;
+        gap: 10px;
+    }
+
+    .rotate-text, .auto-rotate-text, .border-text {
+        font-size: 12px;
+    }
+
+    .switch {
+        width: 40px;
+        height: 20px;
+    }
+
+    .slider:before {
+        height: 16px;
+        width: 16px;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(19px);
+    }
+
+    /* 文字层和文字项样式优化 */
+    .text-layer {
+        transform-style: flat;
+        -webkit-transform-style: flat;
+    }
+    
+    /* 整合所有移动端的text-item样式 */
+    .text-item {
+        text-rendering: optimizeLegibility;
+        font-weight: normal;
+        letter-spacing: 0.5px;
+        background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        transition: none;
+    }
+    
+    .text-item.hexagram-text {
+        font-weight: 600;
+        font-size: 1.1em;
+        background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        backface-visibility: hidden;
+        transition: none;
+    }
+    
+    /* 移动端禁用悬停效果 */
+    .text-item:hover {
+        background: linear-gradient(to right, #d4af37, #f5e28a, #d4af37) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        color: transparent !important;
+        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5) !important;
+        transform: none !important;
+    }
+    
+    /* 自动旋转时优化文字性能 */
+    .compass.auto-rotating .text-item {
+        opacity: 1;
+        text-shadow: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+
+    
+    /* 底部箭头指示器调整 */
+    .scroll-indicator {
+        bottom: 40px; /* 上移箭头位置 */
+        background-color: transparent; /* 确保移动端也是透明的 */
+        width: 50px;
+        height: 50px;
+        border: none;
+        box-shadow: none;
+        pointer-events: none; /* 防止箭头影响滚动 */
+    }
+    
+    .arrow-down i {
+        font-size: 24px;
+    }
+    
+    /* 添加上滑提示 */
+    .container::after {
+        content: '向上滑动进入博客';
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #d4af37;
+        font-size: 12px;
+        opacity: 0.7;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        animation: fadeInOut 3s infinite;
+        pointer-events: none;
+    }
+    
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.8; }
+    }
+}
+
+/* 较小屏幕的适配 - 移除缩放设置，保持尺寸一致 */
+@media screen and (max-width: var(--bp-xs)) {
+    /* 整合所有小型手机的样式 */
+    .compass {
+        /* 不再缩放，但保持居中 */
+        transform: translate(-50%, -50%);
+        margin-top: 0;
+    }
+    
+    .container::before {
+        width: calc(90vmin * 0.12);  /* 更小屏幕使用12% */
+        height: calc(90vmin * 0.12);
+    }
+}
+
+/* 折叠屏和大屏手机的适配 - 移除缩放设置，保持尺寸一致 */
+@media screen and (min-width: var(--bp-md)) and (max-width: var(--bp-lg)) {
+    .compass {
+        /* 不再缩放，但保持居中 */
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* 触摸设备优化 - 整合所有触摸设备样式 */
+@media (hover: none) and (pointer: coarse) {
+    .compass {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    .menu-item {
+        padding: 12px 15px; /* 增大点击区域 */
+    }
+
+    .scroll-indicator {
+        pointer-events: none; /* 防止箭头影响滚动 */
+    }
+}
+
+/* 确保旋转区域在扇形区域下方 */
+.compass-rotate-area {
+    z-index: 5;
+}
+
+/* 禁用拖动时的hover效果 */
+.compass.dragging .sector:hover {
+    background-color: transparent;
+}
+
+.compass.dragging .sector:hover .text-item {
+    color: #d4af37;
+}
+
+/* 自动旋转时的优化 */
+.compass.auto-rotating .text-layer {
+    /* 使用重要属性来确保良好的性能 */
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* 确保自动旋转时的过渡效果 */
+.compass.auto-rotating .compass-inner {
+    transition: none !important;
+    /* 启用硬件加速 */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: transform;
+}
+
+/* 减少动画对性能的影响 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .compass-inner {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .text-item, .sector, .compass::after {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .solar-term-info-panel,
+    .info-item,
+    .current-term,
+    .tips-container,
+    .highlight-tip,
+    .tab-button.active::before {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* 禁用光晕动画，提高性能 */
+/* 此处删除重复的text-item动画禁用代码，已在其他处理 */
+
+/* 添加自动旋转CSS动画 */
+@keyframes autoRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+}
+
+/* 节气信息分页窗口样式 */
+.solar-term-info-panel {
+    display: flex;
+    color: #d4af37;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+    box-sizing: border-box;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.3);
+    border-radius: 10px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    transform-origin: center bottom;
+    animation: panelFadeIn 0.5s ease-out;
+    /* 桌面端定位 */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    top: auto;
+    left: auto;
+    width: 400px;
+    max-width: 400px;
+    min-width: 400px;
+    flex-direction: row;
+    transform: none;
+    z-index: 100;
+}
+
+/* 确保移动端不显示节气卡片 */
+@media (max-width: 768px) {
+    .solar-term-info-panel {
+        display: none !important;
+    }
+}
+
+@keyframes panelFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.solar-term-info-panel:hover {
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.35);
+}
+
+.info-content {
+    line-height: 1.6;
+    padding: 15px;
+    color: #ffeb3b;
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.6), rgba(20, 20, 20, 0.4));
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    transition: all 0.3s ease;
+    letter-spacing: 0.03em;
+    position: relative;
+    overflow: hidden;
+    /* 桌面端内容尺寸 */
+    width: 300px;
+    max-height: 350px;
+    min-height: 150px;
+}
+
+.info-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.08), transparent 70%);
+    pointer-events: none;
+}
+
+.info-content:hover {
+    border-color: rgba(255, 215, 0, 0.3);
+    background: linear-gradient(145deg, rgba(10, 10, 10, 0.6), rgba(30, 30, 30, 0.4));
+}
+
+/* 按钮容器样式 */
+.tab-buttons {
+    display: flex;
+    gap: 20px;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    transform: translateZ(0); /* 启用硬件加速 */
+    position: relative;
+    overflow: visible !important; /* 确保箭头可以溢出显示 */
+    /* 桌面端按钮容器 */
+    width: 95px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tab-button {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
+    position: relative;
+    background: linear-gradient(145deg, rgba(20, 20, 20, 0.6), rgba(0, 0, 0, 0.4));
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #ffeb3b;
+    font-weight: 500;
+    transform-origin: center;
+    font-size: 14px; /* 统一按钮文字大小 */
+    width: 75px !important; /* 强制统一按钮宽度 */
+    line-height: 1.2;
+    height: auto;
+    min-height: 40px;
+    padding: 5px 3px;
+    box-sizing: border-box;
+}
+
+/* 移动端按钮样式 */
+.mobile-panel .tab-button {
+    margin: 3px;
+    font-size: 9px; 
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    width: 58px !important; 
+    height: 28px !important;
+    min-height: 34px;
+    padding: 4px 2px;
+    transition: none;
+}
+
+.tab-button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: linear-gradient(to top, rgba(255, 215, 0, 0.15), transparent);
+    transition: height 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* 移动端按钮after伪元素 */
+.mobile-panel .tab-button::after {
+    transition: none;
+}
+
+.tab-button:hover, .tab-button.active {
+    opacity: 1;
+    color: #ffd700;
+    border-color: rgba(255, 215, 0, 0.7);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* 移动端按钮悬停/激活状态 */
+.mobile-panel .tab-button:hover, 
+.mobile-panel .tab-button.active {
+    transform: none;
+    transition: none;
+}
+
+.tab-button:hover::after, .tab-button.active::after {
+    height: 100%;
+}
+
+.tab-button.active {
+    background: linear-gradient(145deg, rgba(50, 40, 10, 0.7), rgba(30, 25, 5, 0.5));
+}
+
+.tab-button.active::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right: 8px solid #ffd700;
+    transform: translateY(-50%);
+    opacity: 0.9;
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5));
+    animation: indicatorPulse 2s infinite alternate;
+    z-index: 2; /* 确保箭头在上层 */
+}
+
+/* 移动端按钮激活指示器 */
+.mobile-panel .tab-button.active::before {
+    animation: none;
+    left: 50%;
+    top: -6px;
+    transform: translateX(-50%);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    border-bottom: 6px solid #ffd700;
+    border-top: none;
+}
+
+@keyframes indicatorPulse {
+    from { opacity: 0.6; }
+    to { opacity: 1; }
+}
+
+/* 节气标题样式 */
+.current-term {
+    font-weight: 600;
+    font-size: 1.15em;
+    margin-bottom: 2px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    text-align: center;
+    letter-spacing: 0.05em;
+    background: linear-gradient(to right, #d4af37, #fff3b0, #d4af37);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* 移动端标题样式 */
+.mobile-panel .current-term {
+    animation: none;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+}
+
+.info-item {
+    margin-bottom: 2px;
+    padding: 2px 0;
+    border-radius: 4px;
+    animation: slideInRight 0.4s ease-out forwards;
+    opacity: 0;
+    transform: translateX(10px);
+}
+
+/* 移动端信息项样式 */
+.mobile-panel .info-item {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    margin-bottom: 6px;
+    padding: 3px 0;
+}
+
+.info-label {
+    color: rgba(255, 235, 59, 0.85);
+    font-weight: 500;
+    margin-right: 4px;
+}
+
+/* 移动端标签样式 */
+.mobile-panel .info-label {
+    font-size: 0.9em;
+}
+
+.info-value {
+    color: #fff;
+    font-weight: 400;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+/* 移动端值样式 */
+.mobile-panel .info-value {
+    font-size: 0.9em;
+}
+
+.tips-container {
+    margin: 2px 0 2px 0;
+    padding: 2px;
+    border-top: 1px dashed rgba(255, 215, 0, 0.3);
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: fadeIn 0.6s ease-out 0.3s forwards;
+    opacity: 0;
+}
+
+/* 移动端提示容器样式 */
+.mobile-panel .tips-container {
+    animation: none;
+    opacity: 1;
+    margin: 8px 0 3px 0;
+    padding: 5px;
+    padding-top: 6px;
+}
+
+.highlight-tip {
+    color: #ffd700;
+    font-weight: 600;
+    font-size: 15px;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    animation: pulse 4s infinite alternate;
+}
+
+/* 移动端高亮提示样式 */
+.mobile-panel .highlight-tip {
+    animation: none;
+    font-size: 0.9em;
+}
+
+.next-term {
+    color: #ffeb3b;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+/* 移动端下一节气样式 */
+.mobile-panel .next-term,
+.mobile-panel .next-date,
+.mobile-panel .countdown {
+    font-size: 0.9em;
+}
+
+.next-date {
+    color: #e6e6e6;
+    font-size: 0.95em;
+}
+
+.countdown {
+    font-size: 0.95em;
+    color: #ffeb3b;
+}
+
+.countdown strong {
+    font-weight: 700;
+    color: #ffd700;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+}
+
+/* 信息内容的动画效果 */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    }
+}
+
+/* 使用媒体查询隐藏动画效果 */
+@media (prefers-reduced-motion: reduce) {
+    .solar-term-info-panel,
+    .info-item,
+    .current-term,
+    .tips-container,
+    .highlight-tip,
+    .tab-button.active::before {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* 底部箭头指示器样式 */
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000; /* 提高层级，确保在罗盘上方 */
+    cursor: pointer;
+    width: 60px; /* 增加点击区域 */
+    height: 60px; /* 增加点击区域 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent; /* 移除背景 */
+    border-radius: 50%;
+    border: none; /* 移除边框 */
+    box-shadow: none; /* 移除阴影 */
+    pointer-events: auto !important; /* 确保可点击 */
+    transition: all 0.3s ease;
+}
+
+.scroll-indicator:hover, .scroll-indicator:active {
+    background-color: transparent; /* 悬停时也保持透明 */
+    border-color: transparent;
+    transform: translateX(-50%) scale(1.1);
+}
+
+.scroll-indicator::after {
+    content: '前往博客';
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d4af37;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.scroll-indicator:hover::after {
+    opacity: 1;
+}
+
+.arrow-down {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: pulse 2s infinite, bounce 2s infinite;
+}
+
+.arrow-down i {
+    font-size: 28px; /* 稍微增大图标尺寸 */
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7); /* 增强图标发光效果 */
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(0.95);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* 底部导航样式处理 */
+body.has-bottom-nav .container {
+    padding-bottom: max(100px, env(safe-area-inset-bottom) + 80px);
+}
+
+body.has-bottom-nav .scroll-indicator {
+    bottom: max(110px, env(safe-area-inset-bottom) + 90px);
+}
+
+/* 专门处理方向优化 */
+@media (max-width: 767px) and (orientation: portrait) {
+    .container::before {
+        width: calc(90vmin * 0.15);
+        height: calc(90vmin * 0.15);
+    }
+    
+    .container {
+        width: 100%;
+        height: 100vh;
+    }
+    
+    /* 纵向屏幕特殊处理 */
+    .scroll-indicator {
+        bottom: 40px;
+    }
+    
+    body.has-bottom-nav .scroll-indicator {
+        bottom: max(90px, env(safe-area-inset-bottom) + 70px);
+    }
+}
+
+/* 中心图标样式 */
+.center-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16%;
+    height: auto;
+    z-index: 60 !important; /* 确保中心图标始终在最上层 */
+}
+
+/* 针对高DPI屏幕的文字清晰度优化 - 仅桌面端 */
+@media (-webkit-min-device-pixel-ratio: 2) and (min-width: 769px), 
+       (min-resolution: 192dpi) and (min-width: 769px) {
+    .text-item {
+        font-weight: 600;
+        text-shadow: 0 0 10px rgba(255, 235, 59, 0.5), 0 0 18px rgba(255, 215, 0, 0.3);
+    }
+    
+    .text-item.hexagram-text {
+        font-weight: 700;
+        text-shadow: 0 0 12px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.4);
+    }
+}
+
+.current-date {
+    color: #ffd700;
+    font-size: 0.95em;
+    font-weight: 500;
+    margin-bottom: 2px;
+    display: block;
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+}
+
+.tips-container {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    text-align: center;
+    font-size: 0.9em;
+}
+
+/* 移动端优化 - 综合所有移动端样式 */
+@media (max-width: 768px) {    
+    /* 移动端导航栏优化 */
+    .site-header {
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        will-change: transform;
+    }
+
+    /* 移动端禁用悬停效果 */
+    .sector:hover {
+        transform: none !important;
+        filter: none !important;
+        background-color: transparent !important;
+    }
+    
+    .menu-item:hover {
+        transform: none !important;
+    }
+
+    /* 移动端禁用不必要的动画 */
+    .container::after {
+        animation: none !important;
+    }
+    
+    .site-title:hover, .menu-item:hover::after {
+        transform: none !important;
+        letter-spacing: inherit !important;
+        width: 0 !important;
+    }
+
+    /* 优化箭头动画，减少性能消耗 */
+    .arrow-down {
+        animation: simplePulse 2s infinite linear !important;
+    }
+
+    @keyframes simplePulse {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; }
+    }
+    
+    /* 优化罗盘旋转体验 */
+    .compass-inner {
+        transition: none !important;
+    }
+    
+    /* 禁用所有过渡效果 */
+    .rotate-controls, .rotate-controls:hover,
+    .tab-button, .tab-button:hover, .tab-button.active,
+    .info-content, .info-content:hover,
+    .solar-term-info-panel, .solar-term-info-panel:hover {
+        transition: none !important;
+        animation: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* 简化底部控制区样式 */
+    .rotate-controls {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(0, 0, 0, 0.7);
+    }
+    
+    /* 移动端禁用流星效果 */
+    .meteor-container,
+    .meteor, 
+    .meteor-tail {
+        display: none !important;
+        animation: none !important;
+    }
+    
+    /* 移动端隐藏节气卡片 */
+    .solar-term-info-panel {
+        display: none !important;
+    }
+}
+
+/* 设备类型标识 - 整合所有相关样式 */
+.mobile-device .meteor-container,
+.mobile-device .meteor,
+.mobile-device .meteor-tail,
+.mobile-device .solar-term-info-panel {
+    display: none !important;
+}
+
+/* 减少动画对性能的影响 - 整合所有相关样式 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .compass-inner,
+    .text-item, 
+    .sector, 
+    .compass::after,
+    .solar-term-info-panel,
+    .info-item,
+    .current-term,
+    .tips-container,
+    .highlight-tip,
+    .tab-button.active::before {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .meteor-container,
+    .meteor, 
+    .meteor-tail {
+        display: none !important;
+        animation: none !important;
+    }
+}
+
+/* 只在桌面端添加罗盘悬浮效果 */
+@media (min-width: 769px) {
+    /* 罗盘悬浮效果 - 非触摸设备 */
+    .compass {
+        transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    
+    /* 只有在非旋转和非拖动状态下才应用悬浮效果 */
+    .compass:not(.auto-rotating):not(.dragging):hover {
+        transform: scale(1.02);
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+        z-index: 60;
+    }
+    
+    /* 在自动旋转和拖动时禁用悬浮效果 */
+    .compass.auto-rotating:hover,
+    .compass.dragging:hover {
+        transform: none;
+        filter: none;
+    }
+}
+
+/* 为鼠标悬浮添加金色发光效果 */
+@keyframes compassHoverGlow {
+    0% { 
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 30px rgba(212, 175, 55, 0.2);
+    }
+    100% { 
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 0 50px rgba(255, 215, 0, 0.3);
+    }
+}
+
+/* 应用发光动画 */
+@media (min-width: 769px) {
+    .compass:not(.auto-rotating):not(.dragging):hover::after {
+        animation: pulseBorder 4s infinite alternate, compassHoverGlow 2s infinite alternate;
+    }
+}
