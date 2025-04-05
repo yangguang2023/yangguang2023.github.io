@@ -106,14 +106,39 @@
         });
         
         // 流星效果
+        // 定义全局变量判断是否为移动设备
+        let isMobileDevice = window.innerWidth <= 768;
+        let meteorIntervalId; // 用于存储流星生成的定时器ID
+
+        // 监听屏幕旋转和窗口大小变化事件
+        window.addEventListener('resize', function() {
+            // 重新计算设备类型
+            const wasMobile = isMobileDevice;
+            isMobileDevice = window.innerWidth <= 768;
+            
+            // 如果设备类型发生变化，重置流星生成频率
+            if (wasMobile !== isMobileDevice && meteorIntervalId) {
+                clearInterval(meteorIntervalId);
+                const meteorInterval = isMobileDevice ? 8000 : 4000;
+                meteorIntervalId = setInterval(createSimpleMeteor, meteorInterval);
+            }
+        });
+
         function createSimpleMeteor() {
             const container = document.getElementById('meteorContainer');
             
             // 随机生成流星起始位置
             const startX = Math.random() * window.innerWidth;
             const startY = Math.random() * (window.innerHeight / 3);
-            const size = Math.random() * 3 + 1;
-            const length = Math.random() * 150 + 50;
+            
+            // 根据设备类型设置不同的大小参数
+            const size = isMobileDevice ? 
+                Math.random() * 2 + 0.5 :  // 移动端更小的流星
+                Math.random() * 3 + 1;     // 桌面端保持原来的大小
+            
+            const length = isMobileDevice ?
+                Math.random() * 100 + 30 : // 移动端更短的尾巴
+                Math.random() * 150 + 50;  // 桌面端保持原来的长度
             
             // 流星运动角度（135度，右下方向）
             const angle = 135 * Math.PI / 180;
@@ -144,7 +169,11 @@
             // 动画参数
             let posX = startX;
             let posY = startY;
-            const speed = Math.random() * 5 + 3;
+            
+            // 根据设备类型设置不同的速度
+            const speed = isMobileDevice ? 
+                Math.random() * 2 + 1.5 :  // 移动端更慢的速度
+                Math.random() * 5 + 3;     // 桌面端保持原来的速度
             
             // 动画函数
             function animate() {
@@ -170,11 +199,13 @@
             animate();
         }
         
-        // 定期创建流星
-        setInterval(createSimpleMeteor, 4000);
+        // 定期创建流星 - 根据设备类型调整频率
+        const meteorInterval = isMobileDevice ? 8000 : 6000; // 移动端降低频率
+        meteorIntervalId = setInterval(createSimpleMeteor, meteorInterval);
         
-        // 初始创建几个流星
-        for (let i = 0; i < 3; i++) {
+        // 初始创建几个流星 - 移动端减少初始数量
+        const initialMeteors = isMobileDevice ? 2 : 3;
+        for (let i = 0; i < initialMeteors; i++) {
             setTimeout(createSimpleMeteor, Math.random() * 5000);
         }
         
@@ -185,8 +216,15 @@
             // 获取点击位置
             const startX = e.clientX;
             const startY = e.clientY;
-            const size = Math.random() * 3 + 2;
-            const length = Math.random() * 150 + 100;
+            
+            // 根据设备类型设置不同的大小参数
+            const size = isMobileDevice ? 
+                Math.random() * 2 + 1 :    // 移动端更小的流星
+                Math.random() * 3 + 2;     // 桌面端保持原来的大小
+            
+            const length = isMobileDevice ?
+                Math.random() * 100 + 60 : // 移动端更短的尾巴
+                Math.random() * 150 + 100; // 桌面端保持原来的长度
             
             // 流星运动角度
             const angle = 135 * Math.PI / 180;
@@ -217,7 +255,11 @@
             // 动画参数
             let posX = startX;
             let posY = startY;
-            const speed = Math.random() * 5 + 5;
+            
+            // 根据设备类型设置不同的速度
+            const speed = isMobileDevice ? 
+                Math.random() * 3 + 3 :    // 移动端更慢的速度
+                Math.random() * 5 + 5;     // 桌面端保持原来的速度
             
             // 动画函数
             function animate() {

@@ -97,6 +97,19 @@ body {
     z-index: 5; /* 尾巴层级在流星之下 */
 }
 
+/* 移动端流星样式调整 */
+@media (max-width: 768px) {
+    .meteor {
+        box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7); /* 减弱光晕效果 */
+        filter: blur(0.3px); /* 减弱模糊效果 */
+    }
+    
+    .meteor-tail {
+        filter: blur(0.6px); /* 减弱尾巴模糊效果 */
+        opacity: 0.8; /* 降低尾巴不透明度 */
+    }
+}
+
 .particle {
     position: absolute;
     width: 1px;
@@ -876,46 +889,6 @@ input:checked + .slider:before {
 }
 
 /* 移动端样式调整 */
-@media (max-width: 768px) {
-    .scroll-indicator {
-        bottom: 20px;
-    }
-    
-    .arrow-down {
-        width: 36px;
-        height: 36px;
-    }
-}
-
-/* 箭头样式 */
-.arrow-down {
-    animation: pulse 1.5s infinite;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.arrow-down .iconfont {
-    font-size: 32px;
-    color: #d4af37;
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
-}
-
-@keyframes pulse {
-    0% {
-        opacity: 0.6;
-        transform: translateY(0);
-    }
-    50% {
-        opacity: 1;
-        transform: translateY(10px);
-    }
-    100% {
-        opacity: 0.6;
-        transform: translateY(0);
-    }
-}
-
-/* 移动端适配 */
 @media screen and (max-width: 768px) {
     .container {
         padding-bottom: 80px; /* 为底部导航栏预留空间 */
@@ -1006,4 +979,23 @@ body.has-bottom-nav .scroll-indicator {
     .compass {
         transform: scale(0.9);
     }
+}
+
+/* 移动端分页窗口位置调整 */
+@media screen and (max-width: 768px) {
+    .solar-term-info-panel {
+        bottom: 80px !important; /* 上移更多，避免被底部导航栏遮挡 */
+    }
+}
+
+/* 适配不同机型的分页窗口位置 */
+@media screen and (max-width: 768px) and (min-height: 800px) {
+    .solar-term-info-panel {
+        bottom: 100px !important; /* 在更高的屏幕上进一步上移 */
+    }
+}
+
+/* 处理底部导航栏对分页窗口的影响 */
+body.has-bottom-nav .solar-term-info-panel {
+    bottom: max(10px, env(safe-area-inset-bottom) + 80px) !important;
 }
