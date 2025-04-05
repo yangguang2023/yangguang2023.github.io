@@ -2150,7 +2150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             referenceInfo.style.fontSize = '12px';
             referenceInfo.style.textAlign = 'center';
             referenceInfo.style.width = '100%';
-            referenceInfo.style.padding = '0 20px';
+            referenceInfo.style.padding = '0 0px';
             referenceInfo.style.zIndex = '1000';
             referenceInfo.style.pointerEvents = 'none';
             referenceInfo.style.textShadow = '0 0 2px rgba(0, 0, 0, 0.8)';
@@ -2158,7 +2158,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 根据设备类型设置不同的位置
             const isMobile = window.innerWidth <= 768;
             if (isMobile) {
-                referenceInfo.style.bottom= '100px'; // 在移动端显示在顶部，位于导航栏下方
+                referenceInfo.style.bottom= '80px'; // 在移动端显示在顶部，位于导航栏下方
                 referenceInfo.style.left = '0';
                 referenceInfo.style.transform = 'none';
                 referenceInfo.style.fontSize = '10px'; // 移动端字体稍小
@@ -2176,13 +2176,11 @@ document.addEventListener('DOMContentLoaded', function() {
             function adjustReferenceInfoPosition() {
                 const isMobileNow = window.innerWidth <= 768;
                 if (isMobileNow) {
-                    referenceInfo.style.top = '70px';
-                    referenceInfo.style.bottom = 'auto';
+                    referenceInfo.style.bottom = '80px';
                     referenceInfo.style.left = '0';
                     referenceInfo.style.transform = 'none';
                     referenceInfo.style.fontSize = '10px';
                 } else {
-                    referenceInfo.style.top = 'auto';
                     referenceInfo.style.bottom = '20px';
                     referenceInfo.style.left = '50%';
                     referenceInfo.style.transform = 'translateX(-50%)';
