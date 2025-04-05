@@ -158,9 +158,11 @@ document.addEventListener('DOMContentLoaded', function() {
         0.47  // 最外圈
     ];
 
-    // 检测设备类型的函数，这样可以随时调用
+    // 检测设备类型的函数，与CSS断点保持一致
     function checkIfMobile() {
-        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+        // CSS中定义了 --bp-md: 768px
+        const mobileBreakpoint = 768;
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < mobileBreakpoint;
     }
     
     // 根据设备性能调整动画参数
@@ -185,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     
-    // 更新圆环半径比例函数 - 优化：直接赋值而不是循环计算
+    // 更新圆环半径比例函数
     function updateCircleRadios() {
         // 预计算好的值，避免在循环中重复计算
         const mobileRatios = [0.14, 0.19, 0.24, 0.29, 0.34, 0.39, 0.44, 0.49, 0.54, 0.59];
@@ -345,14 +347,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 统一处理窗口大小变化和设备方向变化
     function handleViewportChange() {
+        // 获取当前视口尺寸
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        
         // 检测设备类型是否变化
         const newIsMobile = checkIfMobile();
         
         // 保存当前旋转角度
         const currentRotationValue = currentRotation;
         
-        // 无论设备类型是否变化，都重新初始化罗盘
+        // 更新设备类型标记
         isMobile = newIsMobile;
+        
+        // 更新圆环半径，适应不同设备
         updateCircleRadios();
         
         // 重新初始化整个罗盘，确保所有元素重新创建并定位
@@ -366,13 +374,51 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // 更新分页窗口位置
+        // 更新信息面板布局
         const infoPanel = document.querySelector('.solar-term-info-panel');
         if (infoPanel) {
             updatePanelLayout(infoPanel, document.querySelector('.info-content'), document.querySelector('.tab-buttons'));
         }
         
-        console.log('视口尺寸变化，罗盘已更新');
+        // 添加额外的响应式调整
+        adjustAdditionalElements();
+    }
+
+    // 调整其他响应式元素
+    function adjustAdditionalElements() {
+        // 调整引用信息位置
+        const referenceInfo = document.querySelector('.reference-info');
+        if (referenceInfo) {
+            if (isMobile) {
+                referenceInfo.style.top = '70px';
+                referenceInfo.style.bottom = 'auto';
+                referenceInfo.style.left = '0';
+                referenceInfo.style.transform = 'none';
+                referenceInfo.style.fontSize = '10px';
+            } else {
+                referenceInfo.style.top = 'auto';
+                referenceInfo.style.bottom = '20px';
+                referenceInfo.style.left = '50%';
+                referenceInfo.style.transform = 'translateX(-50%)';
+                referenceInfo.style.fontSize = '12px';
+            }
+        }
+        
+        // 调整底部箭头指示器
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        if (scrollIndicator) {
+            if (isMobile) {
+                scrollIndicator.style.bottom = '40px';
+                scrollIndicator.style.width = '50px';
+                scrollIndicator.style.height = '50px';
+                scrollIndicator.style.pointerEvents = 'none';
+            } else {
+                scrollIndicator.style.bottom = '30px';
+                scrollIndicator.style.width = '60px';
+                scrollIndicator.style.height = '60px';
+                scrollIndicator.style.pointerEvents = 'auto';
+            }
+        }
     }
 
     // 防抖函数，避免频繁触发重绘
@@ -421,6 +467,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 鼠标事件 - 在旋转区域上生效
     rotateArea.addEventListener('mousedown', function(e) {
+        // 检查是否点击了底部箭头，如果是则不触发罗盘旋转
+        if (e.target.closest('.scroll-indicator')) {
+            return;
+        }
+        
         isDragging = true;
         startAngle = null;
         rotateArea.style.cursor = 'grabbing';
@@ -463,24 +514,24 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastTouchY = 0;
 
     rotateArea.addEventListener('touchstart', function(e) {
-        if (e.touches.length === 1) {
-            // 停止自动旋转，确保不与手动旋转冲突
-            stopAutoRotation();
-            
-            isDragging = true;
-            startAngle = null;
-            lastTouchX = e.touches[0].clientX;
-            lastTouchY = e.touches[0].clientY;
-            lastTime = Date.now();
-            
-            // 阻止默认行为
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // 添加拖动标记类
-            compass.classList.add('dragging');
+        // 如果是在底部箭头上的触摸，则忽略此事件
+        if (e.target.closest('.scroll-indicator')) {
+            return;
         }
-    }, { passive: false }); // 确保可以阻止默认行为
+        
+        // 记录起始触摸位置
+        const touch = e.touches[0];
+        lastMouseX = touch.clientX;
+        lastMouseY = touch.clientY;
+        lastTime = Date.now();
+        isDragging = true;
+        startAngle = null;
+        
+        // 添加拖动标记类
+        compass.classList.add('dragging');
+        
+        e.preventDefault();
+    }, { passive: false });
     
     document.addEventListener('touchmove', function(e) {
         if (!isDragging || e.touches.length !== 1) return;
@@ -498,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 阻止默认行为，防止页面滚动
         e.preventDefault();
-    }, { passive: false }); // 确保可以阻止默认行为
+    }, { passive: false });
     
     document.addEventListener('touchend', function(e) {
         if (isDragging) {
@@ -637,23 +688,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 const textElement = document.createElement('div');
                 textElement.className = 'text-item';
                 textElement.innerText = text;
+                const opacityBase = 0.3;
                 
-                // 设置字体大小
-                textElement.style.fontSize = `${fontSize}px`;
+                // 添加圆环特定的样式类别
+                if (circleIndex === 7) {
+                    textElement.classList.add('hexagram-text');
+                }
                 
                 // 计算文字位置
                 const x = centerX + cosVal * radius;
                 const y = centerY + sinVal * radius;
                 
-                // 应用变换 - 使用简单的transform，不添加过渡效果
+                // 只设置位置和旋转相关的样式，其他样式交由CSS处理
+                textElement.style.fontSize = `${fontSize}px`;
                 textElement.style.left = `${x}px`;
                 textElement.style.top = `${y}px`;
                 textElement.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
-                textElement.style.transition = 'none'; // 确保没有过渡效果
-                
-                // 添加清晰渲染的属性
-                textElement.style.backfaceVisibility = 'hidden';
-                textElement.style.webkitBackfaceVisibility = 'hidden';
                 
                 fragment.appendChild(textElement);
             });
@@ -768,40 +818,53 @@ document.addEventListener('DOMContentLoaded', function() {
         compassInner.appendChild(centerIcon);
     }
 
-    // 修改初始化罗盘的函数，移除独立的节气提示框
+    // 修改初始化罗盘的函数
     function initCompass() {
         // 清空罗盘内容
         compass.innerHTML = '';
         
         // 设置罗盘容器样式
-        compass.style.position = 'relative';
+        compass.style.position = 'absolute';
         
-        // 获取容器尺寸
-        const container = document.querySelector('.container');
-        const containerRect = container.getBoundingClientRect();
-        
-        // 使用统一的尺寸计算方法，确保一致性
         // 计算合适的罗盘尺寸（取视口宽度和高度的较小值的90%）
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
         const viewportMin = Math.min(viewportWidth, viewportHeight);
         
-        // 无论是桌面还是移动端，都使用相同的计算逻辑
-        const compassSize = viewportMin * 0.9; // 统一使用90%的视口较小尺寸
+        // 统一使用相同的计算逻辑
+        const compassSize = viewportMin * 0.9;
         
         // 设置罗盘容器尺寸
         compass.style.width = `${compassSize}px`;
         compass.style.height = `${compassSize}px`;
         
-        // 确保罗盘在视口中居中
-        compass.style.margin = 'auto';
+        // 确保罗盘在视口中居中 - 直接使用CSS定位到中心
+        compass.style.top = '50%';
+        compass.style.left = '50%';
+        compass.style.transform = 'translate(-50%, -50%)';
+        compass.style.transformOrigin = 'center center';
+        compass.style.margin = '0';
         
+        // 禁用所有动画和过渡效果
+        compass.style.transition = 'none';
+        compass.style.animation = 'none';
+        
+        // 设置基本样式
         compass.style.overflow = 'visible';
         compass.style.borderRadius = '50%';
         
         // 设置最大尺寸，防止在大屏幕上过大
         compass.style.maxWidth = '800px';
         compass.style.maxHeight = '800px';
+        
+        // 设置z-index确保罗盘在正确的层级
+        compass.style.zIndex = '50';
+        
+        // 移除不需要的样式
+        compass.style.marginTop = '0';
+        compass.style.marginBottom = '0';
+        compass.style.marginLeft = '0';
+        compass.style.marginRight = '0';
         
         // 始终添加边框
         compass.classList.add('border-enabled');
@@ -815,8 +878,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // 创建扇形交互区域
         createSectors();
         
-        // 显示罗盘
+        // 立即显示罗盘，无需等待
         compass.style.visibility = 'visible';
+        compass.style.opacity = '1';
         
         // 添加节气信息分页窗口
         addSolarTermInfoPanel();
@@ -1072,7 +1136,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
     }
 
-    // 添加节气表格分页窗口
+    // 只在桌面端添加节气表格分页窗口
     function addSolarTermInfoPanel() {
         // 检查容器是否已存在
         let infoPanel = document.querySelector('.solar-term-info-panel');
@@ -1110,7 +1174,24 @@ document.addEventListener('DOMContentLoaded', function() {
             button.setAttribute('data-tab', tab.id);
             button.innerHTML = tab.label;
             
+            // 鼠标悬停事件
             button.addEventListener('mouseenter', () => {
+                // 移除所有按钮的active类
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // 给当前按钮添加active类
+                button.classList.add('active');
+                
+                // 更新内容
+                updateInfoContent(tab.fields);
+            });
+            
+            // 添加触摸事件支持
+            button.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // 防止默认行为
+                
                 // 移除所有按钮的active类
                 document.querySelectorAll('.tab-button').forEach(btn => {
                     btn.classList.remove('active');
@@ -1133,155 +1214,228 @@ document.addEventListener('DOMContentLoaded', function() {
         infoPanel.style.position = 'absolute';
         infoPanel.style.zIndex = '100';
         infoPanel.style.display = 'flex';
-        infoPanel.style.width = isMobile ? '90%' : '360px';
-        infoPanel.style.maxWidth = isMobile ? '90%' : '360px';
         infoPanel.style.color = '#ffeb3b';
         infoPanel.style.fontFamily = '"PingFang SC", "微软雅黑", sans-serif';
-        infoPanel.style.border = '2px solid #d4af37';
-        infoPanel.style.boxShadow = '0 0 10px rgba(212, 175, 55, 0.5)';
+        infoPanel.style.border = '1px solid rgba(212, 175, 55, 0.4)';
+        infoPanel.style.boxShadow = '0 0 10px rgba(212, 175, 55, 0.3)';
         infoPanel.style.borderRadius = '8px';
         infoPanel.style.background = 'transparent';
+        infoPanel.style.backdropFilter = 'blur(3px)';
         
         // 根据设备类型设置位置和布局
         updatePanelLayout(infoPanel, infoContent, tabButtons);
         
         // 设置内容区域样式
-        infoContent.style.flex = isMobile ? 'none' : '2';
-        infoContent.style.padding = '8px';
-        infoContent.style.fontSize = isMobile ? '11px' : '14px';
-        infoContent.style.fontWeight = '400';
+        infoContent.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+        infoContent.style.borderRadius = '4px';
         infoContent.style.textShadow = '0 0 2px rgba(0, 0, 0, 0.8)';
-        infoContent.style.minHeight = isMobile ? '80px' : '140px';
+        infoContent.style.overflow = 'auto';
         
         // 设置按钮区域样式
-        tabButtons.style.flex = isMobile ? 'none' : '1';
         tabButtons.style.display = 'flex';
-        tabButtons.style.flexDirection = isMobile ? 'row' : 'column';
-        tabButtons.style.justifyContent = 'space-around';
-        tabButtons.style.padding = '2px';
-        tabButtons.style.width = isMobile ? '100%' : 'auto';
-        
-        // 设置按钮样式
-        const tabBtns = document.querySelectorAll('.tab-button');
-        updateButtonStyles(tabBtns, isMobile);
+        tabButtons.style.gap = '5px'; // 设置按钮之间的间距
         
         // 显示初始内容
         updateInfoContent(tabs[0].fields);
         
         // 监听窗口大小变化，调整面板位置
         window.addEventListener('resize', () => {
-            const isMobileNow = window.innerWidth <= 768;
+            const newIsMobile = window.innerWidth <= 768;
             updatePanelLayout(infoPanel, infoContent, tabButtons);
-            updateButtonStyles(document.querySelectorAll('.tab-button'), isMobileNow);
+            updateButtonStyles(document.querySelectorAll('.tab-button'), newIsMobile);
+            
+            // 更新卡片显示状态
+            const cardToggle = document.getElementById('solarTermCardToggle');
+            if (cardToggle) {
+                // 根据开关状态决定是否显示
+                infoPanel.style.display = cardToggle.checked ? 'flex' : 'none';
+            }
         });
+        
+        // 设置初始显示状态 - 根据开关设置
+        const cardToggle = document.getElementById('solarTermCardToggle');
+        if (cardToggle) {
+            infoPanel.style.display = cardToggle.checked ? 'flex' : 'none';
+        }
     }
 
     // 更新面板布局的函数
     function updatePanelLayout(panel, content, buttons) {
-        const isMobile = window.innerWidth <= 768;
-        const hasBottomNav = document.body.classList.contains('has-bottom-nav');
-        const isHighScreen = window.innerHeight >= 800;
+        // 使用与CSS相同的断点判断
+        const mobileBreakpoint = 768;
+        const isMobile = window.innerWidth <= mobileBreakpoint;
         
+        // 设置面板尺寸和位置
         if (isMobile) {
-            // 设置底部距离，考虑不同情况
-            if (hasBottomNav && isHighScreen) {
-                panel.style.bottom = '160px'; // 高屏幕带导航栏
-            } else if (hasBottomNav) {
-                panel.style.bottom = '120px'; // 普通屏幕带导航栏
-            } else if (isHighScreen) {
-                panel.style.bottom = '160px'; // 高屏幕无导航栏
-            } else {
-                panel.style.bottom = '120px'; // 普通屏幕无导航栏
-            }
-            
-            // 应用安全区域距离（针对iPhone X等全面屏设备）
-            if (hasBottomNav) {
-                // 使用CSS变量获取底部安全区域
-                const safeAreaBottom = getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom') || '0px';
-                // 如果安全区域值存在且不为0，则增加额外距离
-                if (safeAreaBottom && safeAreaBottom !== '0px') {
-                    const numValue = parseInt(safeAreaBottom);
-                    if (!isNaN(numValue) && numValue > 0) {
-                        panel.style.bottom = `calc(${panel.style.bottom} + ${safeAreaBottom})`;
-                    }
-                }
-            }
-            
+            // 移动端设置 - 显示在罗盘下方
+            panel.style.position = 'fixed';
+            panel.style.top = 'auto';
+            panel.style.bottom = '10px';
             panel.style.left = '50%';
             panel.style.right = 'auto';
             panel.style.transform = 'translateX(-50%)';
             panel.style.flexDirection = 'column';
             panel.style.width = '90%';
-            panel.style.maxWidth = '90%';
+            panel.style.maxWidth = '400px';
+            panel.style.minWidth = '280px';
+            panel.style.backgroundColor = 'transparent'; // 完全透明
+            panel.style.border = '1px solid rgba(212, 175, 55, 0.4)'; // 金色边框
             
+            // 移动端内容区域样式
             content.style.flex = 'none';
-            content.style.fontSize = '11px';
+            content.style.width = '100%';
+            content.style.maxHeight = '120px'; // 限制高度，避免占用太多空间
+            content.style.minHeight = '60px';
+            content.style.fontSize = '10px';
             content.style.padding = '8px';
-            content.style.minHeight = '80px';
+            content.style.boxSizing = 'border-box';
+            content.style.backgroundColor = 'rgba(0, 0, 0, 0.2)'; // 微透明黑色背景
+            content.style.margin = '5px';
+            content.style.borderRadius = '4px';
             
-            buttons.style.flexDirection = 'row';
-            buttons.style.padding = '2px';
+            // 移动端按钮区域样式 - 与图片一致的样式
+            buttons.style.flex = 'none';
             buttons.style.width = '100%';
+            buttons.style.flexDirection = 'row'; // 按钮横向排列
+            buttons.style.flexWrap = 'wrap'; // 允许按钮换行
+            buttons.style.justifyContent = 'center';
+            buttons.style.alignItems = 'center';
+            buttons.style.padding = '5px';
+            buttons.style.boxSizing = 'border-box';
+            buttons.style.backgroundColor = 'transparent';
         } else {
-            // 计算动态边距
-            const screenWidth = window.innerWidth;
-            const maxWidth = 1920; // 最大屏幕宽度（边距60px）
-            const minWidth = 960;  // 最小屏幕宽度（边距6px）
-            const maxMargin = 60;  // 最大边距
-            const minMargin = 6;   // 最小边距
-            
-            // 使用线性插值计算边距
-            let margin;
-            if (screenWidth >= maxWidth) {
-                margin = maxMargin;
-            } else if (screenWidth <= minWidth) {
-                margin = minMargin;
-            } else {
-                const ratio = (screenWidth - minWidth) / (maxWidth - minWidth);
-                margin = minMargin + (maxMargin - minMargin) * ratio;
-            }
-            
-            // 确保得到整数像素值
-            margin = Math.round(margin);
-            
-            panel.style.bottom = `${margin}px`;
-            panel.style.right = `${margin}px`;
+            // 桌面端设置 - 显示在右下角
+            panel.style.position = 'fixed';
+            panel.style.top = 'auto';
+            panel.style.bottom = '20px';
             panel.style.left = 'auto';
+            panel.style.right = '20px';
             panel.style.transform = 'none';
             panel.style.flexDirection = 'row';
-            panel.style.width = '360px';
-            panel.style.maxWidth = '360px';
+            panel.style.width = '400px';
+            panel.style.maxWidth = '400px';
+            panel.style.minWidth = '400px';
+            panel.style.backgroundColor = 'transparent'; // 完全透明
             
-            content.style.flex = '2';
+            // 桌面端内容区域样式
+            content.style.flex = 'none';
+            content.style.width = '300px';
+            content.style.maxHeight = '350px'; // 限制最大高度
+            content.style.minHeight = '150px';
             content.style.fontSize = '14px';
-            content.style.padding = '8px';
-            content.style.minHeight = '140px';
+            content.style.padding = '15px';
+            content.style.boxSizing = 'border-box';
+            content.style.backgroundColor = 'rgba(0, 0, 0, 0.2)'; // 微透明黑色背景
+            content.style.borderRadius = '4px';
+            content.style.margin = '0';
             
+            // 桌面端按钮区域样式
+            buttons.style.flex = 'none';
+            buttons.style.width = '95px';
             buttons.style.flexDirection = 'column';
-            buttons.style.padding = '8px';
-            buttons.style.width = 'auto';
+            buttons.style.flexWrap = 'nowrap';
+            buttons.style.justifyContent = 'center';
+            buttons.style.alignItems = 'center';
+            buttons.style.padding = '10px';
+            buttons.style.boxSizing = 'border-box';
+            buttons.style.backgroundColor = 'transparent';
         }
+        
+        // 通用样式设置
+        panel.style.backdropFilter = 'blur(3px)';
+        panel.style.boxSizing = 'border-box';
+        panel.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.3)';
+        panel.style.zIndex = '100';
+        
+        // 更新按钮样式
+        updateButtonStyles(buttons.querySelectorAll('.tab-button'), isMobile);
     }
 
     // 更新按钮样式的函数
     function updateButtonStyles(buttons, isMobile) {
-        buttons.forEach(btn => {
-            btn.style.padding = '2px 2px';
+        buttons.forEach((btn, index) => {
+            // 设置固定宽高
+            if (isMobile) {
+                // 移动端固定尺寸 - 按照图片中的样式设计
+                btn.style.width = '70px';
+                btn.style.height = '36px';
+                btn.style.fontSize = '10px';
+                btn.style.marginBottom = '4px';
+                btn.style.marginRight = '4px';
+                btn.style.lineHeight = '1.1';
+                btn.style.padding = '2px 0';
+            } else {
+                // 桌面端固定尺寸
+                btn.style.width = '90px';
+                btn.style.height = '60px';
+                btn.style.fontSize = '12px';
+                btn.style.marginBottom = '6px';
+                btn.style.marginRight = '0';
+                btn.style.lineHeight = '1.4';
+                btn.style.padding = '2px 2px';
+            }
+            
+            // 通用按钮样式
             btn.style.textAlign = 'center';
             btn.style.cursor = 'pointer';
             btn.style.borderRadius = '4px';
-            btn.style.transition = 'all 0.3s ease';
-            btn.style.fontSize = isMobile ? '10px' : '12px';
+            btn.style.transition = 'background-color 0.3s ease';
             btn.style.fontWeight = '400';
             btn.style.textShadow = '0 0 2px rgba(0, 0, 0, 0.8)';
-            btn.style.marginBottom = isMobile ? '0' : '6px';
-            btn.style.marginRight = isMobile ? '4px' : '0';
             btn.style.border = '1px solid rgba(212, 175, 55, 0.4)';
-            btn.style.flex = isMobile ? '1' : 'none';
+            btn.style.display = 'flex';
+            btn.style.alignItems = 'center';
+            btn.style.justifyContent = 'center';
+            btn.style.flex = 'none'; // 不使用flex自动调整
+            btn.style.boxSizing = 'border-box';
+            btn.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+            btn.style.color = '#ffeb3b'; // 设置文字颜色为金色
+            
+            // 根据按钮状态设置不同样式 - 但不改变文字颜色
+            if (btn.classList.contains('active')) {
+                // 只有不是第一个按钮才应用加深背景色
+                if (index !== 0) {
+                    btn.style.backgroundColor = 'rgba(212, 175, 55, 0.2)';
+                }
+                btn.style.boxShadow = '0 0 5px rgba(212, 175, 55, 0.5)';
+                btn.style.border = '1px solid rgba(212, 175, 55, 0.8)';
+                // 不再改变文字颜色，保持金色
+            } else {
+                btn.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+                btn.style.boxShadow = 'none';
+            }
+            
+            // 添加悬停效果 - 但不为第一个按钮添加
+            if (index !== 0) {
+                btn.onmouseenter = function() {
+                    if (!btn.classList.contains('active')) {
+                        btn.style.backgroundColor = 'rgba(212, 175, 55, 0.2)';
+                    }
+                };
+                
+                btn.onmouseleave = function() {
+                    if (!btn.classList.contains('active')) {
+                        btn.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+                    }
+                };
+
+                // 添加触摸效果
+                btn.ontouchstart = function() {
+                    if (!btn.classList.contains('active')) {
+                        btn.style.backgroundColor = 'rgba(212, 175, 55, 0.2)';
+                    }
+                };
+                
+                btn.ontouchend = function() {
+                    if (!btn.classList.contains('active')) {
+                        btn.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+                    }
+                };
+            }
         });
     }
 
-    // 为所有设备创建顶部自动旋转控件
+    // 为所有设备创建顶部控件
     function addAutoRotateControlsToHeader() {
         // 检查控件是否已存在
         let headerControls = document.querySelector('.header-controls');
@@ -1295,33 +1449,40 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 设置控件样式
         headerControls.style.position = 'fixed';
-        headerControls.style.top = '80px';
-        headerControls.style.right = '2px';
+        headerControls.style.top = '100px';
+        headerControls.style.right = '5px';
         headerControls.style.zIndex = '150';
         headerControls.style.display = 'flex';
-        headerControls.style.flexDirection = 'column';
+        headerControls.style.flexDirection = 'column'; // 垂直排列
         headerControls.style.alignItems = 'center';
-        headerControls.style.padding = '8px 4px';
-        headerControls.style.backgroundColor = 'transparent';
-        headerControls.style.color = '#d4af37';
+        headerControls.style.backgroundColor = 'transparent'; // 透明背景
+        headerControls.style.border = 'none'; // 无边框
+        headerControls.style.boxShadow = 'none'; // 无阴影
         
-        // 创建文本标签
-        const controlText = document.createElement('span');
-        controlText.innerText = '自动旋转';
-        controlText.style.marginBottom = '8px';
-        controlText.style.fontSize = '12px';
-        controlText.style.fontWeight = 'bold';
-        controlText.style.color = '#d4af37';
-        controlText.style.writingMode = 'vertical-lr';
-        controlText.style.textOrientation = 'upright';
+        // 创建自动旋转控件组
+        const rotateGroup = document.createElement('div');
+        rotateGroup.className = 'control-group';
+        rotateGroup.style.display = 'flex';
+        rotateGroup.style.flexDirection = 'column'; // 垂直排列
+        rotateGroup.style.alignItems = 'center';
+        rotateGroup.style.marginBottom = '15px';
         
-        // 创建开关
+        // 创建自动旋转文本标签
+        const rotateText = document.createElement('span');
+        rotateText.innerText = '自动旋转';
+        rotateText.style.fontSize = '12px';
+        rotateText.style.fontWeight = 'bold';
+        rotateText.style.color = '#d4af37';
+        rotateText.style.marginBottom = '5px';
+        rotateText.style.textAlign = 'center';
+        
+        // 创建自动旋转开关
         const toggleSwitch = document.createElement('label');
         toggleSwitch.className = 'switch';
         toggleSwitch.style.position = 'relative';
         toggleSwitch.style.display = 'inline-block';
-        toggleSwitch.style.width = '16px';
-        toggleSwitch.style.height = '32px';
+        toggleSwitch.style.width = '30px';
+        toggleSwitch.style.height = '16px';
         
         // 创建复选框
         const checkbox = document.createElement('input');
@@ -1342,9 +1503,58 @@ document.addEventListener('DOMContentLoaded', function() {
         slider.style.bottom = '0';
         slider.style.backgroundColor = '#333';
         slider.style.transition = '0.4s';
-        slider.style.borderRadius = '16px';
+        slider.style.borderRadius = '10px';
         
-        // 添加伪元素样式（通过CSS类）
+        // 创建节气卡片控件组
+        const cardGroup = document.createElement('div');
+        cardGroup.className = 'control-group';
+        cardGroup.style.display = 'flex';
+        cardGroup.style.flexDirection = 'column'; // 垂直排列
+        cardGroup.style.alignItems = 'center';
+        
+        // 节气卡片文本标签
+        const cardText = document.createElement('span');
+        cardText.innerText = '节气卡片';
+        cardText.style.fontSize = '12px';
+        cardText.style.fontWeight = 'bold';
+        cardText.style.color = '#d4af37';
+        cardText.style.marginBottom = '5px';
+        cardText.style.textAlign = 'center';
+        
+        // 创建节气卡片开关
+        const cardToggleSwitch = document.createElement('label');
+        cardToggleSwitch.className = 'switch';
+        cardToggleSwitch.style.position = 'relative';
+        cardToggleSwitch.style.display = 'inline-block';
+        cardToggleSwitch.style.width = '30px';
+        cardToggleSwitch.style.height = '16px';
+        
+        // 创建节气卡片复选框
+        const cardCheckbox = document.createElement('input');
+        cardCheckbox.type = 'checkbox';
+        cardCheckbox.id = 'solarTermCardToggle';
+        cardCheckbox.style.opacity = '0';
+        cardCheckbox.style.width = '0';
+        cardCheckbox.style.height = '0';
+        
+        // 设置默认状态：桌面端默认打开，移动端默认关闭
+        const isMobile = window.innerWidth <= 768;
+        cardCheckbox.checked = !isMobile;
+        
+        // 创建节气卡片滑块
+        const cardSlider = document.createElement('span');
+        cardSlider.className = 'slider round';
+        cardSlider.style.position = 'absolute';
+        cardSlider.style.cursor = 'pointer';
+        cardSlider.style.top = '0';
+        cardSlider.style.left = '0';
+        cardSlider.style.right = '0';
+        cardSlider.style.bottom = '0';
+        cardSlider.style.backgroundColor = '#333';
+        cardSlider.style.transition = '0.4s';
+        cardSlider.style.borderRadius = '10px';
+        
+        // 添加滑块样式
         const style = document.createElement('style');
         style.textContent = `
             .slider:before {
@@ -1352,8 +1562,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 position: absolute;
                 height: 10px;
                 width: 10px;
-                left: 2px;
-                bottom: 2px;
+                left: 3px;
+                bottom: 3px;
                 background-color: white;
                 transition: .4s;
                 border-radius: 50%;
@@ -1362,7 +1572,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 background-color: #d4af37;
             }
             input:checked + .slider:before {
-                transform: translateY(-16px);
+                transform: translateX(14px);
             }
         `;
         document.head.appendChild(style);
@@ -1370,14 +1580,21 @@ document.addEventListener('DOMContentLoaded', function() {
         // 组装控件
         toggleSwitch.appendChild(checkbox);
         toggleSwitch.appendChild(slider);
+        rotateGroup.appendChild(rotateText);
+        rotateGroup.appendChild(toggleSwitch);
         
-        headerControls.appendChild(controlText);
-        headerControls.appendChild(toggleSwitch);
+        cardToggleSwitch.appendChild(cardCheckbox);
+        cardToggleSwitch.appendChild(cardSlider);
+        cardGroup.appendChild(cardText);
+        cardGroup.appendChild(cardToggleSwitch);
+        
+        headerControls.appendChild(rotateGroup);
+        headerControls.appendChild(cardGroup);
         
         // 添加到文档中
         document.querySelector('.container').appendChild(headerControls);
         
-        // 添加事件监听
+        // 添加自动旋转事件监听
         checkbox.addEventListener('change', function() {
             if (this.checked) {
                 startAutoRotation();
@@ -1385,6 +1602,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 stopAutoRotation();
             }
         });
+        
+        // 添加节气卡片事件监听
+        cardCheckbox.addEventListener('change', function() {
+            const infoPanel = document.querySelector('.solar-term-info-panel');
+            
+            if (this.checked) {
+                // 打开节气卡片
+                if (!infoPanel) {
+                    // 如果不存在则创建
+                    addSolarTermInfoPanel();
+                } else {
+                    // 如果已存在则显示
+                    infoPanel.style.display = 'flex';
+                }
+            } else {
+                // 关闭节气卡片
+                if (infoPanel) {
+                    infoPanel.style.display = 'none';
+                }
+            }
+        });
+        
+        // 初始根据卡片开关显示或隐藏节气卡片
+        if (cardCheckbox.checked) {
+            // 如果开关打开，确保卡片显示
+            if (!document.querySelector('.solar-term-info-panel')) {
+                addSolarTermInfoPanel();
+            } else {
+                const existingPanel = document.querySelector('.solar-term-info-panel');
+                existingPanel.style.display = 'flex';
+            }
+        }
     }
 
     // 更新信息内容
@@ -1476,13 +1725,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 处理导航到博客页面
     function navigateToBlog() {
-        // 使用window.location.assign而不是修改href，保留浏览历史
-        window.location.assign('/blog/');
-        
-        // 另一个选择是使用history API
-        // window.history.pushState({page: 'blog'}, 'Blog Page', '/blog/');
-        // window.location.href = '/blog/';
+        window.location.href = '/blog/';
     }
+    
+    // 将导航函数添加到全局对象中
+    window.navigateToBlog = navigateToBlog;
     
     // 点击箭头导航到博客页面
     if (scrollIndicator) {

@@ -11,50 +11,8 @@
     <script>
         // 添加页面标识类，帮助CSS选择器识别
         document.documentElement.classList.add('custom-index-page');
-        
-        // 检测设备安全区域并添加CSS变量
-        function checkSafeArea() {
-            // 获取环境安全区域值
-            const safeAreaBottom = window.getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-bottom)') || '0px';
-            document.documentElement.style.setProperty('--safe-area-inset-bottom', safeAreaBottom);
-        }
-        
-        // 页面加载后检测底部导航栏
-        function checkBottomNav() {
-            // 如果页面高度大于视口高度，说明可能有底部导航栏
-            const hasBottomNav = document.body.offsetHeight > window.innerHeight;
-            
-            // 检查是否是iPhone X或更新机型（有底部安全区域）
-            const isIPhoneX = /iPhone/.test(navigator.userAgent) && 
-                (window.screen.height >= 812 || window.screen.width >= 812);
-                
-            // 如果检测到底部导航栏或是iPhone X，添加类名
-            if (hasBottomNav || isIPhoneX) {
-                document.body.classList.add('has-bottom-nav');
-            } else {
-                document.body.classList.remove('has-bottom-nav');
-            }
-            
-            // 重新调整分页窗口位置
-            setTimeout(function() {
-                const infoPanel = document.querySelector('.solar-term-info-panel');
-                if (infoPanel) {
-                    const content = document.querySelector('.info-content');
-                    const buttons = document.querySelector('.tab-buttons');
-                    if (typeof updatePanelLayout === 'function') {
-                        updatePanelLayout(infoPanel, content, buttons);
-                    }
-                }
-            }, 300);
-        }
-        
         window.onload = function() {
             document.body.classList.add('page-index');
-            checkSafeArea();
-            checkBottomNav();
-            
-            // 在窗口大小改变时重新检测
-            window.addEventListener('resize', checkBottomNav);
         };
     </script>
 </head>
@@ -67,7 +25,6 @@
             <a href="blog/" class="menu-item">博客</a>
             <a href="book/" class="menu-item">藏宝阁</a>
             <a href="introduction/" class="menu-item">导师简介</a>
-            <a href="clear-cache.html" class="menu-item">清除缓存</a>
         </nav>
         <div class="menu-toggle">
             <span></span>
@@ -101,26 +58,17 @@
             const autoRotateToggle = document.getElementById('autoRotateToggle');
             
             // 添加事件监听，使用script.js中的实现
-            autoRotateToggle.addEventListener('change', function() {
-                if (this.checked) {
-                    window.startAutoRotation(); // 使用script.js中的函数
-                } else {
-                    window.stopAutoRotation(); // 使用script.js中的函数
-                }
-            });
-            
-            // 在页面加载完成后检查罗盘是否准备好
             if (autoRotateToggle) {
+                autoRotateToggle.addEventListener('change', function() {
+                    if (this.checked) {
+                        window.startAutoRotation(); // 使用script.js中的函数
+                    } else {
+                        window.stopAutoRotation(); // 使用script.js中的函数
+                    }
+                });
+                
                 autoRotateToggle.checked = false;
             }
-            
-            // 检查罗盘是否准备好
-            const checkInterval = setInterval(() => {
-                if (window.compassFunctions) {
-                    clearInterval(checkInterval);
-                    console.log('罗盘和自动旋转功能已准备好');
-                }
-            }, 500);
             
             // 移动端菜单切换
             const menuToggle = document.querySelector('.menu-toggle');
@@ -139,6 +87,42 @@
                         mainMenu.classList.remove('active');
                     });
                 });
+            }
+            
+            // 添加向上滑动和点击箭头跳转到博客页面的功能
+            const isMobile = window.innerWidth <= 768;
+            const container = document.querySelector('.container');
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            
+            // 点击底部箭头跳转到博客页面
+            if (scrollIndicator) {
+                scrollIndicator.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // 阻止事件冒泡，避免触发罗盘旋转
+                    window.location.href = '/blog/';
+                });
+            }
+            
+            // 在移动端添加上滑手势
+            if (isMobile && container) {
+                let touchStartY = 0;
+                let touchEndY = 0;
+                
+                container.addEventListener('touchstart', function(e) {
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+                
+                container.addEventListener('touchend', function(e) {
+                    touchEndY = e.changedTouches[0].clientY;
+                    
+                    // 计算滑动距离和方向
+                    const swipeDistance = touchStartY - touchEndY;
+                    
+                    // 如果是向上滑动且滑动距离足够大，则跳转到博客页面
+                    if (swipeDistance > 100) { // 滑动距离大于100px视为有效滑动
+                        window.location.href = '/blog/';
+                    }
+                }, { passive: true });
             }
         });
         
@@ -237,11 +221,11 @@
         }
         
         // 定期创建流星 - 根据设备类型调整频率
-        const meteorInterval = isMobileDevice ? 8000 : 6000; // 移动端降低频率
+        const meteorInterval = isMobileDevice ? 8000 : 4000; // 移动端降低频率
         meteorIntervalId = setInterval(createSimpleMeteor, meteorInterval);
         
         // 初始创建几个流星 - 移动端减少初始数量
-        const initialMeteors = isMobileDevice ? 2 : 3;
+        const initialMeteors = isMobileDevice ? 1 : 3;
         for (let i = 0; i < initialMeteors; i++) {
             setTimeout(createSimpleMeteor, Math.random() * 5000);
         }
@@ -295,7 +279,7 @@
             
             // 根据设备类型设置不同的速度
             const speed = isMobileDevice ? 
-                Math.random() * 3 + 3 :    // 移动端更慢的速度
+                Math.random() * 3 + 2 :    // 移动端更慢的速度
                 Math.random() * 5 + 5;     // 桌面端保持原来的速度
             
             // 动画函数

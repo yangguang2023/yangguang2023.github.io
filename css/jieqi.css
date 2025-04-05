@@ -433,27 +433,35 @@ input:checked + .slider:before {
 .text-item {
     position: absolute;
     color: #ffeb3b;
-    font-weight: 500;
+    font-weight: 600;
     transform-origin: center center;
     display: flex;
     justify-content: center;
     align-items: center;
     pointer-events: none;
-    letter-spacing: normal;
+    letter-spacing: 1px;
     white-space: nowrap;
     z-index: 35;
-    text-shadow: 0 0 4px rgba(255, 235, 59, 0.3);
-    transition: none;
+    text-shadow: 0 0 8px rgba(255, 235, 59, 0.5), 0 0 15px rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    will-change: auto;
-    backface-visibility: visible;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     perspective: none;
 }
 
+/* 卦符文字特殊样式 */
+.text-item.hexagram-text {
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6), 0 0 18px rgba(255, 215, 0, 0.4);
+}
+
 .text-item:hover {
-    text-shadow: 0 0 6px rgba(255, 235, 59, 0.4);
-    color: #fff;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.4);
+    color: #ffffff;
+    opacity: 1;
 }
 
 /* 添加金色边框样式 */
@@ -521,8 +529,18 @@ input:checked + .slider:before {
     transform: scale(0.98);
 }
 
-/* 响应式设计 */
+/* 统一的响应式断点 */
+:root {
+    --bp-xs: 360px;   /* 小型手机 */
+    --bp-sm: 480px;   /* 普通手机 */
+    --bp-md: 768px;   /* 平板设备 */
+    --bp-lg: 1024px;  /* 较小笔记本 */
+    --bp-xl: 1366px;  /* 大型显示器 */
+}
+
+/* 响应式设计 - 整合移动端样式 */
 @media (max-width: 768px) {
+    /* 导航栏响应式 */
     .site-header {
         padding: 15px 20px;
     }
@@ -558,6 +576,7 @@ input:checked + .slider:before {
     .menu-item {
         font-size: 20px;
         opacity: 0.8;
+        padding: 12px 15px; /* 增大点击区域 */
     }
 
     .menu-item:hover {
@@ -568,23 +587,27 @@ input:checked + .slider:before {
         display: block;
     }
 
+    /* 罗盘响应式样式 */
     .compass {
         max-width: none;
         max-height: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
     }
     
     .container {
         width: 100%;
         height: 100vh;
+        padding-bottom: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
     
-    .text-item {
-        color: #ffeb3b;
-    }
-    
+    /* 罗盘边框样式调整 */
     .compass::after {
         border-width: 1.5px;
         top: -1.5%;
@@ -593,6 +616,7 @@ input:checked + .slider:before {
         height: 103%;
     }
     
+    /* 扇形区域调整 */
     .segment-sector {
         width: 103%;
         height: 103%;
@@ -605,6 +629,12 @@ input:checked + .slider:before {
         z-index: 8;
     }
     
+    .sector:hover {
+        z-index: 8 !important;
+        transform: scale(1.03);
+    }
+    
+    /* 中心图标调整 */
     .center-icon {
         z-index: 40;
         position: relative;
@@ -615,6 +645,7 @@ input:checked + .slider:before {
         height: calc(90vmin * 0.15);
     }
     
+    /* 控制区域调整 */
     .rotate-controls {
         padding: 4px 15px;
         gap: 10px;
@@ -638,16 +669,36 @@ input:checked + .slider:before {
         transform: translateX(19px);
     }
 
+    /* 文字层和文字项样式优化 */
     .text-layer {
         transform-style: flat;
         -webkit-transform-style: flat;
     }
     
     .text-item {
+        color: #ffeb3b;
+        text-rendering: optimizeLegibility;
+        font-weight: 700; /* 移动端加粗 */
+        letter-spacing: 0.5px; /* 移动端字间距略小 */
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.6), 0 0 12px rgba(255, 215, 0, 0.3);
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
     }
-
+    
+    .text-item.hexagram-text {
+        font-weight: 800;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+    
+    .text-item:hover {
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+    
+    /* 信息面板调整 */
+    .solar-term-info-panel {
+        max-width: 90%;
+    }
+    
     .tab-button.active::before {
         left: 50%;
         top: -5px;
@@ -659,45 +710,78 @@ input:checked + .slider:before {
         border-bottom: 6px solid #ffd700;
     }
     
-    .solar-term-info-panel {
-        max-width: 90%;
-    }
-
-    /* 确保扇形区域在悬停时不会改变层级 */
-    .sector:hover {
-        z-index: 8 !important;
-        transform: scale(1.03);
-    }
-    
-    /* 降低移动端文字模糊效果 */
-    .text-item {
-        text-shadow: 0 0 4px rgba(255, 235, 59, 0.3);
-        font-weight: 600; /* 增加字重以提高可读性 */
+    /* 箭头指示器调整 */
+    .scroll-indicator {
+        bottom: 40px; /* 上移箭头位置 */
+        background-color: transparent; /* 确保移动端也是透明的 */
+        width: 50px;
+        height: 50px;
+        border: none;
+        box-shadow: none;
+        pointer-events: none; /* 防止箭头影响滚动 */
     }
     
-    .text-item:hover {
-        text-shadow: 0 0 6px rgba(255, 235, 59, 0.4);
+    .arrow-down i {
+        font-size: 24px;
+    }
+    
+    /* 添加上滑提示 */
+    .container::after {
+        content: '向上滑动进入博客';
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #d4af37;
+        font-size: 12px;
+        opacity: 0.7;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        animation: fadeInOut 3s infinite;
+        pointer-events: none;
+    }
+    
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.8; }
     }
 }
 
-/* 添加更小屏幕的媒体查询 */
-@media (max-width: 480px) {
+/* 较小屏幕的适配 - 移除缩放设置，保持尺寸一致 */
+@media screen and (max-width: var(--bp-xs)) {
+    /* 整合所有小型手机的样式 */
+    .compass {
+        /* 不再缩放，但保持居中 */
+        transform: translate(-50%, -50%);
+        margin-top: 0;
+    }
+    
     .container::before {
         width: calc(90vmin * 0.12);  /* 更小屏幕使用12% */
         height: calc(90vmin * 0.12);
     }
 }
 
-/* 添加纵向屏幕的特殊处理 */
-@media (max-width: 767px) and (orientation: portrait) {
-    .container::before {
-        width: calc(90vmin * 0.15);
-        height: calc(90vmin * 0.15);
+/* 折叠屏和大屏手机的适配 - 移除缩放设置，保持尺寸一致 */
+@media screen and (min-width: var(--bp-md)) and (max-width: var(--bp-lg)) {
+    .compass {
+        /* 不再缩放，但保持居中 */
+        transform: translate(-50%, -50%);
     }
-    
-    .container {
-        width: 100%;
-        height: 100vh;
+}
+
+/* 触摸设备优化 - 整合所有触摸设备样式 */
+@media (hover: none) and (pointer: coarse) {
+    .compass {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    .menu-item {
+        padding: 12px 15px; /* 增大点击区域 */
+    }
+
+    .scroll-indicator {
+        pointer-events: none; /* 防止箭头影响滚动 */
     }
 }
 
@@ -730,44 +814,13 @@ input:checked + .slider:before {
     -webkit-transform-style: preserve-3d;
 }
 
-/* 移动端性能优化 */
-@media (max-width: 768px) {
-    .text-layer {
-        transform-style: flat;
-        -webkit-transform-style: flat;
-    }
-    
-    .text-item {
-        font-weight: 400;
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-    }
-}
-
+/* 减少动画对性能的影响 */
 @media (prefers-reduced-motion: reduce) {
     .compass-inner {
         transition: none !important;
     }
     .compass.auto-rotating .text-item {
         transition: none !important;
-    }
-}
-
-/* 较小屏幕的适配 - 移除缩放设置，保持尺寸一致 */
-@media screen and (max-width: 360px) {
-    /* 移除缩放代码 */
-    .compass {
-        /* 不再缩放 */
-        transform: none; 
-        margin-top: 0;
-    }
-}
-
-/* 折叠屏和大屏手机的适配 - 移除缩放设置，保持尺寸一致 */
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-    .compass {
-        /* 不再缩放 */
-        transform: none; 
     }
 }
 
@@ -842,8 +895,13 @@ input:checked + .slider:before {
 /* 针对不同设备的文字清晰度优化 */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .text-item {
-        font-weight: 500;
-        text-shadow: 0 0 5px rgba(255, 235, 59, 0.3);
+        font-weight: 600;
+        text-shadow: 0 0 10px rgba(255, 235, 59, 0.5), 0 0 18px rgba(255, 215, 0, 0.3);
+    }
+    
+    .text-item.hexagram-text {
+        font-weight: 700;
+        text-shadow: 0 0 12px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.4);
     }
 }
 
@@ -851,7 +909,36 @@ input:checked + .slider:before {
 @media (max-width: 768px) {
     .text-item {
         text-rendering: optimizeLegibility;
+        font-weight: 700; /* 移动端加粗 */
+        letter-spacing: 0.5px; /* 移动端字间距略小 */
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.6), 0 0 12px rgba(255, 215, 0, 0.3);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
     }
+    
+    .text-item.hexagram-text {
+        font-weight: 800;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+    
+    .text-item:hover {
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+}
+
+/* 添加光晕动画效果 */
+@keyframes textGlow {
+    0%, 100% { 
+        text-shadow: 0 0 8px rgba(255, 235, 59, 0.5), 0 0 15px rgba(255, 215, 0, 0.3);
+    }
+    50% { 
+        text-shadow: 0 0 12px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.4);
+    }
+}
+
+/* 激活光晕动画 */
+.compass.auto-rotating .text-item {
+    animation: textGlow 3s infinite alternate;
 }
 
 /* 底部箭头指示器样式 */
@@ -860,8 +947,43 @@ input:checked + .slider:before {
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 100;
+    z-index: 1000; /* 提高层级，确保在罗盘上方 */
     cursor: pointer;
+    width: 60px; /* 增加点击区域 */
+    height: 60px; /* 增加点击区域 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent; /* 移除背景 */
+    border-radius: 50%;
+    border: none; /* 移除边框 */
+    box-shadow: none; /* 移除阴影 */
+    pointer-events: auto !important; /* 确保可点击 */
+    transition: all 0.3s ease;
+}
+
+.scroll-indicator:hover, .scroll-indicator:active {
+    background-color: transparent; /* 悬停时也保持透明 */
+    border-color: transparent;
+    transform: translateX(-50%) scale(1.1);
+}
+
+.scroll-indicator::after {
+    content: '前往博客';
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d4af37;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.scroll-indicator:hover::after {
+    opacity: 1;
 }
 
 .arrow-down {
@@ -873,10 +995,10 @@ input:checked + .slider:before {
     animation: pulse 2s infinite, bounce 2s infinite;
 }
 
-.arrow-down svg {
-    width: 100%;
-    height: 100%;
-    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.6));
+.arrow-down i {
+    font-size: 28px; /* 稍微增大图标尺寸 */
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7); /* 增强图标发光效果 */
 }
 
 @keyframes pulse {
@@ -902,60 +1024,7 @@ input:checked + .slider:before {
     }
 }
 
-/* 移动端样式调整 */
-@media screen and (max-width: 768px) {
-    .container {
-        padding-bottom: 80px; /* 为底部导航栏预留空间 */
-    }
-
-    .compass {
-        margin-top: -40px; /* 整体上移 */
-    }
-
-    .scroll-indicator {
-        bottom: 90px; /* 调整箭头位置，避免被导航栏遮挡 */
-    }
-
-    /* 调整流星容器位置 */
-    .meteor-container {
-        margin-bottom: 60px;
-    }
-
-    /* 确保内容不会被底部导航栏遮挡 */
-    body {
-        padding-bottom: env(safe-area-inset-bottom, 80px);
-        min-height: -webkit-fill-available;
-    }
-
-    /* 调整页面整体布局 */
-    .site-header {
-        padding-top: env(safe-area-inset-top, 20px);
-    }
-
-    /* 适配不同机型的底部安全区域 */
-    @supports (padding: max(0px)) {
-        .container {
-            padding-bottom: max(80px, env(safe-area-inset-bottom) + 60px);
-        }
-    }
-}
-
-/* iPhone X 及以上机型的适配 */
-@media screen and (max-width: 768px) and (min-height: 800px) {
-    .container {
-        padding-bottom: 100px;
-    }
-
-    .compass {
-        margin-top: -60px;
-    }
-
-    .scroll-indicator {
-        bottom: 110px;
-    }
-}
-
-/* 处理底部导航栏 */
+/* 底部导航样式处理 */
 body.has-bottom-nav .container {
     padding-bottom: max(100px, env(safe-area-inset-bottom) + 80px);
 }
@@ -964,37 +1033,24 @@ body.has-bottom-nav .scroll-indicator {
     bottom: max(110px, env(safe-area-inset-bottom) + 90px);
 }
 
-/* 优化移动端触摸体验 */
-@media (hover: none) and (pointer: coarse) {
-    .compass {
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
+/* 专门处理方向优化 */
+@media (max-width: 767px) and (orientation: portrait) {
+    .container::before {
+        width: calc(90vmin * 0.15);
+        height: calc(90vmin * 0.15);
     }
-
-    .menu-item {
-        padding: 12px 15px; /* 增大点击区域 */
+    
+    .container {
+        width: 100%;
+        height: 100vh;
     }
-
+    
+    /* 纵向屏幕特殊处理 */
     .scroll-indicator {
-        pointer-events: none; /* 防止箭头影响滚动 */
+        bottom: 40px;
     }
-}
-
-/* 移动端分页窗口位置调整 */
-@media screen and (max-width: 768px) {
-    .solar-term-info-panel {
-        bottom: 100px !important; /* 上移更多，避免被底部导航栏遮挡 */
+    
+    body.has-bottom-nav .scroll-indicator {
+        bottom: max(90px, env(safe-area-inset-bottom) + 70px);
     }
-}
-
-/* 适配不同机型的分页窗口位置 */
-@media screen and (max-width: 768px) and (min-height: 800px) {
-    .solar-term-info-panel {
-        bottom: 160px !important; /* 在更高的屏幕上进一步上移 */
-    }
-}
-
-/* 处理底部导航栏对分页窗口的影响 */
-body.has-bottom-nav .solar-term-info-panel {
-    bottom: max(140px, env(safe-area-inset-bottom) + 100px) !important;
 }
