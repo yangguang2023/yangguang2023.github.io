@@ -1,0 +1,426 @@
+/* 自定义侧边栏 */
+.image-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden; /* 防止内容溢出 */
+  border-radius: 12px; /* 添加圆角 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+  margin-bottom: 15px; /* 底部间距 */
+  transition: transform 0.3s ease; /* 添加悬停时的变换效果 */
+}
+
+.image-container:hover {
+  transform: translateY(-2px); /* 悬停时轻微上浮 */
+}
+
+.asideimage {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* 保持图片比例并填充 */
+  transition: all 0.5s ease; /* 更平滑的过渡效果 */
+  display: block; /* 消除图片底部间隙 */
+}
+
+.description {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* 确保覆盖整个容器 */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 240, 0.9)); /* 渐变背景 */
+  color: #333; /* 更深的文字颜色 */
+  font-size: 16px;
+  line-height: 1.6; /* 增加行高 */
+  padding: 15px; /* 添加内边距 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: justify; /* 文本两端对齐 */
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 使用更高级的过渡效果 */
+  transform: scale(0.9); /* 初始缩小 */
+  border-radius: 12px; /* 保持与容器相同的圆角 */
+  box-sizing: border-box; /* 确保padding不会增加元素尺寸 */
+}
+
+.image-container:hover .asideimage {
+  transform: scale(1.05); /* 图片轻微放大 */
+  filter: blur(3px); /* 添加模糊效果 */
+  opacity: 0.3; /* 不完全隐藏图片，而是降低透明度 */
+}
+
+.image-container:hover .description {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1); /* 恢复正常大小 */
+}
+
+/* 针对移动端的字体大小设置 */
+@media (max-width: 768px) { /* 768px是常见的移动端屏幕宽度 */
+  #article-container {
+    font-size: 18px;
+  }
+  
+  .description {
+    font-size: 14px; /* 移动端字体稍小 */
+    padding: 10px;
+  }
+}
+
+/* 针对移动端隐藏特定元素 */
+@media (max-width: 768px) { /* 768px是常见的移动端屏幕宽度 */
+  #categoryBar {
+    display: none !important; /* 隐藏该元素 */
+  }
+}
+
+/* 导师介绍页面样式 */
+.post-introduction {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  color: #333;
+  line-height: 1.8;
+  position: relative;
+  background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+/* 导师介绍页面背景装饰 */
+.post-introduction:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: repeat;
+  background-size: 200px;
+  opacity: 0.03;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 删除装饰元素 */
+.post-introduction:after {
+  display: none;
+}
+
+/* 页面标题样式 */
+.post-introduction .post-title {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.post-introduction .post-title:after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(to right, #4a90e2, #6ec6ff);
+}
+
+/* 删除导师名称h3样式 */
+.post-introduction h3 {
+  display: none;
+}
+
+/* 美化导师名称 */
+.teacher-name {
+  position: relative;
+  display: inline-block;
+  margin: 0 auto 30px;
+  padding: 10px 30px;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(74, 144, 226, 0.05) 100%);
+  border-radius: 50px;
+  text-align: center;
+  width: auto;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+}
+
+.teacher-name:before, 
+.teacher-name:after {
+  content: "✦";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4a90e2;
+  font-size: 16px;
+}
+
+.teacher-name:before {
+  left: 10px;
+}
+
+.teacher-name:after {
+  right: 10px;
+}
+
+/* 导师图片样式 */
+.post-introduction img {
+  display: block;
+  max-width: 300px;
+  margin: 0 auto 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border: 5px solid white;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.post-introduction img:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* 导师简介文字样式 */
+.post-introduction p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  text-align: justify;
+  color: #444;
+}
+
+/* 添加引言样式 */
+.post-introduction > p:first-of-type {
+  font-size: 18px;
+  color: #4a90e2;
+  font-weight: 500;
+  text-align: center;
+  margin: 20px 0 30px;
+  padding: 0 20px;
+}
+
+/* 学术成就列表样式 */
+.post-introduction ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 20px 0;
+}
+
+.post-introduction li, 
+.post-introduction p:nth-of-type(n+6) {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+/* 删除小圆点样式 */
+.post-introduction li:before,
+.post-introduction p:nth-of-type(n+6):before {
+  display: none;
+}
+
+/* 删除学术成就和社会荣誉标题样式 */
+.post-introduction h3:nth-of-type(n+2) {
+  display: none;
+}
+
+.post-introduction h3:nth-of-type(n+2):after {
+  display: none;
+}
+
+/* 添加新的标题样式 */
+.section-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+  position: relative;
+}
+
+.section-title:after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: #4a90e2;
+}
+
+/* 卡片式布局 */
+.achievement-section,
+.publications-section,
+.lectures-section,
+.honors-section {
+  background: #fff;
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.achievement-section:hover,
+.publications-section:hover,
+.lectures-section:hover,
+.honors-section:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+/* 美化各部分标题 */
+.achievement-section .section-title,
+.publications-section .section-title,
+.lectures-section .section-title,
+.honors-section .section-title {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #4a90e2 0%, #6ec6ff 100%);
+  color: white;
+  border-radius: 5px;
+  margin-left: -25px;
+  margin-top: -25px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: none;
+}
+
+.achievement-section .section-title:after,
+.publications-section .section-title:after,
+.lectures-section .section-title:after,
+.honors-section .section-title:after {
+  display: none;
+}
+
+/* 美化学术成就列表 */
+.achievement-section p {
+  transition: all 0.3s ease;
+  padding: 10px 15px;
+  border-radius: 5px;
+  position: relative;
+  padding-left: 15px;
+  margin-bottom: 10px;
+  border-left: 3px solid rgba(74, 144, 226, 0.3);
+}
+
+.achievement-section p:hover {
+  background: rgba(74, 144, 226, 0.05);
+  transform: translateX(5px);
+  border-left: 3px solid #4a90e2;
+}
+
+/* 专著和主编样式 */
+.publications-section strong {
+  color: #4a90e2;
+  font-weight: 600;
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(74, 144, 226, 0.1);
+  border-radius: 3px;
+  margin-right: 5px;
+}
+
+/* 学术讲座段落样式 */
+.lectures-section p {
+  background: linear-gradient(to right, #f9f9f9, #fff);
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 3px solid #4a90e2;
+  position: relative;
+  padding-left: 15px;
+}
+
+/* 删除引号装饰 */
+.lectures-section p:before {
+  display: none;
+}
+
+/* 社会荣誉列表样式 */
+.honors-section p {
+  position: relative;
+  padding-left: 15px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed #eee;
+  border-left: 3px solid rgba(74, 144, 226, 0.3);
+}
+
+/* 删除勾选符号 */
+.honors-section p:before {
+  display: none;
+}
+
+.honors-section p:hover {
+  background: rgba(74, 144, 226, 0.05);
+  transform: translateX(5px);
+  border-left: 3px solid #4a90e2;
+}
+
+.honors-section p:last-child {
+  border-bottom: none;
+}
+
+/* 添加动画效果 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.post-introduction > * {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.post-introduction > *:nth-child(2) { animation-delay: 0.1s; }
+.post-introduction > *:nth-child(3) { animation-delay: 0.2s; }
+.post-introduction > *:nth-child(4) { animation-delay: 0.3s; }
+.post-introduction > *:nth-child(5) { animation-delay: 0.4s; }
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .post-introduction {
+    padding: 15px;
+  }
+  
+  .post-introduction img {
+    max-width: 80%;
+  }
+  
+  .post-introduction h3 {
+    font-size: 22px;
+  }
+  
+  .achievement-section,
+  .publications-section,
+  .lectures-section,
+  .honors-section {
+    padding: 15px;
+  }
+}
+
+/* 添加打印样式 */
+@media print {
+  .post-introduction {
+    padding: 0;
+    max-width: 100%;
+  }
+  
+  .post-introduction img {
+    max-width: 200px;
+  }
+  
+  .achievement-section,
+  .publications-section,
+  .lectures-section,
+  .honors-section {
+    page-break-inside: avoid;
+    box-shadow: none;
+  }
+}
