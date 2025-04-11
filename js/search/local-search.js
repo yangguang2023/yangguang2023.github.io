@@ -15,6 +15,17 @@ class LocalSearch {
     this.top_n_per_article = top_n_per_article
     this.isfetched = false
     this.datas = null
+    this.cachedData = null
+    // 尝试从localStorage读取缓存数据
+    try {
+      const cachedData = localStorage.getItem('hexo-local-search-data')
+      if (cachedData) {
+        this.cachedData = JSON.parse(cachedData)
+        console.log('Local search data loaded from cache')
+      }
+    } catch (e) {
+      console.error('Failed to load search data from localStorage', e)
+    }
   }
 
   getIndexByWord (words, text, caseSensitive = false) {
@@ -172,6 +183,26 @@ class LocalSearch {
 
   fetchData () {
     const isXml = !this.path.endsWith('json')
+
+    // 先检查是否有网络连接
+    if (!navigator.onLine) {
+      console.log('Browser is offline, using cached search data')
+      if (this.cachedData) {
+        this.isfetched = true
+        this.datas = this.cachedData
+        // 移除加载动画
+        window.dispatchEvent(new Event('search:loaded'))
+      } else {
+        // 显示离线信息
+        const loadingBar = document.getElementById('loading-bar')
+        if (loadingBar) {
+          loadingBar.innerHTML = '<i class="fas fa-exclamation-circle"></i> 您处于离线状态且没有缓存数据'
+        }
+      }
+      return
+    }
+
+    // 在线状态，尝试获取数据
     fetch(this.path)
       .then(response => response.text())
       .then(res => {
@@ -191,8 +222,33 @@ class LocalSearch {
           data.url = decodeURIComponent(data.url).replace(/\/{2,}/g, '/')
           return data
         })
+
+        // 将数据保存到localStorage
+        try {
+          localStorage.setItem('hexo-local-search-data', JSON.stringify(this.datas))
+          console.log('Search data cached to localStorage')
+        } catch (e) {
+          console.error('Failed to cache search data to localStorage', e)
+        }
+
         // Remove loading animation
         window.dispatchEvent(new Event('search:loaded'))
+      })
+      .catch(error => {
+        console.error('Error fetching search data:', error)
+        // 如果网络请求失败但有缓存数据，使用缓存数据
+        if (this.cachedData) {
+          console.log('Fetch failed, using cached search data')
+          this.isfetched = true
+          this.datas = this.cachedData
+          window.dispatchEvent(new Event('search:loaded'))
+        } else {
+          // 显示错误信息
+          const loadingBar = document.getElementById('loading-bar')
+          if (loadingBar) {
+            loadingBar.innerHTML = '<i class="fas fa-exclamation-circle"></i> 获取搜索数据失败，请检查网络连接'
+          }
+        }
       })
   }
 
