@@ -8,6 +8,17 @@ module.exports = {
     skipWaiting: true,
     clientsClaim: true,
     runtimeCaching: [
+      // 本地搜索文件缓存策略 - 使用旧缓存同时更新
+      {
+        urlPattern: /.*\/search\.json/,
+        handler: 'StaleWhileRevalidate',
+        options: {
+          cacheName: 'search-cache',
+          expiration: {
+            maxAgeSeconds: 86400 * 7 // 缓存保留一周
+          }
+        }
+      },
       // Vercel相关资源缓存配置
       {
         urlPattern: /^https:\/\/www\.zhonmiaozhimen\.cn\/.*/, 
