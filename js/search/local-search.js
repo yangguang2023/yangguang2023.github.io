@@ -147,7 +147,10 @@ class LocalSearch {
       let resultItem = ''
 
       url = new URL(url, location.origin)
-      url.searchParams.append('highlight', keywords.join(' '))
+      // 检测是否处于离线状态，离线状态下不添加highlight参数
+      if (navigator.onLine) {
+        url.searchParams.append('highlight', keywords.join(' '))
+      }
 
       if (slicesOfTitle.length !== 0) {
         resultItem += `<li class="local-search-hit-item"><a href="${url.href}"><span class="search-result-title">${this.highlightKeyword(title, slicesOfTitle[0])}</span>`
@@ -420,6 +423,26 @@ window.addEventListener('load', () => {
 
   searchClickFn()
   searchFnOnce()
+  
+  // 添加搜索结果点击事件处理，离线状态下修正URL
+  document.addEventListener('click', function(e) {
+    // 判断是否处于离线状态
+    if (!navigator.onLine) {
+      // 查找搜索结果链接
+      const searchResultLink = e.target.closest('.local-search-hit-item a')
+      if (searchResultLink) {
+        // 获取原始链接
+        const href = searchResultLink.getAttribute('href')
+        // 如果链接包含highlight参数，则移除
+        if (href && href.includes('?highlight=')) {
+          e.preventDefault()
+          // 提取干净的URL并导航
+          const cleanUrl = href.split('?')[0]
+          window.location.href = cleanUrl
+        }
+      }
+    }
+  }, true)
 
   // pjax
   window.addEventListener('pjax:complete', () => {
