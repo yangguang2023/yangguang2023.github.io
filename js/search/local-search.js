@@ -15,17 +15,6 @@ class LocalSearch {
     this.top_n_per_article = top_n_per_article
     this.isfetched = false
     this.datas = null
-    this.cachedData = null
-    // 尝试从localStorage读取缓存数据
-    try {
-      const cachedData = localStorage.getItem('hexo-local-search-data')
-      if (cachedData) {
-        this.cachedData = JSON.parse(cachedData)
-        console.log('Local search data loaded from cache')
-      }
-    } catch (e) {
-      console.error('Failed to load search data from localStorage', e)
-    }
   }
 
   getIndexByWord (words, text, caseSensitive = false) {
@@ -183,73 +172,98 @@ class LocalSearch {
 
   fetchData () {
     const isXml = !this.path.endsWith('json')
-
-    // 先检查是否有网络连接
-    if (!navigator.onLine) {
-      console.log('Browser is offline, using cached search data')
-      if (this.cachedData) {
-        this.isfetched = true
-        this.datas = this.cachedData
-        // 移除加载动画
-        window.dispatchEvent(new Event('search:loaded'))
-      } else {
-        // 显示离线信息
-        const loadingBar = document.getElementById('loading-bar')
-        if (loadingBar) {
-          loadingBar.innerHTML = '<i class="fas fa-exclamation-circle"></i> 您处于离线状态且没有缓存数据'
+    
+    // 添加缓存键名
+    const cacheKey = 'local-search-' + window.location.hostname
+    
+    // 首先尝试从localStorage读取缓存
+    const loadFromCache = () => {
+      try {
+        const cachedData = localStorage.getItem(cacheKey)
+        if (cachedData) {
+          const { timestamp, data } = JSON.parse(cachedData)
+          // 检查缓存是否在7天内
+          if (Date.now() - timestamp < 7 * 24 * 60 * 60 * 1000) {
+            console.log('使用本地缓存的搜索数据')
+            this.processFetchedData(data, isXml)
+            return true
+          }
         }
+      } catch (e) {
+        console.error('读取缓存失败:', e)
       }
-      return
+      return false
     }
-
-    // 在线状态，尝试获取数据
+    
+    // 如果有缓存直接使用
+    if (loadFromCache()) return
+    
+    // 否则从网络获取
     fetch(this.path)
       .then(response => response.text())
       .then(res => {
-        // Get the contents from search data
-        this.isfetched = true
-        this.datas = isXml
-          ? [...new DOMParser().parseFromString(res, 'text/xml').querySelectorAll('entry')].map(element => ({
-              title: element.querySelector('title').textContent,
-              content: element.querySelector('content').textContent,
-              url: element.querySelector('url').textContent
-            }))
-          : JSON.parse(res)
-        // Only match articles with non-empty titles
-        this.datas = this.datas.filter(data => data.title).map(data => {
-          data.title = data.title.trim()
-          data.content = data.content ? data.content.trim().replace(/<[^>]+>/g, '') : ''
-          data.url = decodeURIComponent(data.url).replace(/\/{2,}/g, '/')
-          return data
-        })
-
+        // 处理获取的数据
+        this.processFetchedData(res, isXml)
+        
         // 将数据保存到localStorage
         try {
-          localStorage.setItem('hexo-local-search-data', JSON.stringify(this.datas))
-          console.log('Search data cached to localStorage')
+          localStorage.setItem(cacheKey, JSON.stringify({
+            timestamp: Date.now(),
+            data: res
+          }))
+          console.log('搜索数据已缓存到localStorage')
         } catch (e) {
-          console.error('Failed to cache search data to localStorage', e)
+          console.error('缓存搜索数据失败:', e)
         }
-
-        // Remove loading animation
-        window.dispatchEvent(new Event('search:loaded'))
       })
-      .catch(error => {
-        console.error('Error fetching search data:', error)
-        // 如果网络请求失败但有缓存数据，使用缓存数据
-        if (this.cachedData) {
-          console.log('Fetch failed, using cached search data')
-          this.isfetched = true
-          this.datas = this.cachedData
-          window.dispatchEvent(new Event('search:loaded'))
-        } else {
-          // 显示错误信息
-          const loadingBar = document.getElementById('loading-bar')
-          if (loadingBar) {
-            loadingBar.innerHTML = '<i class="fas fa-exclamation-circle"></i> 获取搜索数据失败，请检查网络连接'
+      .catch(err => {
+        console.error('获取搜索数据失败:', err)
+        // 如果网络请求失败，再次尝试从缓存加载（忽略过期时间）
+        try {
+          const cachedData = localStorage.getItem(cacheKey)
+          if (cachedData) {
+            const { data } = JSON.parse(cachedData)
+            console.log('网络请求失败，使用本地缓存的搜索数据')
+            this.processFetchedData(data, isXml)
+          } else {
+            // 没有缓存也没有网络，显示错误
+            this.isfetched = true
+            this.datas = []
+            const $loadDataItem = document.getElementById('loading-database')
+            if ($loadDataItem) {
+              $loadDataItem.innerHTML = '<p>搜索数据加载失败，请检查网络连接或刷新页面重试</p>'
+            }
+            window.dispatchEvent(new Event('search:loaded'))
           }
+        } catch (e) {
+          console.error('读取缓存失败:', e)
+          this.isfetched = true
+          this.datas = []
+          window.dispatchEvent(new Event('search:loaded'))
         }
       })
+  }
+  
+  // 添加新方法处理获取的数据
+  processFetchedData (res, isXml) {
+    // Get the contents from search data
+    this.isfetched = true
+    this.datas = isXml
+      ? [...new DOMParser().parseFromString(res, 'text/xml').querySelectorAll('entry')].map(element => ({
+          title: element.querySelector('title').textContent,
+          content: element.querySelector('content').textContent,
+          url: element.querySelector('url').textContent
+        }))
+      : JSON.parse(res)
+    // Only match articles with non-empty titles
+    this.datas = this.datas.filter(data => data.title).map(data => {
+      data.title = data.title.trim()
+      data.content = data.content ? data.content.trim().replace(/<[^>]+>/g, '') : ''
+      data.url = decodeURIComponent(data.url).replace(/\/{2,}/g, '/')
+      return data
+    })
+    // Remove loading animation
+    window.dispatchEvent(new Event('search:loaded'))
   }
 
   // Highlight by wrapping node in mark elements with the given class name
