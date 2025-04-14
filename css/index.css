@@ -3335,6 +3335,11 @@ figure.highlight pre .javascript .function {
   -ms-transition: all 0.5s;
   transition: all 0.5s;
 }
+@media screen and (max-width: 768px) {
+  #page-header.full_page {
+    background-image: url("/images/mobile_top_img.jpg") !important;
+  }
+}
 #page-header.full_page {
   height: 100vh;
   background-attachment: fixed;
