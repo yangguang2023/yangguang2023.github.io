@@ -1,0 +1,233 @@
+/* 节气Tabs样式 */
+:root {
+  --jieqi-primary: #d4af37;
+  --jieqi-hover: #ffd700;
+  --jieqi-bg: rgba(0, 0, 0, 0.05);
+  --jieqi-border: rgba(212, 175, 55, 0.3);
+  --jieqi-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+  --jieqi-current: rgba(212, 175, 55, 0.15);
+  --jieqi-next: rgba(212, 175, 55, 0.08);
+}
+
+[data-theme="dark"] {
+  --jieqi-bg: rgba(255, 255, 255, 0.05);
+  --jieqi-current: rgba(212, 175, 55, 0.25);
+  --jieqi-next: rgba(212, 175, 55, 0.15);
+}
+
+/* 卡片样式 */
+.card-jieqi {
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.card-jieqi:hover {
+  box-shadow: var(--jieqi-shadow);
+}
+
+/* 当前节气信息 */
+.jieqi-current-info {
+  margin: 8px 0 15px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: var(--jieqi-current);
+  font-size: 0.9rem;
+}
+
+.jieqi-current-info .current-term {
+  margin-bottom: 4px;
+  font-weight: bold;
+  color: var(--jieqi-primary);
+}
+
+.jieqi-current-info .term-date {
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+}
+
+.jieqi-current-info .next-term {
+  color: var(--font-color);
+  opacity: 0.9;
+}
+
+.jieqi-current-info .next-term strong {
+  color: var(--jieqi-primary);
+  font-weight: bold;
+  margin: 0 2px;
+}
+
+/* Tabs容器 */
+.jieqi-tabs-container {
+  margin-top: 15px;
+}
+
+/* Tabs导航 */
+.jieqi-tab-nav {
+  display: flex;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--jieqi-border);
+}
+
+.jieqi-tab-button {
+  flex: 1;
+  padding: 6px 3px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.jieqi-tab-button::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--jieqi-primary);
+  transition: all 0.3s;
+  transform: translateX(-50%);
+}
+
+.jieqi-tab-button:hover {
+  color: var(--jieqi-primary);
+}
+
+.jieqi-tab-button.active {
+  color: var(--jieqi-primary);
+  font-weight: bold;
+}
+
+.jieqi-tab-button.active::after {
+  width: 80%;
+}
+
+/* Tabs内容区域 */
+.jieqi-tab-contents {
+  position: relative;
+  min-height: 150px;
+}
+
+.jieqi-tab-content {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.jieqi-tab-content.active {
+  display: block;
+}
+
+/* 当前节气内容样式 */
+.jieqi-current-content {
+  padding: 12px;
+  background-color: var(--jieqi-bg);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* 节气项目 */
+.jieqi-term-item {
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.jieqi-term-item:hover {
+  background-color: var(--jieqi-bg);
+  transform: translateX(3px);
+}
+
+.jieqi-term-item.current {
+  background-color: var(--jieqi-current);
+}
+
+.jieqi-term-item.next {
+  background-color: var(--jieqi-next);
+}
+
+.jieqi-term-item .term-name {
+  font-weight: bold;
+  margin-bottom: 3px;
+  color: var(--jieqi-primary);
+}
+
+.jieqi-term-item .term-date {
+  font-size: 0.8rem;
+  margin-bottom: 3px;
+  opacity: 0.8;
+}
+
+.jieqi-term-item .term-desc {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* 节气详细信息的标签和值 */
+.term-info-label {
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin: 10px 0 5px;
+  color: var(--jieqi-primary);
+  opacity: 0.85;
+}
+
+.term-info-label:first-child {
+  margin-top: 0;
+}
+
+.term-info-value {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  padding-left: 5px;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 滚动条样式 */
+.jieqi-tab-contents::-webkit-scrollbar {
+  width: 4px;
+}
+
+.jieqi-tab-contents::-webkit-scrollbar-thumb {
+  background-color: var(--jieqi-border);
+  border-radius: 10px;
+}
+
+.jieqi-tab-contents::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+  .jieqi-tab-button {
+    padding: 5px 2px;
+    font-size: 0.8rem;
+  }
+  
+  .jieqi-current-content {
+    padding: 10px;
+  }
+  
+  .term-info-label {
+    font-size: 0.8rem;
+  }
+  
+  .term-info-value {
+    font-size: 0.85rem;
+  }
+} 

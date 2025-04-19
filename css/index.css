@@ -1371,7 +1371,7 @@ body {
   background: var(--global-bg);
   color: var(--font-color);
   font-size: var(--global-font-size);
-  font-family: PingFangSC-Regular, Helvetica, Arial, Microsoft Yahei, sans-serif;
+  font-family: Microsoft Yahei, PingFang SC, Hiragino Sans GB, sans-serif;
   line-height: 2;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   scroll-behavior: smooth;
